@@ -4,6 +4,7 @@ import { useFonts } from "expo-font";
 import LoginSceeen from "./screens/LoginSceeen";
 
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import OtpVerification from "./screens/OtpVerification";
 
 const Stack = createNativeStackNavigator();
 
@@ -28,6 +29,11 @@ const App = () => {
             <Stack.Screen
               name="LoginSceeen"
               component={LoginSceeen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="OtpVerification"
+              component={OtpVerification}
               options={{ headerShown: false }}
             />
           </Stack.Navigator>

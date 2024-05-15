@@ -11,12 +11,11 @@ import {
 import { Color, FontFamily, FontSize } from "../utills/GlobalStyles";
 import HeadereImages from "../components/HeadereImages";
 
-const LoginScreen = ({ navigation }) => {
+const OtpVerification = () => {
   const [phoneNumber, setPhoneNumber] = React.useState("");
 
   const handleSendOTP = () => {
     const phoneNumberRegex = /^(\+92|92|0)-?3\d{2}-?\d{7}$/;
-    navigation.navigate("OtpVerification");
 
     if (!phoneNumberRegex.test(phoneNumber)) {
       Alert.alert(
@@ -38,10 +37,10 @@ const LoginScreen = ({ navigation }) => {
         />
       </View>
       <View style={styles.innerContainer}>
-        <Text style={styles.enterYourEmail}>{`Enter Your Mobile Number`}</Text>
+        <Text style={styles.enterYourEmail}>{`Enter Verification Code`}</Text>
         <Text
           style={styles.sendYou}
-        >{`We will send you a confirmation code`}</Text>
+        >{`We Are Automatically detecting a SMS Sent to your Number`}</Text>
         <TextInput
           style={styles.inputNumber}
           placeholder="Mobile Number"
@@ -53,7 +52,7 @@ const LoginScreen = ({ navigation }) => {
           style={styles.rectangleViewBorder}
           onPress={handleSendOTP}
         >
-          <Text style={styles.sendOtp}>Send OTP</Text>
+          <Text style={styles.sendOtp}>Submit</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -114,4 +113,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default LoginScreen;
+export default OtpVerification;
