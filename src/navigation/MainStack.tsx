@@ -4,22 +4,38 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import UserScreen from "../screens/UserScreen";
 import SettingScreen from "../screens/SettingScreen";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
+import AntDesign from "react-native-vector-icons/AntDesign";
+import { Color } from "../utills/GlobalStyles";
 
 const Tab = createBottomTabNavigator();
 const MainStack = () => {
   return (
-    <Tab.Navigator screenOptions={{ headerShown: false }}>
+    <Tab.Navigator
+      screenOptions={{
+        headerShown: false,
+        tabBarActiveTintColor: Color.primaryColor,
+      }}
+    >
       <Tab.Screen
         name="UserScreen"
         component={UserScreen}
         options={{
-          tabBarLabel: "Home",
+          tabBarLabel: "user",
           tabBarIcon: ({ color, size }) => (
-            <MaterialCommunityIcons name="home" color={color} size={size} />
+            <AntDesign name="user" color={color} size={size} />
           ),
         }}
       />
-      <Tab.Screen name="SettingScreen" component={SettingScreen} />
+      <Tab.Screen
+        name="SettingScreen"
+        component={SettingScreen}
+        options={{
+          tabBarLabel: "Setting",
+          tabBarIcon: ({ color, size }) => (
+            <AntDesign name="setting" color={color} size={size} />
+          ),
+        }}
+      />
     </Tab.Navigator>
   );
 };
