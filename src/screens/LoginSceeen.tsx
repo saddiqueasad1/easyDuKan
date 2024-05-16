@@ -11,7 +11,7 @@ import {
 import { Color, FontFamily, FontSize } from "../utills/GlobalStyles";
 import HeadereImages from "../components/HeadereImages";
 
-const LoginScreen = ({ navigation }) => {
+const LoginScreen = ({ navigation }: { navigation: any }) => {
   const [phoneNumber, setPhoneNumber] = React.useState("");
 
   const handleSendOTP = () => {
