@@ -1,12 +1,7 @@
 import * as React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { useFonts } from "expo-font";
-import LoginSceeen from "./screens/LoginSceeen";
-
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import OtpVerification from "./screens/OtpVerification";
-
-const Stack = createNativeStackNavigator();
+import AppNavigator from "./navigation/AppNavigator";
 
 const App = () => {
   const [hideSplashScreen] = React.useState(true);
@@ -24,20 +19,7 @@ const App = () => {
   return (
     <>
       <NavigationContainer>
-        {hideSplashScreen ? (
-          <Stack.Navigator screenOptions={{ headerShown: false }}>
-            <Stack.Screen
-              name="LoginSceeen"
-              component={LoginSceeen}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="OtpVerification"
-              component={OtpVerification}
-              options={{ headerShown: false }}
-            />
-          </Stack.Navigator>
-        ) : null}
+        {hideSplashScreen ? <AppNavigator /> : null}
       </NavigationContainer>
     </>
   );

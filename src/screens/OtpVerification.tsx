@@ -6,25 +6,15 @@ import {
   Image,
   TouchableOpacity,
   TextInput,
-  Alert,
 } from "react-native";
 import { Color, FontFamily, FontSize } from "../utills/GlobalStyles";
 import HeadereImages from "../components/HeadereImages";
 
-const OtpVerification = () => {
+const OtpVerification = ({ navigation }: { navigation: any }) => {
   const [phoneNumber, setPhoneNumber] = React.useState("");
 
   const handleSendOTP = () => {
-    const phoneNumberRegex = /^(\+92|92|0)-?3\d{2}-?\d{7}$/;
-
-    if (!phoneNumberRegex.test(phoneNumber)) {
-      Alert.alert(
-        "Invalid Phone Number",
-        "Please enter a valid Pakistani phone number.",
-      );
-      return;
-    }
-    Alert.alert(" ✅ ✅ valid Phone Number", "OTP sent, check your phone");
+    navigation.navigate("MainStack");
   };
 
   return (
