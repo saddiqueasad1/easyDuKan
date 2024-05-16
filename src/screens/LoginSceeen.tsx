@@ -10,9 +10,10 @@ import {
 } from "react-native";
 import { Color, FontFamily, FontSize } from "../utills/GlobalStyles";
 import HeadereImages from "../components/HeadereImages";
-
+import { useTranslation } from "react-i18next";
 const LoginScreen = ({ navigation }: { navigation: any }) => {
   const [phoneNumber, setPhoneNumber] = React.useState("");
+  const { t } = useTranslation();
 
   const handleSendOTP = () => {
     const phoneNumberRegex = /^(\+92|92|0)-?3\d{2}-?\d{7}$/;
@@ -20,8 +21,8 @@ const LoginScreen = ({ navigation }: { navigation: any }) => {
 
     if (!phoneNumberRegex.test(phoneNumber)) {
       Alert.alert(
-        "Invalid Phone Number",
-        "Please enter a valid Pakistani phone number.",
+        t("login.invalid_phone_number"),
+        t("login.valid_phone_number"),
       );
       return;
     }
@@ -38,10 +39,10 @@ const LoginScreen = ({ navigation }: { navigation: any }) => {
         />
       </View>
       <View style={styles.innerContainer}>
-        <Text style={styles.enterYourEmail}>{`Enter Your Mobile Number`}</Text>
-        <Text
-          style={styles.sendYou}
-        >{`We will send you a confirmation code`}</Text>
+        <Text style={styles.enterYourEmail}>
+          {t("login.enter_mobile_number")}
+        </Text>
+        <Text style={styles.sendYou}>{t("login.confirmation_message")}</Text>
         <TextInput
           style={styles.inputNumber}
           placeholder="Mobile Number"
@@ -53,7 +54,7 @@ const LoginScreen = ({ navigation }: { navigation: any }) => {
           style={styles.rectangleViewBorder}
           onPress={handleSendOTP}
         >
-          <Text style={styles.sendOtp}>Send OTP</Text>
+          <Text style={styles.sendOtp}>{t("login.send_otp")}</Text>
         </TouchableOpacity>
       </View>
     </View>

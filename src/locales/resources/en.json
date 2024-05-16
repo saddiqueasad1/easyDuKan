@@ -1,0 +1,14 @@
+{
+  "login": {
+    "enter_mobile_number": "Enter Your Mobile Number",
+    "confirmation_message": "We will send you a confirmation code",
+    "send_otp": "Send OTP",
+    "invalid_phone_number": "Invalid Phone Number",
+    "valid_phone_number": "Please enter a valid Pakistani phone number."
+  },
+  "OtpVerification": {
+    "enter_Code": "Enter Verification Code",
+    "automatically_Detecting": "We Are Automatically detecting a SMS Sent to your Number",
+    "submit": "Submit"
+  }
+}

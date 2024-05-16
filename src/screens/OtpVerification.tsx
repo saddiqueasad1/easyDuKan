@@ -9,9 +9,11 @@ import {
 } from "react-native";
 import { Color, FontFamily, FontSize } from "../utills/GlobalStyles";
 import HeadereImages from "../components/HeadereImages";
+import { useTranslation } from "react-i18next";
 
 const OtpVerification = ({ navigation }: { navigation: any }) => {
   const [phoneNumber, setPhoneNumber] = React.useState("");
+  const { t } = useTranslation();
 
   const handleSendOTP = () => {
     navigation.navigate("MainStack");
@@ -27,10 +29,12 @@ const OtpVerification = ({ navigation }: { navigation: any }) => {
         />
       </View>
       <View style={styles.innerContainer}>
-        <Text style={styles.enterYourEmail}>{`Enter Verification Code`}</Text>
-        <Text
-          style={styles.sendYou}
-        >{`We Are Automatically detecting a SMS Sent to your Number`}</Text>
+        <Text style={styles.enterYourEmail}>
+          {t("OtpVerification.enter_Code")}
+        </Text>
+        <Text style={styles.sendYou}>
+          {t("OtpVerification.automatically_Detecting")}
+        </Text>
         <TextInput
           style={styles.inputNumber}
           placeholder="Mobile Number"
@@ -42,7 +46,7 @@ const OtpVerification = ({ navigation }: { navigation: any }) => {
           style={styles.rectangleViewBorder}
           onPress={handleSendOTP}
         >
-          <Text style={styles.sendOtp}>Submit</Text>
+          <Text style={styles.sendOtp}>{t("OtpVerification.submit")}</Text>
         </TouchableOpacity>
       </View>
     </View>

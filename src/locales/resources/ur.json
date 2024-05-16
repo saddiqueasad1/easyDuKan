@@ -1,0 +1,14 @@
+{
+  "login": {
+    "enter_mobile_number": "اپنا موبائل نمبر درج کریں",
+    "confirmation_message": "ہم آپ کو تصدیقی کوڈ بھیجیں گے",
+    "send_otp": "OTP بھیجیں",
+    "invalid_phone_number": "غلط فون نمبر",
+    "valid_phone_number": "براہ کرم ایک درست پاکستانی فون نمبر درج کریں۔"
+  },
+  "OtpVerification": {
+    "enter_Code": "تصدیقی کوڈ درج کریں",
+    "automatically_Detecting": "ہم آپ کے نمبر پر بھیجے گئے ایس ایم ایس کو خود بخود شناخت کر رہے ہیں",
+    "submit": "جمع کریں"
+  }
+}
