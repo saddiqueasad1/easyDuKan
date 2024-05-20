@@ -6,6 +6,7 @@ import {
   Image,
   TouchableOpacity,
   ActivityIndicator,
+  Animated,
 } from "react-native";
 import { Color, FontFamily, FontSize } from "../utills/GlobalStyles";
 import HeadereImages from "../components/HeadereImages";
@@ -41,10 +42,13 @@ const OtpVerification = ({
   const verificationId = route.params.verificationId;
   const [isOtpFilled, setIsOtpFilled] = React.useState<boolean>(false);
   const [loading, setLoading] = React.useState(false);
+  const [showSuccess, setShowSuccess] = React.useState(false);
 
   const [oTP, setOtP] = React.useState("");
   const { t } = useTranslation();
   const auth = getAuth();
+
+  const scaleAnim = React.useRef(new Animated.Value(0)).current;
 
   const firebaseOTPVerification = async () => {
     try {
@@ -53,9 +57,17 @@ const OtpVerification = ({
       await signInWithCredential(auth, credential)
         .then((res) => {
           console.log("res of ()=> firebaseOTPVerification", phoneNumber);
-          // {"_redirectEventId": undefined, "apiKey": "AIzaSyBfTQ7IigRYXnp0DExoeutidqdN2xfljM0", "appName": "[DEFAULT]", "createdAt": "1709215100260", "displayName": undefined, "email": undefined, "emailVerified": false, "isAnonymous": false, "lastLoginAt": "1709215100261", "phoneNumber": "+923115182891", "photoURL": undefined, "providerData": [[Object]], "stsTokenManager": {"accessToken": "eyJhbGciOiJSUzI1NiIsImtpZCI6IjNiYjg3ZGNhM2JjYjY5ZDcyYjZjYmExYjU5YjMzY2M1MjI5N2NhOGQiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vZGhhcnRpLWE3MmJkIiwiYXVkIjoiZGhhcnRpLWE3MmJkIiwiYXV0aF90aW1lIjoxNzA5MjE1MTAwLCJ1c2VyX2lkIjoiVHlIWFhpNHFxRVhvbUY2ajYwMGZESUd3UHBqMSIsInN1YiI6IlR5SFhYaTRxcUVYb21GNmo2MDBmRElHd1BwajEiLCJpYXQiOjE3MDkyMTUxMDAsImV4cCI6MTcwOTIxODcwMCwicGhvbmVfbnVtYmVyIjoiKzkyMzExNTE4Mjg5MSIsImZpcmViYXNlIjp7ImlkZW50aXRpZXMiOnsicGhvbmUiOlsiKzkyMzExNTE4Mjg5MSJdfSwic2lnbl9pbl9wcm92aWRlciI6InBob25lIn19.ikdmvWhBhf6mqn-elafWPLxysHMleLVGI__I4wtrc1kL9mJ2vWuJysknWA3YQOhEjD6LhCkulJWEJvNHAogqsDAvuP_1mg-7YpxoCQgwRZTPrE0BuAAcV9x2au-C0cKyv3YLU3K_Bl8j5qWbIDkS-8Deuj2cUU4A7TH5HyH9R6_PORVCWHQscX2qpOtAkR3NkVL2iAfU8hbR9JKIvAa1w6Ci6aA125bMrprXJGjN9yjouknkDJrjtOHGFKgUDm4McReGv3fJwaqAlUtIqJyZzVRgoHedn2ZEZNAGJlMpHcbNaa8OanQwpjKPGFlIdl2GOdxoap2WfOqZsLMvk40MSw", "expirationTime": 1709218700412, "refreshToken": "AMf-vBwj_5RwgPkPFYtPI68eIlsWg8DnhstKpRIHgny240VwoGqnptOv81i2ep4DfKCeyUhRKiGZh3tCl_3N9mikCWBY2-HLcUlidY1_Dk6EtT9CmQfBFaIIL0HQIQd2tH1MDG7Hb3-o7JSYjJfzj8BMepkA_rQBT2OIjrtYcSnWtXPgWTOV3jGoD62sei1W8nKWcKbyV99M"}, "tenantId": undefined, "uid": "TyHXXi4qqEXomF6j600fDIGwPpj1"}
           console.log(res.user);
-          navigation.navigate("MainStack");
+          setShowSuccess(true);
+          Animated.timing(scaleAnim, {
+            toValue: 1,
+            duration: 1000,
+            useNativeDriver: true,
+          }).start(() => {
+            setTimeout(() => {
+              navigation.navigate("MainStack");
+            }, 2000);
+          });
         })
         .catch((err) => alert(err.message));
     } catch (err) {
@@ -87,23 +99,11 @@ const OtpVerification = ({
         <Text style={styles.sendYou}>
           {t("OtpVerification.automatically_Detecting")}
         </Text>
-        {/* <TextInput
-          style={styles.inputNumber}
-          placeholder="Mobile Number"
-          keyboardType="phone-pad"
-          value={oTP}
-          onChangeText={setOtP}
-        /> */}
-        {/* <OtpInputBox
-          value={oTP}
-          onChangeText={setOtP}
-          onFilled={handleOtpFilled}
-        /> */}
         <OtpInputBox length={6} onOtpChange={handleOtpFilled} />
         <TouchableOpacity
           style={
             isOtpFilled
-              ? styles.rectangleViewBorder // If OTP is filled, use regular button styles
+              ? styles.rectangleViewBorder
               : [styles.rectangleViewBorder, styles.disabledButton]
           }
           onPress={firebaseOTPVerification}
@@ -116,6 +116,21 @@ const OtpVerification = ({
         <View style={styles.overlay}>
           <ActivityIndicator size="large" color={Color.primaryColor} />
         </View>
+      )}
+      {showSuccess && (
+        <Animated.View
+          style={[
+            styles.successContainer,
+            {
+              transform: [{ scale: scaleAnim }],
+            },
+          ]}
+        >
+          <Image
+            style={styles.successImage}
+            source={require("../assets/images/successfullyLogin.jpeg")}
+          />
+        </Animated.View>
       )}
     </View>
   );
@@ -179,7 +194,7 @@ const styles = StyleSheet.create({
     color: Color.colorWhite,
   },
   disabledButton: {
-    backgroundColor: "#ccc", // Change to the color you want for disabled state
+    backgroundColor: "#ccc",
     borderColor: "#ccc",
   },
   overlay: {
@@ -187,6 +202,16 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(0, 0, 0, 0.5)",
     justifyContent: "center",
     alignItems: "center",
+  },
+  successContainer: {
+    ...StyleSheet.absoluteFillObject,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  successImage: {
+    width: 500,
+    height: 500,
+    resizeMode: "contain",
   },
 });
 
