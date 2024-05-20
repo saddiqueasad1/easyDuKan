@@ -5,6 +5,7 @@ import AppNavigator from "./navigation/AppNavigator";
 import i18n from "./locales/Translation";
 import { useState } from "react";
 import { I18nextProvider } from "react-i18next";
+import firebaseApp from "./utills/firebaseConfig";
 
 const App = () => {
   const [hideSplashScreen] = useState(true);
@@ -14,6 +15,10 @@ const App = () => {
     "Outfit-SemiBold": require("./assets/fonts/Outfit-SemiBold.ttf"),
     "Outfit-Bold": require("./assets/fonts/Outfit-Bold.ttf"),
   });
+
+  React.useEffect(() => {
+    console.log(firebaseApp);
+  }, []);
 
   if (!fontsLoaded && !error) {
     return null;

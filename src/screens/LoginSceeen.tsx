@@ -7,17 +7,29 @@ import {
   TouchableOpacity,
   TextInput,
   Alert,
+  ActivityIndicator,
 } from "react-native";
 import { Color, FontFamily, FontSize } from "../utills/GlobalStyles";
 import HeadereImages from "../components/HeadereImages";
 import { useTranslation } from "react-i18next";
+import { useFirebaseLogin } from "@itzsunny/firebase-login";
+import { getAuth } from "firebase/auth";
+import { getApp } from "firebase/app";
+
 const LoginScreen = ({ navigation }: { navigation: any }) => {
   const [phoneNumber, setPhoneNumber] = React.useState("");
   const { t } = useTranslation();
+  const [loading, setLoading] = React.useState(false);
 
-  const handleSendOTP = () => {
+  const auth = getAuth();
+  const app = getApp();
+  const { recaptcha, recaptchaBanner, sendOtp } = useFirebaseLogin({
+    auth: auth,
+    firebaseConfig: app.options,
+  });
+
+  const handleSendOTP = async () => {
     const phoneNumberRegex = /^(\+92|92|0)-?3\d{2}-?\d{7}$/;
-    navigation.navigate("OtpVerification");
 
     if (!phoneNumberRegex.test(phoneNumber)) {
       Alert.alert(
@@ -26,7 +38,22 @@ const LoginScreen = ({ navigation }: { navigation: any }) => {
       );
       return;
     }
-    Alert.alert(" ✅ ✅ valid Phone Number", "OTP sent, check your phone");
+    setLoading(true);
+
+    try {
+      console.log("()=> handleSendOTP");
+      const verificationId = await sendOtp(phoneNumber);
+      console.log("confirmationResult.");
+      console.log(verificationId);
+      navigation.navigate("OtpVerification", {
+        phoneNumber,
+        verificationId: verificationId,
+      });
+    } catch (err) {
+      alert(err);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -57,6 +84,13 @@ const LoginScreen = ({ navigation }: { navigation: any }) => {
           <Text style={styles.sendOtp}>{t("login.send_otp")}</Text>
         </TouchableOpacity>
       </View>
+      {recaptcha}
+      {recaptchaBanner}
+      {loading && (
+        <View style={styles.overlay}>
+          <ActivityIndicator size="large" color={Color.primaryColor} />
+        </View>
+      )}
     </View>
   );
 };
@@ -117,6 +151,12 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     fontFamily: FontFamily.outfitBold,
     color: Color.colorWhite,
+  },
+  overlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    justifyContent: "center",
+    alignItems: "center",
   },
 });
 
