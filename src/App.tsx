@@ -20,13 +20,11 @@ const App = () => {
   }
 
   return (
-    <>
-      <I18nextProvider i18n={i18n}>
-        <NavigationContainer>
-          {hideSplashScreen ? <AppNavigator /> : null}
-        </NavigationContainer>
-      </I18nextProvider>
-    </>
+    <I18nextProvider i18n={i18n}>
+      <NavigationContainer>
+        {hideSplashScreen ? <AppNavigator /> : null}
+      </NavigationContainer>
+    </I18nextProvider>
   );
 };
 export default App;
