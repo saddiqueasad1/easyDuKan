@@ -32,10 +32,10 @@ const LoginScreen = ({ navigation }: { navigation: any }) => {
   return (
     <View style={styles.container}>
       <HeadereImages />
-      <View style={{ padding: 10, marginTop: 200 }}>
+      <View style={styles.imageContainer}>
         <Image
           style={styles.undrawSecureLoginPdn41Icon}
-          source={require("../assets/images/undraw-secure-login-pdn4-1.png")}
+          source={require("../assets/images/forgotPasswordIconn.png")}
         />
       </View>
       <View style={styles.innerContainer}>
@@ -69,10 +69,15 @@ const styles = StyleSheet.create({
     overflow: "hidden",
   },
   undrawSecureLoginPdn41Icon: {
-    height: 223,
-    left: 26,
     overflow: "hidden",
-    width: 321,
+    width: "100%",
+    resizeMode: "contain",
+  },
+  imageContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 30,
   },
   innerContainer: {
     flex: 1,
