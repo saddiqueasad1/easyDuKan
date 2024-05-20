@@ -15,9 +15,12 @@ import {
   getAuth,
   PhoneAuthProvider,
   signInWithCredential,
+  User,
 } from "firebase/auth";
 import { RouteProp } from "@react-navigation/native";
 import OtpInputBox from "../components/OtpInputBox";
+import { setUser } from "../redux/slices/userSlice";
+import { useDispatch } from "react-redux";
 
 type RootStackParamList = {
   OtpVerification: {
@@ -26,7 +29,7 @@ type RootStackParamList = {
   };
 };
 
-type OtpVerificationScreenRouteProp = RouteProp<
+export type OtpVerificationScreenRouteProp = RouteProp<
   RootStackParamList,
   "OtpVerification"
 >;
@@ -43,6 +46,7 @@ const OtpVerification = ({
   const [isOtpFilled, setIsOtpFilled] = React.useState<boolean>(false);
   const [loading, setLoading] = React.useState(false);
   const [showSuccess, setShowSuccess] = React.useState(false);
+  const dispatch = useDispatch();
 
   const [oTP, setOtP] = React.useState("");
   const { t } = useTranslation();
@@ -57,7 +61,8 @@ const OtpVerification = ({
       await signInWithCredential(auth, credential)
         .then((res) => {
           console.log("res of ()=> firebaseOTPVerification", phoneNumber);
-          console.log(res.user);
+          console.log(res.user.toJSON());
+          dispatch(setUser(res.user.toJSON() as User));
           setShowSuccess(true);
           Animated.timing(scaleAnim, {
             toValue: 1,
@@ -65,11 +70,15 @@ const OtpVerification = ({
             useNativeDriver: true,
           }).start(() => {
             setTimeout(() => {
-              navigation.navigate("MainStack");
+              // navigation.navigate("MainStack");
+              console.log("hhhh!");
             }, 2000);
           });
         })
-        .catch((err) => alert(err.message));
+        .catch((err) => {
+          alert(err.message);
+          console.log(err);
+        });
     } catch (err) {
       navigation.goBack();
       console.log(err);
@@ -209,8 +218,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   successImage: {
-    width: 500,
-    height: 500,
+    width: 400,
+    height: 400,
     resizeMode: "contain",
   },
 });
