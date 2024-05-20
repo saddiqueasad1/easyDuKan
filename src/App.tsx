@@ -17,7 +17,7 @@ const App = () => {
   });
 
   React.useEffect(() => {
-    console.log(firebaseApp);
+    console.log(firebaseApp.automaticDataCollectionEnabled);
   }, []);
 
   if (!fontsLoaded && !error) {

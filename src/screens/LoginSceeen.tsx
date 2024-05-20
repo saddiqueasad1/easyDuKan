@@ -17,7 +17,7 @@ import { getAuth } from "firebase/auth";
 import { getApp } from "firebase/app";
 
 const LoginScreen = ({ navigation }: { navigation: any }) => {
-  const [phoneNumber, setPhoneNumber] = React.useState("");
+  const [phoneNumber, setPhoneNumber] = React.useState("3002918546");
   const { t } = useTranslation();
   const [loading, setLoading] = React.useState(false);
 
@@ -29,24 +29,26 @@ const LoginScreen = ({ navigation }: { navigation: any }) => {
   });
 
   const handleSendOTP = async () => {
+    const completePhoneNNumer = "+92" + phoneNumber;
     const phoneNumberRegex = /^(\+92|92|0)-?3\d{2}-?\d{7}$/;
 
-    if (!phoneNumberRegex.test(phoneNumber)) {
+    if (!phoneNumberRegex.test(completePhoneNNumer)) {
       Alert.alert(
         t("login.invalid_phone_number"),
         t("login.valid_phone_number"),
       );
       return;
     }
+
     setLoading(true);
 
     try {
       console.log("()=> handleSendOTP");
-      const verificationId = await sendOtp(phoneNumber);
+      const verificationId = await sendOtp(completePhoneNNumer);
       console.log("confirmationResult.");
       console.log(verificationId);
       navigation.navigate("OtpVerification", {
-        phoneNumber,
+        phoneNumber: completePhoneNNumer,
         verificationId: verificationId,
       });
     } catch (err) {
@@ -70,13 +72,17 @@ const LoginScreen = ({ navigation }: { navigation: any }) => {
           {t("login.enter_mobile_number")}
         </Text>
         <Text style={styles.sendYou}>{t("login.confirmation_message")}</Text>
-        <TextInput
-          style={styles.inputNumber}
-          placeholder="Mobile Number"
-          keyboardType="phone-pad"
-          value={phoneNumber}
-          onChangeText={setPhoneNumber}
-        />
+        <View style={styles.inputContainer}>
+          <Text style={styles.countryCode}>+92</Text>
+          <TextInput
+            style={styles.inputNumber}
+            placeholder="Mobile Number"
+            keyboardType="number-pad"
+            value={phoneNumber}
+            onChangeText={setPhoneNumber}
+            maxLength={10}
+          />
+        </View>
         <TouchableOpacity
           style={styles.rectangleViewBorder}
           onPress={handleSendOTP}
@@ -119,12 +125,22 @@ const styles = StyleSheet.create({
     marginHorizontal: 30,
     gap: 20,
   },
-  inputNumber: {
-    borderStyle: "solid",
-    borderRadius: 10,
+  inputContainer: {
+    flexDirection: "row",
+    alignItems: "center",
     borderColor: Color.primaryColor,
     borderWidth: 2,
+    borderRadius: 10,
     height: 55,
+  },
+  countryCode: {
+    paddingHorizontal: 10,
+    fontSize: FontSize.size_mini,
+    color: Color.primaryColor,
+  },
+  inputNumber: {
+    flex: 1,
+    height: "100%",
     paddingHorizontal: 10,
   },
   rectangleViewBorder: {
