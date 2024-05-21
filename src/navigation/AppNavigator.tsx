@@ -5,6 +5,7 @@ import LoginScreen from "../screens/LoginSceeen";
 import OtpVerification from "../screens/OtpVerification";
 import MainStack from "./MainStack";
 import { RootState } from "../redux/store";
+import EditItemScreen from "../screens/EditItemScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -12,11 +13,18 @@ const AppNavigator = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       {isLoggedIn ? (
-        <Stack.Screen
-          name="MainStack"
-          component={MainStack}
-          options={{ headerShown: false }}
-        />
+        <>
+          <Stack.Screen
+            name="MainStack"
+            component={MainStack}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="EditItemScreen"
+            component={EditItemScreen}
+            options={{ headerShown: false }}
+          />
+        </>
       ) : (
         <>
           <Stack.Screen
