@@ -1,12 +1,12 @@
 import React, { useState } from "react";
-import { View, TextInput, Button } from "react-native";
+import { View, TextInput, Button, Text } from "react-native";
 import { addDoc, collection, doc, setDoc } from "firebase/firestore";
 import { getFirestore } from "firebase/firestore";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../redux/store";
 import { clearUser } from "../redux/slices/userSlice";
 
-const SettingScreen = () => {
+const ProfileScreen = () => {
   const user = useSelector((state: RootState) => state.user);
   const [username, setUsername] = useState("");
   const [phoneNumber, setPhoneNumber] = useState(user.phoneNumber + "");
@@ -55,6 +55,7 @@ const SettingScreen = () => {
 
   return (
     <View style={{ flex: 1, marginTop: 150, gap: 50 }}>
+      <Text>Profile Scrreem</Text>
       <TextInput
         placeholder="Username"
         value={username}
@@ -82,4 +83,4 @@ const SettingScreen = () => {
   );
 };
 
-export default SettingScreen;
+export default ProfileScreen;
