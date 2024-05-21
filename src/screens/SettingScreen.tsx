@@ -9,7 +9,7 @@ import { clearUser } from "../redux/slices/userSlice";
 const SettingScreen = () => {
   const user = useSelector((state: RootState) => state.user);
   const [username, setUsername] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState(user.phoneNumber);
+  const [phoneNumber, setPhoneNumber] = useState(user.phoneNumber + "");
   const [email, setEmail] = useState("");
   const [address, setAddress] = useState("");
   const db = getFirestore();
@@ -57,7 +57,7 @@ const SettingScreen = () => {
         onChangeText={(text) => setAddress(text)}
       />
       <Button title="Save Profile" onPress={saveProfile} />
-      <Button title="Logout =" onPress={handleLogout} />
+      <Button title="Logout" onPress={handleLogout} />
     </View>
   );
 };
