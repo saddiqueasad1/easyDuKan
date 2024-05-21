@@ -61,7 +61,7 @@ const ProfileScreen = ({ navigation }: { navigation: any }) => {
         id: doc.id,
         ...doc.data(),
       }));
-      setItems(itemsList);
+      setItems(itemsList as []);
     } catch (error) {
       console.log(error);
     }
@@ -84,7 +84,7 @@ const ProfileScreen = ({ navigation }: { navigation: any }) => {
     dispatch(clearUser());
   };
 
-  const renderItem = ({ item }) => (
+  const renderItem = ({ item }: { item: any }) => (
     <TouchableOpacity
       onPress={() =>
         navigation.navigate("EditItemScreen", {
@@ -106,9 +106,14 @@ const ProfileScreen = ({ navigation }: { navigation: any }) => {
 
   const saveItems = async () => {
     try {
-      const profilesCollectionRef = collection(db, "users", user.uid, "products");
+      const profilesCollectionRef = collection(
+        db,
+        "users",
+        user.uid,
+        "products",
+      );
       await addDoc(profilesCollectionRef, {
-        name: "phone 2",
+        name: "phone 3",
         description: "phone 2",
         unit_price: "10",
         total_quantity: "10",

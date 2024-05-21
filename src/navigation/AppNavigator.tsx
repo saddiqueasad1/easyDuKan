@@ -17,12 +17,12 @@ const AppNavigator = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
           <Stack.Screen
             name="MainStack"
             component={MainStack}
-            options={{ headerShown: false }}
+            options={{ headerShown: false, title: "" }}
           />
           <Stack.Screen
             name="EditItemScreen"
             component={EditItemScreen}
-            options={{ headerShown: false }}
+            options={{ headerShown: true }}
           />
         </>
       ) : (

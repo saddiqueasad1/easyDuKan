@@ -3,7 +3,13 @@ import { View, TextInput, Button, Text, StyleSheet } from "react-native";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { getFirestore } from "firebase/firestore";
 
-const EditItemScreen = ({ route, navigation }) => {
+const EditItemScreen = ({
+  route,
+  navigation,
+}: {
+  route: any;
+  navigation: any;
+}) => {
   const { userId, itemId } = route.params;
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
