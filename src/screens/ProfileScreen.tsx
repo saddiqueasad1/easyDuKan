@@ -1,25 +1,17 @@
 import React, { useEffect, useState } from "react";
 import {
   View,
-  TextInput,
   TouchableOpacity,
   Text,
   FlatList,
   StyleSheet,
-  ScrollView,
-  Alert,
 } from "react-native";
-import {
-  addDoc,
-  collection,
-  doc,
-  setDoc,
-  getDoc,
-  getDocs,
-} from "firebase/firestore";
+import { addDoc, collection, doc, getDoc, getDocs } from "firebase/firestore";
 import { getFirestore } from "firebase/firestore";
 import { useSelector } from "react-redux";
 import { RootState } from "../redux/store";
+import { FontAwesome5 } from "@expo/vector-icons";
+import { Color } from "../utills/GlobalStyles";
 
 const ProfileScreen = ({ navigation }: { navigation: any }) => {
   const user = useSelector((state: RootState) => state.user);
@@ -67,21 +59,6 @@ const ProfileScreen = ({ navigation }: { navigation: any }) => {
     }
   };
 
-  const saveProfile = async () => {
-    try {
-      await setDoc(doc(db, "users", user.uid, "profile", "details"), {
-        username,
-        phoneNumber,
-        email,
-        address,
-      });
-      Alert.alert("Success", "Profile saved successfully!");
-    } catch (error) {
-      console.log(error);
-      Alert.alert("Error", "Failed to save profile.");
-    }
-  };
-
   const renderItem = ({ item }: { item: any }) => (
     <TouchableOpacity
       onPress={() =>
@@ -108,7 +85,7 @@ const ProfileScreen = ({ navigation }: { navigation: any }) => {
         db,
         "users",
         user.uid,
-        "products",
+        "products"
       );
       await addDoc(profilesCollectionRef, {
         name: "New Item",
@@ -116,60 +93,58 @@ const ProfileScreen = ({ navigation }: { navigation: any }) => {
         unit_price: "0",
         total_quantity: "0",
       });
-      // Fetch items again after adding
       fetchItems();
     } catch (error) {
       console.log(error);
     }
   };
+  const handleEditPrrofile = () => {
+    navigation.navigate("EditProfileScreen");
+  };
 
-  return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.title}>Profile</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Username"
-        value={username}
-        onChangeText={setUsername}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Phone Number"
-        value={phoneNumber}
-        onChangeText={setPhoneNumber}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Email"
-        value={email}
-        onChangeText={setEmail}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Address"
-        value={address}
-        onChangeText={setAddress}
-      />
-      <TouchableOpacity style={styles.saveButton} onPress={saveProfile}>
-        <Text style={styles.saveButtonText}>Save Profile</Text>
-      </TouchableOpacity>
+  const headerItem = () => (
+    <>
+      <View style={styles.body}>
+        <View style={styles.profileImage}>
+          <FontAwesome5 name="user-tie" size={50} color={Color.primaryColor} />
+          <TouchableOpacity
+            style={styles.editButton}
+            onPress={handleEditPrrofile}
+          >
+            <FontAwesome5
+              name="plus-circle"
+              size={24}
+              color={Color.primaryColor}
+            />
+          </TouchableOpacity>
+        </View>
+        <Text style={styles.username}>{username}</Text>
+        <Text style={styles.username}>{email}</Text>
+        <Text style={styles.bio}>{phoneNumber}</Text>
+        <Text style={styles.bio}>{address}</Text>
+      </View>
       <View style={styles.sectionHeader}>
         <Text style={styles.sectionTitle}>Items</Text>
         <TouchableOpacity style={styles.addButton} onPress={addItem}>
           <Text style={styles.addButtonText}>Add Item</Text>
         </TouchableOpacity>
       </View>
-      {items.length === 0 ? (
-        <Text style={styles.noItemsText}>No items available</Text>
-      ) : (
-        <FlatList
-          data={items}
-          keyExtractor={(item) => item.id}
-          renderItem={renderItem}
-          contentContainerStyle={styles.itemsList}
-        />
-      )}
-    </ScrollView>
+    </>
+  );
+
+  return (
+    <View style={styles.container}>
+      <FlatList
+        data={items}
+        keyExtractor={(item) => item.id}
+        renderItem={renderItem}
+        contentContainerStyle={styles.itemsList}
+        ListHeaderComponent={headerItem}
+        ListEmptyComponent={
+          <Text style={styles.noItemsText}>No items available</Text>
+        }
+      />
+    </View>
   );
 };
 
@@ -247,6 +222,44 @@ const styles = StyleSheet.create({
   itemText: {
     fontSize: 16,
     color: "#495057",
+  },
+
+  body: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  username: {
+    fontSize: 24,
+    fontWeight: "bold",
+    marginBottom: 10,
+  },
+  bio: {
+    fontSize: 16,
+    marginBottom: 20,
+  },
+  editButton: {
+    paddingHorizontal: 5,
+    paddingVertical: 10,
+    borderRadius: 5,
+    position: "absolute",
+    top: 10,
+    right: -10,
+  },
+  editButtonText: {
+    color: "#fff",
+    fontSize: 16,
+  },
+  profileImage: {
+    width: 100,
+    height: 100,
+    borderRadius: 75,
+    marginVertical: 10,
+    marginTop: 30,
+    backgroundColor: Color.lightgray,
+    justifyContent: "center",
+    alignItems: "center",
+    shadowColor: "#000",
   },
 });
 

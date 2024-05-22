@@ -3,7 +3,7 @@ import * as React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import UserScreen from "../screens/UserScreen";
 import SettingScreen from "../screens/SettingScreen";
-import AntDesign from "react-native-vector-icons/AntDesign";
+import AntDesign from "@expo/vector-icons/AntDesign";
 import { Color } from "../utills/GlobalStyles";
 import ProfileScreen from "../screens/ProfileScreen";
 
