@@ -19,7 +19,7 @@ const ProfileScreen = ({ navigation }: { navigation: any }) => {
   const [phoneNumber, setPhoneNumber] = useState(user.phoneNumber + "");
   const [email, setEmail] = useState("");
   const [address, setAddress] = useState("");
-  const [items, setItems] = useState([]);
+  const [products, setProducts] = useState([]);
   const db = getFirestore();
 
   useEffect(() => {
@@ -53,7 +53,7 @@ const ProfileScreen = ({ navigation }: { navigation: any }) => {
         id: doc.id,
         ...doc.data(),
       }));
-      setItems(itemsList as []);
+      setProducts(itemsList as []);
     } catch (error) {
       console.log(error);
     }
@@ -62,7 +62,7 @@ const ProfileScreen = ({ navigation }: { navigation: any }) => {
   const renderItem = ({ item }: { item: any }) => (
     <TouchableOpacity
       onPress={() =>
-        navigation.navigate("EditItemScreen", {
+        navigation.navigate("EditProductScreen", {
           userId: user.uid,
           itemId: item.id,
         })
@@ -117,9 +117,9 @@ const ProfileScreen = ({ navigation }: { navigation: any }) => {
         </TouchableOpacity>
       </View>
       <View style={styles.sectionHeader}>
-        <Text style={styles.sectionTitle}>Items</Text>
+        <Text style={styles.sectionTitle}>My Products</Text>
         <TouchableOpacity style={styles.addButton} onPress={addItem}>
-          <Text style={styles.addButtonText}>Add Item</Text>
+          <Text style={styles.addButtonText}>Add Products</Text>
         </TouchableOpacity>
       </View>
     </>
@@ -128,7 +128,7 @@ const ProfileScreen = ({ navigation }: { navigation: any }) => {
   return (
     <View style={styles.container}>
       <FlatList
-        data={items}
+        data={products}
         keyExtractor={(item) => item.id}
         renderItem={renderItem}
         contentContainerStyle={styles.itemsList}

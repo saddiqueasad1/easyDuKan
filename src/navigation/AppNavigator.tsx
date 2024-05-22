@@ -5,7 +5,7 @@ import LoginScreen from "../screens/LoginSceeen";
 import OtpVerification from "../screens/OtpVerification";
 import MainStack from "./MainStack";
 import { RootState } from "../redux/store";
-import EditItemScreen from "../screens/EditItemScreen";
+import EditProductScreen from "../screens/EditProductScreen";
 import AddCategoryScreen from "../screens/AddCategoryScreen";
 import EditProfileScreen from "../screens/EditProfileScreen";
 
@@ -22,8 +22,8 @@ const AppNavigator = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
             options={{ headerShown: false, title: "" }}
           />
           <Stack.Screen
-            name="EditItemScreen"
-            component={EditItemScreen}
+            name="EditProductScreen"
+            component={EditProductScreen}
             options={{ headerShown: true, title: "Edit Item" }}
           />
           <Stack.Screen

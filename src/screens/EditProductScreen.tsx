@@ -16,7 +16,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setCategories } from "../redux/slices/categoriesSlice";
 import { RootState } from "../redux/store";
 
-const EditItemScreen = ({
+const EditProductScreen = ({
   route,
   navigation,
 }: {
@@ -72,7 +72,7 @@ const EditItemScreen = ({
           id: doc.id,
           ...doc.data(),
         }));
-        dispatch(setCategories(categoriesList));
+        dispatch(setCategories(categoriesList as any));
       } catch (error) {
         console.log(error);
       } finally {
@@ -165,6 +165,7 @@ const EditItemScreen = ({
           <ActivityIndicator size="large" color="#0000ff" />
         </View>
       )}
+      <Text style={styles.text}>Name</Text>
       <TextInput
         style={styles.input}
         placeholder="Name"
@@ -174,6 +175,7 @@ const EditItemScreen = ({
       {inputErrors.name !== "" && (
         <Text style={styles.errorText}>{inputErrors.name}</Text>
       )}
+      <Text style={styles.text}>Description</Text>
       <TextInput
         style={styles.input}
         placeholder="Description"
@@ -183,6 +185,7 @@ const EditItemScreen = ({
       {inputErrors.description !== "" && (
         <Text style={styles.errorText}>{inputErrors.description}</Text>
       )}
+      <Text style={styles.text}>Unit Price</Text>
       <TextInput
         style={styles.input}
         placeholder="Unit Price"
@@ -193,6 +196,8 @@ const EditItemScreen = ({
       {inputErrors.unitPrice !== "" && (
         <Text style={styles.errorText}>{inputErrors.unitPrice}</Text>
       )}
+      <Text style={styles.text}>Total Quantity</Text>
+
       <TextInput
         style={styles.input}
         placeholder="Total Quantity"
@@ -203,6 +208,7 @@ const EditItemScreen = ({
       {inputErrors.totalQuantity !== "" && (
         <Text style={styles.errorText}>{inputErrors.totalQuantity}</Text>
       )}
+      <Text style={styles.text}>Category</Text>
       <Picker
         style={styles.input}
         selectedValue={selectedCategoryId}
@@ -246,6 +252,10 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(255, 255, 255, 0.7)",
     zIndex: 1,
   },
+  text: {
+    textAlign: "left",
+    width: "100%",
+  },
   input: {
     borderWidth: 1,
     borderColor: "#ced4da",
@@ -267,4 +277,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default EditItemScreen;
+export default EditProductScreen;
