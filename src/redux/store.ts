@@ -2,23 +2,23 @@ import { configureStore } from "@reduxjs/toolkit";
 import { persistReducer, persistStore } from "redux-persist";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import userReducer from "./slices/userSlice";
+import categoriesReducer from "./slices/categoriesSlice"; // Import your categories slice
 
 const persistConfig = {
   key: "root",
   storage: AsyncStorage,
 };
 
-const persistedReducer = persistReducer(persistConfig, userReducer);
+const persistedUserReducer = persistReducer(persistConfig, userReducer);
 
 const store = configureStore({
   reducer: {
-    user: persistedReducer,
+    user: persistedUserReducer,
+    categories: categoriesReducer, // Include categories slice without persisting it
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
-      thunk: {
-        extraArgument: userReducer,
-      },
+      thunk: true,
       serializableCheck: false,
     }),
   devTools: false,

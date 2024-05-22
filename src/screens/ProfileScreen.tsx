@@ -154,8 +154,6 @@ const ProfileScreen = ({ navigation }: { navigation: any }) => {
       />
       <Button title="Save Profile" onPress={saveProfile} />
       <Button title="Save items" onPress={saveItems} />
-      <Button title="Logout" onPress={handleLogout} />
-
       <Text style={styles.sectionTitle}>Items</Text>
       {items.length === 0 ? (
         <Text>No items available</Text>

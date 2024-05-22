@@ -6,6 +6,7 @@ import OtpVerification from "../screens/OtpVerification";
 import MainStack from "./MainStack";
 import { RootState } from "../redux/store";
 import EditItemScreen from "../screens/EditItemScreen";
+import AddCategoryScreen from "../screens/AddCategoryScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -22,6 +23,11 @@ const AppNavigator = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
           <Stack.Screen
             name="EditItemScreen"
             component={EditItemScreen}
+            options={{ headerShown: true }}
+          />
+          <Stack.Screen
+            name="AddCategoryScreen"
+            component={AddCategoryScreen}
             options={{ headerShown: true }}
           />
         </>

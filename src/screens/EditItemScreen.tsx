@@ -1,5 +1,13 @@
-import React, { useState, useEffect } from "react";
-import { View, TextInput, Button, Text, StyleSheet, Alert } from "react-native";
+import React, { useState, useEffect, useCallback } from "react";
+import {
+  View,
+  TextInput,
+  Button,
+  Text,
+  StyleSheet,
+  Alert,
+  ActivityIndicator,
+} from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import {
   doc,
@@ -10,6 +18,9 @@ import {
   getDocs,
 } from "firebase/firestore";
 import { getFirestore } from "firebase/firestore";
+import { useDispatch, useSelector } from "react-redux";
+import { setCategories } from "../redux/slices/categoriesSlice";
+import { RootState } from "../redux/store";
 
 const EditItemScreen = ({
   route,
@@ -19,17 +30,26 @@ const EditItemScreen = ({
   navigation: any;
 }) => {
   const { userId, itemId } = route.params;
+  const dispatch = useDispatch();
+  const { categories } = useSelector((state: RootState) => state.categories);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [unitPrice, setUnitPrice] = useState("");
   const [totalQuantity, setTotalQuantity] = useState("");
-  const [categories, setCategories] = useState([]);
   const [selectedCategoryId, setSelectedCategoryId] = useState("");
-  const [newCategoryName, setNewCategoryName] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [inputErrors, setInputErrors] = useState({
+    name: "",
+    description: "",
+    unitPrice: "",
+    totalQuantity: "",
+    newCategoryName: "",
+  });
   const db = getFirestore();
 
   useEffect(() => {
     const fetchItem = async () => {
+      setLoading(true);
       try {
         const itemRef = doc(db, "users", userId, "products", itemId);
         const itemSnap = await getDoc(itemRef);
@@ -44,21 +64,27 @@ const EditItemScreen = ({
         }
       } catch (error) {
         console.log(error);
+      } finally {
+        setLoading(false);
       }
     };
 
     const fetchCategories = async () => {
+      setLoading(true);
       try {
         const categoriesSnapshot = await getDocs(
-          collection(db, "users", userId, "categories"),
+          collection(db, "users", userId, "categories")
         );
         const categoriesList = categoriesSnapshot.docs.map((doc) => ({
           id: doc.id,
           ...doc.data(),
         }));
-        setCategories(categoriesList as never[]);
+        dispatch(setCategories(categoriesList));
+        // setCategories(categoriesList);
       } catch (error) {
         console.log(error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -67,6 +93,7 @@ const EditItemScreen = ({
   }, [userId, itemId, db]);
 
   const saveItem = async () => {
+    setLoading(true);
     try {
       await setDoc(doc(db, "users", userId, "products", itemId), {
         name,
@@ -78,67 +105,80 @@ const EditItemScreen = ({
       navigation.goBack();
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoading(false);
     }
   };
 
   const addCategory = async () => {
-    if (!newCategoryName.trim()) {
-      Alert.alert("Error", "Category name cannot be empty.");
-      return;
-    }
-    try {
-      const categoryRef = await addDoc(
-        collection(db, "users", userId, "categories"),
-        {
-          name: newCategoryName,
-        },
-      );
-      const newCategory = {
-        id: categoryRef.id,
-        name: newCategoryName,
-      };
-      setCategories([...categories, newCategory] as never);
-      setSelectedCategoryId(newCategory.id);
-      setNewCategoryName("");
-      Alert.alert("Success", "New category added.");
-    } catch (error) {
-      console.log(error);
-      Alert.alert("Error", "Could not add category. Please try again.");
+    navigation.navigate("AddCategoryScreen");
+  };
+
+  const handleInputChange = (key: string, value: string) => {
+    setInputErrors((prevErrors) => ({ ...prevErrors, [key]: "" }));
+    switch (key) {
+      case "name":
+        setName(value);
+        break;
+      case "description":
+        setDescription(value);
+        break;
+      case "unitPrice":
+        setUnitPrice(value);
+        break;
+      case "totalQuantity":
+        setTotalQuantity(value);
+        break;
+      default:
+        break;
     }
   };
 
   return (
     <View style={styles.container}>
+      {loading && <ActivityIndicator size="large" color="#0000ff" />}
       <TextInput
         style={styles.input}
         placeholder="Name"
         value={name}
-        onChangeText={setName}
+        onChangeText={(value) => handleInputChange("name", value)}
       />
+      {inputErrors.name !== "" && (
+        <Text style={styles.errorText}>{inputErrors.name}</Text>
+      )}
       <TextInput
         style={styles.input}
         placeholder="Description"
         value={description}
-        onChangeText={setDescription}
+        onChangeText={(value) => handleInputChange("description", value)}
       />
+      {inputErrors.description !== "" && (
+        <Text style={styles.errorText}>{inputErrors.description}</Text>
+      )}
       <TextInput
         style={styles.input}
         placeholder="Unit Price"
         value={unitPrice}
-        onChangeText={setUnitPrice}
+        onChangeText={(value) => handleInputChange("unitPrice", value)}
       />
+      {inputErrors.unitPrice !== "" && (
+        <Text style={styles.errorText}>{inputErrors.unitPrice}</Text>
+      )}
       <TextInput
         style={styles.input}
         placeholder="Total Quantity"
         value={totalQuantity}
-        onChangeText={setTotalQuantity}
+        onChangeText={(value) => handleInputChange("totalQuantity", value)}
       />
+      {inputErrors.totalQuantity !== "" && (
+        <Text style={styles.errorText}>{inputErrors.totalQuantity}</Text>
+      )}
       <Picker
+        style={styles.input}
         selectedValue={selectedCategoryId}
-        // style={styles.input}
         onValueChange={(itemValue) => setSelectedCategoryId(itemValue)}
       >
-        {categories.map((category: { name: string; id: string }) => (
+        {categories.map((category: any) => (
           <Picker.Item
             label={category.name}
             value={category.id}
@@ -146,14 +186,10 @@ const EditItemScreen = ({
           />
         ))}
       </Picker>
-      <TextInput
-        style={styles.input}
-        placeholder="New Category Name"
-        value={newCategoryName}
-        onChangeText={setNewCategoryName}
-      />
-      <Button title="Add New Category" onPress={addCategory} />
-      <Button title="Save Item" onPress={saveItem} />
+      <View style={styles.buttonContainer}>
+        <Button title="Add New Category" onPress={addCategory} />
+        <Button title="Save Item" onPress={saveItem} />
+      </View>
     </View>
   );
 };
@@ -162,12 +198,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: "bold",
-    textAlign: "center",
-    marginVertical: 20,
+    justifyContent: "center",
+    alignItems: "center",
   },
   input: {
     borderWidth: 1,
@@ -175,6 +207,17 @@ const styles = StyleSheet.create({
     padding: 10,
     marginVertical: 10,
     borderRadius: 5,
+    width: "100%",
+  },
+  buttonContainer: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    width: "100%",
+    marginTop: 20,
+  },
+  errorText: {
+    color: "red",
+    marginBottom: 5,
   },
 });
 
