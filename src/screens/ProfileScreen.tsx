@@ -85,7 +85,7 @@ const ProfileScreen = ({ navigation }: { navigation: any }) => {
         db,
         "users",
         user.uid,
-        "products"
+        "products",
       );
       await addDoc(profilesCollectionRef, {
         name: "New Item",
@@ -98,30 +98,23 @@ const ProfileScreen = ({ navigation }: { navigation: any }) => {
       console.log(error);
     }
   };
-  const handleEditPrrofile = () => {
+  const handleEditProfile = () => {
     navigation.navigate("EditProfileScreen");
   };
 
   const headerItem = () => (
     <>
-      <View style={styles.body}>
-        <View style={styles.profileImage}>
-          <FontAwesome5 name="user-tie" size={50} color={Color.primaryColor} />
-          <TouchableOpacity
-            style={styles.editButton}
-            onPress={handleEditPrrofile}
-          >
-            <FontAwesome5
-              name="plus-circle"
-              size={24}
-              color={Color.primaryColor}
-            />
-          </TouchableOpacity>
+      <View style={styles.profile}>
+        <FontAwesome5 name="user-tie" size={50} color={Color.primaryColor} />
+        <View style={styles.profileInfo}>
+          <Text style={styles.username}>{username}</Text>
+          <Text style={styles.email}>{email}</Text>
+          <Text style={styles.contact}>{phoneNumber}</Text>
+          <Text style={styles.address}>{address}</Text>
         </View>
-        <Text style={styles.username}>{username}</Text>
-        <Text style={styles.username}>{email}</Text>
-        <Text style={styles.bio}>{phoneNumber}</Text>
-        <Text style={styles.bio}>{address}</Text>
+        <TouchableOpacity style={styles.editButton} onPress={handleEditProfile}>
+          <FontAwesome5 name="edit" size={20} color={Color.primaryColor} />
+        </TouchableOpacity>
       </View>
       <View style={styles.sectionHeader}>
         <Text style={styles.sectionTitle}>Items</Text>
@@ -150,43 +143,47 @@ const ProfileScreen = ({ navigation }: { navigation: any }) => {
 
 const styles = StyleSheet.create({
   container: {
-    flexGrow: 1,
-    padding: 20,
-    marginTop: 20,
+    flex: 1,
     backgroundColor: "#f8f9fa",
+    padding: 20,
+    paddingTop: 40,
+    marginTop: 30,
   },
-  title: {
-    fontSize: 28,
+  profile: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 20,
+  },
+  profileInfo: {
+    marginLeft: 20,
+  },
+  username: {
+    fontSize: 24,
     fontWeight: "bold",
-    textAlign: "center",
-    marginVertical: 20,
-    color: "#343a40",
+    marginBottom: 5,
   },
-  input: {
-    borderWidth: 1,
-    borderColor: "#ced4da",
-    padding: 12,
-    marginVertical: 10,
-    borderRadius: 8,
-    backgroundColor: "#fff",
+  email: {
+    fontSize: 16,
+    color: "#666",
+    marginBottom: 5,
   },
-  saveButton: {
-    backgroundColor: "#007bff",
-    padding: 15,
-    borderRadius: 8,
-    marginVertical: 10,
+  contact: {
+    fontSize: 16,
+    color: "#666",
+    marginBottom: 5,
   },
-  saveButtonText: {
-    color: "#fff",
-    textAlign: "center",
-    fontWeight: "bold",
+  address: {
+    fontSize: 16,
+    color: "#666",
+  },
+  editButton: {
+    marginLeft: "auto",
   },
   sectionHeader: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginTop: 30,
-    marginBottom: 10,
+    marginBottom: 20,
   },
   sectionTitle: {
     fontSize: 24,
@@ -195,12 +192,12 @@ const styles = StyleSheet.create({
   },
   addButton: {
     backgroundColor: "#28a745",
-    padding: 10,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
     borderRadius: 8,
   },
   addButtonText: {
     color: "#fff",
-    textAlign: "center",
     fontWeight: "bold",
   },
   noItemsText: {
@@ -216,50 +213,12 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#dee2e6",
     borderRadius: 8,
-    marginVertical: 5,
+    marginBottom: 10,
     backgroundColor: "#fff",
   },
   itemText: {
     fontSize: 16,
     color: "#495057",
-  },
-
-  body: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  username: {
-    fontSize: 24,
-    fontWeight: "bold",
-    marginBottom: 10,
-  },
-  bio: {
-    fontSize: 16,
-    marginBottom: 20,
-  },
-  editButton: {
-    paddingHorizontal: 5,
-    paddingVertical: 10,
-    borderRadius: 5,
-    position: "absolute",
-    top: 10,
-    right: -10,
-  },
-  editButtonText: {
-    color: "#fff",
-    fontSize: 16,
-  },
-  profileImage: {
-    width: 100,
-    height: 100,
-    borderRadius: 75,
-    marginVertical: 10,
-    marginTop: 30,
-    backgroundColor: Color.lightgray,
-    justifyContent: "center",
-    alignItems: "center",
-    shadowColor: "#000",
   },
 });
 
