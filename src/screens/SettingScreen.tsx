@@ -44,8 +44,8 @@ const SettingScreen = () => {
       const res = await addDoc(profilesCollectionRef, {
         name: "phone",
         description: "phone",
-        unit_price: "10",
-        total_quantity: "10  ",
+        unitPrice: "10",
+        totalQuantity: "10  ",
       });
       console.log("res", res);
     } catch (error) {

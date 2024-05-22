@@ -48,7 +48,10 @@ const AddCategoryScreen = ({ navigation }: { navigation: any }) => {
 
       setNewCategoryName("");
       setInputError("");
-      Alert.alert("Success", "New category added.");
+      Alert.alert("Success", "New category added.", [
+        { text: "Add More" },
+        { text: "OK", onPress: () => navigation.goBack() },
+      ]);
     } catch (error) {
       console.log(error);
       Alert.alert("Error", "Could not add category. Please try again.");

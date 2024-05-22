@@ -6,21 +6,23 @@ import {
   FlatList,
   StyleSheet,
 } from "react-native";
-import { addDoc, collection, doc, getDoc, getDocs } from "firebase/firestore";
+import { collection, doc, getDoc, getDocs } from "firebase/firestore";
 import { getFirestore } from "firebase/firestore";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../redux/store";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { Color } from "../utills/GlobalStyles";
+import { setProfile } from "../redux/slices/profilleSlice";
+import { IProduct, setProduct } from "../redux/slices/productSlice";
 
 const ProfileScreen = ({ navigation }: { navigation: any }) => {
   const user = useSelector((state: RootState) => state.user);
-  const [username, setUsername] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState(user.phoneNumber + "");
-  const [email, setEmail] = useState("");
-  const [address, setAddress] = useState("");
-  const [products, setProducts] = useState([]);
+  const profile = useSelector((state: RootState) => state.profile);
+  const products = useSelector((state: RootState) => state.products);
+  const { username, email, address } = profile;
+  const [phoneNumber] = useState(user.phoneNumber + "");
   const db = getFirestore();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -30,10 +32,7 @@ const ProfileScreen = ({ navigation }: { navigation: any }) => {
 
         if (docSnap.exists()) {
           const data = docSnap.data();
-          setUsername(data.username);
-          setPhoneNumber(data.phoneNumber);
-          setEmail(data.email);
-          setAddress(data.address);
+          dispatch(setProfile(data as any));
         }
       } catch (error) {
         console.log(error);
@@ -43,7 +42,7 @@ const ProfileScreen = ({ navigation }: { navigation: any }) => {
     fetchProfile();
     fetchItems();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user.uid, db]);
+  }, [user.uid, db, profile]);
 
   const fetchItems = async () => {
     try {
@@ -53,50 +52,41 @@ const ProfileScreen = ({ navigation }: { navigation: any }) => {
         id: doc.id,
         ...doc.data(),
       }));
-      setProducts(itemsList as []);
+      dispatch(setProduct(itemsList as any));
     } catch (error) {
       console.log(error);
     }
   };
 
-  const renderItem = ({ item }: { item: any }) => (
-    <TouchableOpacity
-      onPress={() =>
-        navigation.navigate("EditProductScreen", {
-          userId: user.uid,
-          itemId: item.id,
-        })
-      }
-    >
-      <View style={styles.item}>
-        <Text style={styles.itemText}>Name: {item.name}</Text>
-        <Text style={styles.itemText}>Description: {item.description}</Text>
-        <Text style={styles.itemText}>Unit Price: {item.unit_price}</Text>
-        <Text style={styles.itemText}>
-          Total Quantity: {item.total_quantity}
-        </Text>
-      </View>
-    </TouchableOpacity>
-  );
+  const renderItem = ({ item }: { item: IProduct }) => {
+    return (
+      <TouchableOpacity
+        onPress={() =>
+          navigation.navigate("EditProductScreen", {
+            userId: user.uid,
+            itemId: item.id,
+          })
+        }
+      >
+        <View style={styles.item}>
+          <Text style={styles.itemText}>Name: {item.name}</Text>
+          <Text style={styles.itemText}>Description: {item.description}</Text>
+          <Text style={styles.itemText}>Unit Price: {item.unitPrice}</Text>
+          <Text style={styles.itemText}>
+            {item.purchasePrice ? " Purchase Price:" + item.purchasePrice : ""}
+          </Text>
+          <Text style={styles.itemText}>
+            Total Quantity: {item.totalQuantity}
+          </Text>
+        </View>
+      </TouchableOpacity>
+    );
+  };
 
-  const addItem = async () => {
-    try {
-      const profilesCollectionRef = collection(
-        db,
-        "users",
-        user.uid,
-        "products",
-      );
-      await addDoc(profilesCollectionRef, {
-        name: "New Item",
-        description: "Item Description",
-        unit_price: "0",
-        total_quantity: "0",
-      });
-      fetchItems();
-    } catch (error) {
-      console.log(error);
-    }
+  const addIProduct = async () => {
+    navigation.navigate("EditProductScreen", {
+      userId: user.uid,
+    });
   };
   const handleEditProfile = () => {
     navigation.navigate("EditProfileScreen");
@@ -118,7 +108,7 @@ const ProfileScreen = ({ navigation }: { navigation: any }) => {
       </View>
       <View style={styles.sectionHeader}>
         <Text style={styles.sectionTitle}>My Products</Text>
-        <TouchableOpacity style={styles.addButton} onPress={addItem}>
+        <TouchableOpacity style={styles.addButton} onPress={addIProduct}>
           <Text style={styles.addButtonText}>Add Products</Text>
         </TouchableOpacity>
       </View>

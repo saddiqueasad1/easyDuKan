@@ -10,11 +10,16 @@ import {
   ScrollView,
 } from "react-native";
 import { Picker } from "@react-native-picker/picker";
-import { doc, getDoc, setDoc, collection, getDocs } from "firebase/firestore";
+import { doc, setDoc, collection, getDocs, addDoc } from "firebase/firestore";
 import { getFirestore } from "firebase/firestore";
 import { useDispatch, useSelector } from "react-redux";
 import { setCategories } from "../redux/slices/categoriesSlice";
 import { RootState } from "../redux/store";
+import {
+  addProduct,
+  IProduct,
+  updateProduct,
+} from "../redux/slices/productSlice";
 
 const EditProductScreen = ({
   route,
@@ -23,13 +28,17 @@ const EditProductScreen = ({
   route: any;
   navigation: any;
 }) => {
-  const { userId, itemId } = route.params;
+  const user = useSelector((state: RootState) => state.user);
+  const userId = user.uid;
+  const { itemId } = route.params;
   const dispatch = useDispatch();
   const { categories } = useSelector((state: RootState) => state.categories);
+  const products = useSelector((state: RootState) => state.products);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
-  const [unitPrice, setUnitPrice] = useState("");
-  const [totalQuantity, setTotalQuantity] = useState("");
+  const [unitPrice, setUnitPrice] = useState(0);
+  const [totalQuantity, setTotalQuantity] = useState(0);
+  const [purchasePrice, setPurchasePrice] = useState(0);
   const [selectedCategoryId, setSelectedCategoryId] = useState("");
   const [loading, setLoading] = useState(false);
   const [inputErrors, setInputErrors] = useState({
@@ -37,28 +46,36 @@ const EditProductScreen = ({
     description: "",
     unitPrice: "",
     totalQuantity: "",
+    purchasePrice: "",
   });
   const db = getFirestore();
 
   useEffect(() => {
+    navigation.setOptions({
+      title: itemId ? "Edit Product" : "Add Product",
+    });
     const fetchItem = async () => {
-      setLoading(true);
-      try {
-        const itemRef = doc(db, "users", userId, "products", itemId);
-        const itemSnap = await getDoc(itemRef);
-
-        if (itemSnap.exists()) {
-          const data = itemSnap.data();
-          setName(data.name);
-          setDescription(data.description);
-          setUnitPrice(data.unit_price);
-          setTotalQuantity(data.total_quantity);
-          setSelectedCategoryId(data.category_id || "");
+      if (itemId) {
+        setLoading(true);
+        try {
+          const selectProductById: IProduct | undefined = products.find(
+            (product) => product.id === itemId,
+          );
+          if (selectProductById) {
+            setName(selectProductById.name || "");
+            setDescription(selectProductById.description);
+            setUnitPrice(selectProductById.unitPrice);
+            setTotalQuantity(selectProductById.totalQuantity);
+            setSelectedCategoryId(selectProductById.category_id || "");
+          } else {
+            // Handle case when no product is found with the given id
+            console.log("Product not found");
+          }
+        } catch (error) {
+          console.log(error);
+        } finally {
+          setLoading(false);
         }
-      } catch (error) {
-        console.log(error);
-      } finally {
-        setLoading(false);
       }
     };
 
@@ -82,7 +99,7 @@ const EditProductScreen = ({
 
     fetchItem();
     fetchCategories();
-  }, [userId, itemId, db, dispatch]);
+  }, [userId, itemId, db, dispatch, navigation, products]);
 
   const validateInputs = () => {
     let valid = true;
@@ -91,6 +108,7 @@ const EditProductScreen = ({
       description: "",
       unitPrice: "",
       totalQuantity: "",
+      purchasePrice: "",
     };
 
     if (!name.trim()) {
@@ -101,12 +119,16 @@ const EditProductScreen = ({
       errors.description = "Description is required.";
       valid = false;
     }
-    if (!unitPrice.trim() || isNaN(Number(unitPrice))) {
+    if (!unitPrice || isNaN(Number(unitPrice))) {
       errors.unitPrice = "Valid unit price is required.";
       valid = false;
     }
-    if (!totalQuantity.trim() || isNaN(Number(totalQuantity))) {
+    if (!totalQuantity || isNaN(Number(totalQuantity))) {
       errors.totalQuantity = "Valid total quantity is required.";
+      valid = false;
+    }
+    if (!purchasePrice || isNaN(Number(purchasePrice))) {
+      errors.purchasePrice = "Valid total purchase Price is required.";
       valid = false;
     }
 
@@ -118,21 +140,62 @@ const EditProductScreen = ({
     if (!validateInputs()) {
       return;
     }
-
     setLoading(true);
     try {
-      await setDoc(doc(db, "users", userId, "products", itemId), {
-        name,
-        description,
-        unit_price: unitPrice,
-        total_quantity: totalQuantity,
-        category_id: selectedCategoryId,
-      });
-      Alert.alert("Success", "Item saved successfully!");
-      navigation.goBack();
+      if (itemId) {
+        await setDoc(doc(db, "users", userId, "products", itemId), {
+          name,
+          description,
+          unitPrice: unitPrice,
+          totalQuantity: totalQuantity,
+          category_id: selectedCategoryId,
+          purchasePrice: purchasePrice,
+        });
+        Alert.alert("Success", "Prodduct updated successfully!", [
+          { text: "OK", onPress: () => navigation.goBack() },
+        ]);
+        dispatch(
+          updateProduct({
+            name,
+            description,
+            unitPrice: unitPrice,
+            totalQuantity: totalQuantity,
+            category_id: selectedCategoryId,
+            id: itemId,
+            purchasePrice: purchasePrice,
+          }),
+        );
+      } else {
+        const result = await addDoc(
+          collection(db, "users", userId, "products"),
+          {
+            name,
+            description,
+            unitPrice: unitPrice,
+            totalQuantity: totalQuantity,
+            category_id: selectedCategoryId,
+            purchasePrice: purchasePrice,
+          },
+        );
+        dispatch(
+          addProduct({
+            name,
+            description,
+            unitPrice: unitPrice,
+            totalQuantity: totalQuantity,
+            category_id: selectedCategoryId,
+            purchasePrice: purchasePrice,
+            id: result.id,
+          }),
+        );
+        Alert.alert("Success", "Product added successfully!", [
+          { text: "Add More" },
+          { text: "OK", onPress: () => navigation.goBack() },
+        ]);
+      }
     } catch (error) {
       console.log(error);
-      Alert.alert("Error", "Failed to save item.");
+      Alert.alert("Error", "Failed to save Product.");
     } finally {
       setLoading(false);
     }
@@ -148,10 +211,13 @@ const EditProductScreen = ({
         setDescription(value);
         break;
       case "unitPrice":
-        setUnitPrice(value);
+        setUnitPrice(Number(value));
         break;
       case "totalQuantity":
-        setTotalQuantity(value);
+        setTotalQuantity(Number(value));
+        break;
+      case "purchasePrice":
+        setPurchasePrice(Number(value));
         break;
       default:
         break;
@@ -190,7 +256,7 @@ const EditProductScreen = ({
         style={styles.input}
         placeholder="Unit Price"
         keyboardType="numeric"
-        value={unitPrice}
+        value={unitPrice + ""}
         onChangeText={(value) => handleInputChange("unitPrice", value)}
       />
       {inputErrors.unitPrice !== "" && (
@@ -202,11 +268,22 @@ const EditProductScreen = ({
         style={styles.input}
         placeholder="Total Quantity"
         keyboardType="numeric"
-        value={totalQuantity}
+        value={totalQuantity + ""}
         onChangeText={(value) => handleInputChange("totalQuantity", value)}
       />
       {inputErrors.totalQuantity !== "" && (
         <Text style={styles.errorText}>{inputErrors.totalQuantity}</Text>
+      )}
+      <Text style={styles.text}>Purchase Price</Text>
+      <TextInput
+        style={styles.input}
+        placeholder="Purchase Price"
+        keyboardType="numeric"
+        value={purchasePrice + ""}
+        onChangeText={(value) => handleInputChange("purchasePrice", value)}
+      />
+      {inputErrors.purchasePrice !== "" && (
+        <Text style={styles.errorText}>{inputErrors.purchasePrice}</Text>
       )}
       <Text style={styles.text}>Category</Text>
       <Picker
@@ -270,6 +347,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     width: "100%",
     marginTop: 20,
+    marginBottom: 140,
   },
   errorText: {
     color: "red",
