@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   TextInput,
@@ -7,16 +7,10 @@ import {
   StyleSheet,
   Alert,
   ActivityIndicator,
+  ScrollView,
 } from "react-native";
 import { Picker } from "@react-native-picker/picker";
-import {
-  doc,
-  getDoc,
-  setDoc,
-  collection,
-  addDoc,
-  getDocs,
-} from "firebase/firestore";
+import { doc, getDoc, setDoc, collection, getDocs } from "firebase/firestore";
 import { getFirestore } from "firebase/firestore";
 import { useDispatch, useSelector } from "react-redux";
 import { setCategories } from "../redux/slices/categoriesSlice";
@@ -43,7 +37,6 @@ const EditItemScreen = ({
     description: "",
     unitPrice: "",
     totalQuantity: "",
-    newCategoryName: "",
   });
   const db = getFirestore();
 
@@ -73,14 +66,13 @@ const EditItemScreen = ({
       setLoading(true);
       try {
         const categoriesSnapshot = await getDocs(
-          collection(db, "users", userId, "categories")
+          collection(db, "users", userId, "categories"),
         );
         const categoriesList = categoriesSnapshot.docs.map((doc) => ({
           id: doc.id,
           ...doc.data(),
         }));
         dispatch(setCategories(categoriesList));
-        // setCategories(categoriesList);
       } catch (error) {
         console.log(error);
       } finally {
@@ -90,9 +82,43 @@ const EditItemScreen = ({
 
     fetchItem();
     fetchCategories();
-  }, [userId, itemId, db]);
+  }, [userId, itemId, db, dispatch]);
+
+  const validateInputs = () => {
+    let valid = true;
+    let errors = {
+      name: "",
+      description: "",
+      unitPrice: "",
+      totalQuantity: "",
+    };
+
+    if (!name.trim()) {
+      errors.name = "Name is required.";
+      valid = false;
+    }
+    if (!description.trim()) {
+      errors.description = "Description is required.";
+      valid = false;
+    }
+    if (!unitPrice.trim() || isNaN(Number(unitPrice))) {
+      errors.unitPrice = "Valid unit price is required.";
+      valid = false;
+    }
+    if (!totalQuantity.trim() || isNaN(Number(totalQuantity))) {
+      errors.totalQuantity = "Valid total quantity is required.";
+      valid = false;
+    }
+
+    setInputErrors(errors);
+    return valid;
+  };
 
   const saveItem = async () => {
+    if (!validateInputs()) {
+      return;
+    }
+
     setLoading(true);
     try {
       await setDoc(doc(db, "users", userId, "products", itemId), {
@@ -102,16 +128,14 @@ const EditItemScreen = ({
         total_quantity: totalQuantity,
         category_id: selectedCategoryId,
       });
+      Alert.alert("Success", "Item saved successfully!");
       navigation.goBack();
     } catch (error) {
       console.log(error);
+      Alert.alert("Error", "Failed to save item.");
     } finally {
       setLoading(false);
     }
-  };
-
-  const addCategory = async () => {
-    navigation.navigate("AddCategoryScreen");
   };
 
   const handleInputChange = (key: string, value: string) => {
@@ -135,8 +159,12 @@ const EditItemScreen = ({
   };
 
   return (
-    <View style={styles.container}>
-      {loading && <ActivityIndicator size="large" color="#0000ff" />}
+    <ScrollView contentContainerStyle={styles.container}>
+      {loading && (
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color="#0000ff" />
+        </View>
+      )}
       <TextInput
         style={styles.input}
         placeholder="Name"
@@ -158,6 +186,7 @@ const EditItemScreen = ({
       <TextInput
         style={styles.input}
         placeholder="Unit Price"
+        keyboardType="numeric"
         value={unitPrice}
         onChangeText={(value) => handleInputChange("unitPrice", value)}
       />
@@ -167,6 +196,7 @@ const EditItemScreen = ({
       <TextInput
         style={styles.input}
         placeholder="Total Quantity"
+        keyboardType="numeric"
         value={totalQuantity}
         onChangeText={(value) => handleInputChange("totalQuantity", value)}
       />
@@ -187,31 +217,47 @@ const EditItemScreen = ({
         ))}
       </Picker>
       <View style={styles.buttonContainer}>
-        <Button title="Add New Category" onPress={addCategory} />
+        <Button
+          title="Add New Category"
+          onPress={() => navigation.navigate("AddCategoryScreen")}
+        />
         <Button title="Save Item" onPress={saveItem} />
       </View>
-    </View>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flexGrow: 1,
     padding: 20,
+    backgroundColor: "#f8f9fa",
     justifyContent: "center",
     alignItems: "center",
   },
+  loadingContainer: {
+    position: "absolute",
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(255, 255, 255, 0.7)",
+    zIndex: 1,
+  },
   input: {
     borderWidth: 1,
-    borderColor: "#ccc",
-    padding: 10,
+    borderColor: "#ced4da",
+    padding: 12,
     marginVertical: 10,
-    borderRadius: 5,
+    borderRadius: 8,
     width: "100%",
+    backgroundColor: "#fff",
   },
   buttonContainer: {
     flexDirection: "row",
-    justifyContent: "space-around",
+    justifyContent: "space-between",
     width: "100%",
     marginTop: 20,
   },

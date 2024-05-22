@@ -1,5 +1,13 @@
 import React, { useState } from "react";
-import { View, TextInput, Button, Text, StyleSheet, Alert } from "react-native";
+import {
+  View,
+  TextInput,
+  Button,
+  Text,
+  StyleSheet,
+  Alert,
+  ActivityIndicator,
+} from "react-native";
 import { addDoc, collection } from "firebase/firestore";
 import { getFirestore } from "firebase/firestore";
 import { useDispatch, useSelector } from "react-redux";
@@ -13,7 +21,6 @@ const AddCategoryScreen = ({ navigation }: { navigation: any }) => {
   const dispatch = useDispatch();
   const { categories } = useSelector((state: RootState) => state.categories);
   const user = useSelector((state: RootState) => state.user);
-
   const db = getFirestore();
 
   const addCategory = async () => {
@@ -28,7 +35,7 @@ const AddCategoryScreen = ({ navigation }: { navigation: any }) => {
         collection(db, "users", user.uid, "categories"),
         {
           name: newCategoryName,
-        }
+        },
       );
 
       const newCategory = {
@@ -40,6 +47,7 @@ const AddCategoryScreen = ({ navigation }: { navigation: any }) => {
       dispatch(setCategories([...categories, newCategory]));
 
       setNewCategoryName("");
+      setInputError("");
       Alert.alert("Success", "New category added.");
     } catch (error) {
       console.log(error);
@@ -58,7 +66,13 @@ const AddCategoryScreen = ({ navigation }: { navigation: any }) => {
         onChangeText={setNewCategoryName}
       />
       {inputError !== "" && <Text style={styles.errorText}>{inputError}</Text>}
-      <Button title="Add Category" onPress={addCategory} disabled={loading} />
+      <View style={styles.buttonContainer}>
+        {loading ? (
+          <ActivityIndicator size="large" color="#0000ff" />
+        ) : (
+          <Button title="Add Category" onPress={addCategory} />
+        )}
+      </View>
     </View>
   );
 };
@@ -69,18 +83,24 @@ const styles = StyleSheet.create({
     padding: 20,
     justifyContent: "center",
     alignItems: "center",
+    backgroundColor: "#f8f9fa",
   },
   input: {
     borderWidth: 1,
-    borderColor: "#ccc",
-    padding: 10,
+    borderColor: "#ced4da",
+    padding: 12,
     marginVertical: 10,
-    borderRadius: 5,
+    borderRadius: 8,
     width: "100%",
+    backgroundColor: "#fff",
   },
   errorText: {
     color: "red",
     marginBottom: 10,
+  },
+  buttonContainer: {
+    marginTop: 20,
+    width: "100%",
   },
 });
 

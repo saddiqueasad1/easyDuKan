@@ -2,11 +2,12 @@ import React, { useEffect, useState } from "react";
 import {
   View,
   TextInput,
-  Button,
+  TouchableOpacity,
   Text,
   FlatList,
   StyleSheet,
-  TouchableOpacity,
+  ScrollView,
+  Alert,
 } from "react-native";
 import {
   addDoc,
@@ -17,9 +18,8 @@ import {
   getDocs,
 } from "firebase/firestore";
 import { getFirestore } from "firebase/firestore";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { RootState } from "../redux/store";
-import { clearUser } from "../redux/slices/userSlice";
 
 const ProfileScreen = ({ navigation }: { navigation: any }) => {
   const user = useSelector((state: RootState) => state.user);
@@ -29,7 +29,6 @@ const ProfileScreen = ({ navigation }: { navigation: any }) => {
   const [address, setAddress] = useState("");
   const [items, setItems] = useState([]);
   const db = getFirestore();
-  const dispatch = useDispatch();
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -51,6 +50,7 @@ const ProfileScreen = ({ navigation }: { navigation: any }) => {
 
     fetchProfile();
     fetchItems();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user.uid, db]);
 
   const fetchItems = async () => {
@@ -75,13 +75,11 @@ const ProfileScreen = ({ navigation }: { navigation: any }) => {
         email,
         address,
       });
+      Alert.alert("Success", "Profile saved successfully!");
     } catch (error) {
       console.log(error);
+      Alert.alert("Error", "Failed to save profile.");
     }
-  };
-
-  const handleLogout = () => {
-    dispatch(clearUser());
   };
 
   const renderItem = ({ item }: { item: any }) => (
@@ -104,7 +102,7 @@ const ProfileScreen = ({ navigation }: { navigation: any }) => {
     </TouchableOpacity>
   );
 
-  const saveItems = async () => {
+  const addItem = async () => {
     try {
       const profilesCollectionRef = collection(
         db,
@@ -113,10 +111,10 @@ const ProfileScreen = ({ navigation }: { navigation: any }) => {
         "products",
       );
       await addDoc(profilesCollectionRef, {
-        name: "phone 3",
-        description: "phone 2",
-        unit_price: "10",
-        total_quantity: "10",
+        name: "New Item",
+        description: "Item Description",
+        unit_price: "0",
+        total_quantity: "0",
       });
       // Fetch items again after adding
       fetchItems();
@@ -126,8 +124,8 @@ const ProfileScreen = ({ navigation }: { navigation: any }) => {
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Profile Screen</Text>
+    <ScrollView contentContainerStyle={styles.container}>
+      <Text style={styles.title}>Profile</Text>
       <TextInput
         style={styles.input}
         placeholder="Username"
@@ -152,56 +150,103 @@ const ProfileScreen = ({ navigation }: { navigation: any }) => {
         value={address}
         onChangeText={setAddress}
       />
-      <Button title="Save Profile" onPress={saveProfile} />
-      <Button title="Save items" onPress={saveItems} />
-      <Text style={styles.sectionTitle}>Items</Text>
+      <TouchableOpacity style={styles.saveButton} onPress={saveProfile}>
+        <Text style={styles.saveButtonText}>Save Profile</Text>
+      </TouchableOpacity>
+      <View style={styles.sectionHeader}>
+        <Text style={styles.sectionTitle}>Items</Text>
+        <TouchableOpacity style={styles.addButton} onPress={addItem}>
+          <Text style={styles.addButtonText}>Add Item</Text>
+        </TouchableOpacity>
+      </View>
       {items.length === 0 ? (
-        <Text>No items available</Text>
+        <Text style={styles.noItemsText}>No items available</Text>
       ) : (
         <FlatList
           data={items}
           keyExtractor={(item) => item.id}
           renderItem={renderItem}
+          contentContainerStyle={styles.itemsList}
         />
       )}
-    </View>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flexGrow: 1,
     padding: 20,
-    marginTop: 10,
+    marginTop: 20,
+    backgroundColor: "#f8f9fa",
   },
   title: {
-    fontSize: 24,
+    fontSize: 28,
     fontWeight: "bold",
     textAlign: "center",
     marginVertical: 20,
+    color: "#343a40",
   },
   input: {
     borderWidth: 1,
-    borderColor: "#ccc",
-    padding: 10,
+    borderColor: "#ced4da",
+    padding: 12,
     marginVertical: 10,
-    borderRadius: 5,
+    borderRadius: 8,
+    backgroundColor: "#fff",
   },
-  sectionTitle: {
-    fontSize: 20,
+  saveButton: {
+    backgroundColor: "#007bff",
+    padding: 15,
+    borderRadius: 8,
+    marginVertical: 10,
+  },
+  saveButtonText: {
+    color: "#fff",
+    textAlign: "center",
     fontWeight: "bold",
+  },
+  sectionHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     marginTop: 30,
     marginBottom: 10,
+  },
+  sectionTitle: {
+    fontSize: 24,
+    fontWeight: "bold",
+    color: "#343a40",
+  },
+  addButton: {
+    backgroundColor: "#28a745",
+    padding: 10,
+    borderRadius: 8,
+  },
+  addButtonText: {
+    color: "#fff",
+    textAlign: "center",
+    fontWeight: "bold",
+  },
+  noItemsText: {
+    textAlign: "center",
+    color: "#6c757d",
+    marginVertical: 20,
+  },
+  itemsList: {
+    paddingBottom: 20,
   },
   item: {
     padding: 15,
     borderWidth: 1,
-    borderColor: "#ddd",
-    borderRadius: 5,
+    borderColor: "#dee2e6",
+    borderRadius: 8,
     marginVertical: 5,
+    backgroundColor: "#fff",
   },
   itemText: {
     fontSize: 16,
+    color: "#495057",
   },
 });
 
