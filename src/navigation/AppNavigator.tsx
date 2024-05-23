@@ -8,6 +8,7 @@ import { RootState } from "../redux/store";
 import EditProductScreen from "../screens/EditProductScreen";
 import AddCategoryScreen from "../screens/AddCategoryScreen";
 import EditProfileScreen from "../screens/EditProfileScreen";
+import ChatScreen from "../screens/ChatScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -35,6 +36,11 @@ const AppNavigator = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
             name="EditProfileScreen"
             component={EditProfileScreen}
             options={{ headerShown: true, title: "Edit Profile" }}
+          />
+          <Stack.Screen
+            name="ChatScreen"
+            component={ChatScreen}
+            options={{ headerShown: true, title: "Chat" }}
           />
         </>
       ) : (

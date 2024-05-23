@@ -8,6 +8,7 @@ import {
   FlatList,
   Alert,
   ActivityIndicator,
+  TouchableOpacity,
 } from "react-native";
 import {
   collection,
@@ -21,7 +22,7 @@ import { IProfile } from "../redux/slices/profilleSlice";
 import { useSelector } from "react-redux";
 import { RootState } from "../redux/store";
 
-const UserScreen = () => {
+const UserScreen = ({ navigation }: { navigation: any }) => {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [error, setError] = useState("");
   const [contacts, setContacts] = useState<IProfile[]>([]);
@@ -147,11 +148,15 @@ const UserScreen = () => {
           data={contacts}
           keyExtractor={(item) => item.phoneNumber}
           renderItem={({ item }) => (
-            <View style={styles.contactItem}>
-              <Text style={styles.contactText}>Name: {item.username}</Text>
-              <Text style={styles.contactText}>Email: {item.email}</Text>
-              <Text style={styles.contactText}>Phone: {item.phoneNumber}</Text>
-            </View>
+            <TouchableOpacity onPress={() => navigation.navigate("ChatScreen")}>
+              <View style={styles.contactItem}>
+                <Text style={styles.contactText}>Name: {item.username}</Text>
+                <Text style={styles.contactText}>Email: {item.email}</Text>
+                <Text style={styles.contactText}>
+                  Phone: {item.phoneNumber}
+                </Text>
+              </View>
+            </TouchableOpacity>
           )}
         />
       </View>
