@@ -28,7 +28,7 @@ const EditProfileScreen = ({ navigation }: { navigation: any }) => {
   const saveProfile = async () => {
     try {
       setLoading(true);
-      await setDoc(doc(db, "users", user.uid, "profile", "details"), {
+      await setDoc(doc(db, "users", user.uid), {
         username,
         phoneNumber,
         email,

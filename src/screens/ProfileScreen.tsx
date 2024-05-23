@@ -27,7 +27,7 @@ const ProfileScreen = ({ navigation }: { navigation: any }) => {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const docRef = doc(db, "users", user.uid, "profile", "details");
+        const docRef = doc(db, "users", user.uid);
         const docSnap = await getDoc(docRef);
 
         if (docSnap.exists()) {

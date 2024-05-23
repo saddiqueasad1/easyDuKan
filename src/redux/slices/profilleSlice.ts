@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-interface IPrrofile {
+export interface IProfile {
   username: string;
   phoneNumber: string;
   email: string;
@@ -16,7 +16,7 @@ const profileSilse = createSlice({
     address: "",
   },
   reducers: {
-    setProfile(state, action: PayloadAction<IPrrofile>) {
+    setProfile(state, action: PayloadAction<IProfile>) {
       state.username = action.payload.username;
       state.phoneNumber = action.payload.phoneNumber;
       state.email = action.payload.email;
