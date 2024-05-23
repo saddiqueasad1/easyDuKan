@@ -147,17 +147,22 @@ const UserScreen = ({ navigation }: { navigation: any }) => {
         <FlatList
           data={contacts}
           keyExtractor={(item) => item.phoneNumber}
-          renderItem={({ item }) => (
-            <TouchableOpacity onPress={() => navigation.navigate("ChatScreen")}>
-              <View style={styles.contactItem}>
-                <Text style={styles.contactText}>Name: {item.username}</Text>
-                <Text style={styles.contactText}>Email: {item.email}</Text>
-                <Text style={styles.contactText}>
-                  Phone: {item.phoneNumber}
-                </Text>
-              </View>
-            </TouchableOpacity>
-          )}
+          renderItem={({ item }) => {
+            console.log(item);
+            return (
+              <TouchableOpacity
+                onPress={() => navigation.navigate("ChatScreen", { item })}
+              >
+                <View style={styles.contactItem}>
+                  <Text style={styles.contactText}>Name: {item.username}</Text>
+                  <Text style={styles.contactText}>Email: {item.email}</Text>
+                  <Text style={styles.contactText}>
+                    Phone: {item.phoneNumber}
+                  </Text>
+                </View>
+              </TouchableOpacity>
+            );
+          }}
         />
       </View>
       {loading && (

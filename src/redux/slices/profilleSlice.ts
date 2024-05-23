@@ -5,6 +5,7 @@ export interface IProfile {
   phoneNumber: string;
   email: string;
   address: string;
+  userId?: string;
 }
 
 const profileSilse = createSlice({
