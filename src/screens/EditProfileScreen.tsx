@@ -66,7 +66,7 @@ const EditProfileScreen = ({ navigation }: { navigation: any }) => {
         onChangeText={setPhoneNumber}
         editable={false}
       />
-      <Text style={styles.text}>EmailEmail</Text>
+      <Text style={styles.text}>Email</Text>
 
       <TextInput
         style={styles.input}
@@ -74,7 +74,7 @@ const EditProfileScreen = ({ navigation }: { navigation: any }) => {
         value={email}
         onChangeText={setEmail}
       />
-      <Text style={styles.text}>AddressAddress</Text>
+      <Text style={styles.text}>Address</Text>
 
       <TextInput
         style={styles.input}
