@@ -148,10 +148,9 @@ const UserScreen = ({ navigation }: { navigation: any }) => {
           data={contacts}
           keyExtractor={(item) => item.phoneNumber}
           renderItem={({ item }) => {
-            console.log(item);
             return (
               <TouchableOpacity
-                onPress={() => navigation.navigate("ChatScreen", { item })}
+                onPress={() => navigation.navigate("ChatScreen", item)}
               >
                 <View style={styles.contactItem}>
                   <Text style={styles.contactText}>Name: {item.username}</Text>

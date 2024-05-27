@@ -5,7 +5,7 @@ import AppNavigator from "./navigation/AppNavigator";
 import i18n from "./locales/Translation";
 import { useState } from "react";
 import { I18nextProvider } from "react-i18next";
-import firebaseApp from "./utills/firebaseConfig";
+import { app } from "./utills/firebaseConfig";
 
 const App = () => {
   const [hideSplashScreen] = useState(true);
@@ -17,7 +17,7 @@ const App = () => {
   });
 
   React.useEffect(() => {
-    console.log(firebaseApp.automaticDataCollectionEnabled);
+    console.log(app.automaticDataCollectionEnabled);
   }, []);
 
   if (!fontsLoaded && !error) {
