@@ -9,57 +9,16 @@ import {
   StyleSheet,
   ActivityIndicator,
 } from "react-native";
-import {
-  ref,
-  onValue,
-  push,
-  getDatabase,
-  query,
-  orderByChild,
-  equalTo,
-  set,
-  serverTimestamp,
-} from "firebase/database";
+import { ref, onValue, push, getDatabase, set } from "firebase/database";
 import { useSelector } from "react-redux";
 import { RouteProp } from "@react-navigation/native";
 import { RootState } from "../redux/store";
-import { addDoc, collection, getFirestore } from "firebase/firestore";
-import { sendMessage } from "../api/chatService";
-import { createRoom } from "../api/chatRoom";
-import { addParticipant } from "../api/participants";
+import { getFirestore } from "firebase/firestore";
+
+import { IMessage } from "../utills/types";
 type RootStackParamList = {
   ChatScreen: { userId: string; userName: string };
 };
-
-export interface IUser {
-  id: string;
-  name: string;
-  avatar: string;
-}
-interface QuickReplies {
-  type: "radio" | "checkbox";
-  values: Reply[];
-  keepIt?: boolean;
-}
-interface Reply {
-  title: string;
-  value: string;
-  messageId?: any;
-}
-export interface IMessage {
-  _id: string | number;
-  text: string;
-  createdAt: Date | number;
-  user: IUser;
-  image?: string;
-  video?: string;
-  audio?: string;
-  system?: boolean;
-  sent?: boolean;
-  received?: boolean;
-  pending?: boolean;
-  quickReplies?: QuickReplies;
-}
 
 export type ChatScreenRouteProp = RouteProp<RootStackParamList, "ChatScreen">;
 
@@ -73,7 +32,6 @@ const ChatScreen = ({ route }: { route: ChatScreenRouteProp }) => {
   const currentUserID = user.uid;
   const recipientId = route.params.userId;
   const database = getDatabase();
-  const db = getFirestore();
 
   useEffect(() => {
     if (!user) return;
@@ -104,11 +62,11 @@ const ChatScreen = ({ route }: { route: ChatScreenRouteProp }) => {
 
       const senderRef = ref(
         database,
-        `users/${user.uid}/chats/${recipientId}/messages`
+        `users/${user.uid}/chats/${recipientId}/messages`,
       );
       const recipientRef = ref(
         database,
-        `users/${recipientId}/chats/${user.uid}/messages`
+        `users/${recipientId}/chats/${user.uid}/messages`,
       );
       console.log(inputMessage);
       const HandleSendMessage = {
@@ -128,10 +86,10 @@ const ChatScreen = ({ route }: { route: ChatScreenRouteProp }) => {
       const newRecipientMessageRef = push(recipientRef);
       set(newRecipientMessageRef, HandleSendMessage);
     },
-    [user, recipientId, inputMessage]
+    [user, recipientId, inputMessage],
   );
 
-  const renderItem = ({ item }) => {
+  const renderItem = ({ item }: { item: any }) => {
     console.log(item);
 
     return (

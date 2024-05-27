@@ -1,8 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-interface Category {
-  id: string;
-  name: string;
-}
+import { Category } from "../../utills/types";
 
 interface CategoriesState {
   categories: Category[];

@@ -6,7 +6,7 @@ import {
   subscribeToParticipants,
 } from "./participants";
 import { getTimestamp } from "./utils";
-import { Message } from "./types";
+import { IMessage } from "../utills/types";
 
 const roomId = "exampleRoomId";
 const userId = "user123";
@@ -38,7 +38,7 @@ sendMessage(roomId, message)
   });
 
 // Listen for new messages
-subscribeToMessages(roomId, (messages: Message[]) => {
+subscribeToMessages(roomId, (messages: IMessage[]) => {
   console.log("Received messages:", messages);
 });
 

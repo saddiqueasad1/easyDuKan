@@ -1,15 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../store";
+import { IProduct } from "../../utills/types";
 
-export interface IProduct {
-  category_id?: string;
-  id: string;
-  name: string;
-  description: string;
-  unitPrice: number;
-  totalQuantity: number;
-  purchasePrice: number;
-}
 
 const initialState: IProduct[] = [];
 

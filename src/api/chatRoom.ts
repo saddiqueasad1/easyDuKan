@@ -14,47 +14,11 @@ export const createRoom = async () => {
   return roomId;
 };
 
-
-
-
 // chatService.ts
 import { ref, push, set, getDatabase } from "firebase/database";
+import { Message } from "../utills/types";
 
 const database = getDatabase();
-
-interface Message {
-  senderId: string;
-  message: string;
-  timestamp: number;
-  messageType: string;
-  mediaUrl?: string;
-}
-
-interface Chat {
-  participants: string[];
-  isGroupChat: boolean;
-  lastMessage: string;
-  lastMessageTimestamp: string;
-  messages: {//herre is message id 
-    senderId: string;
-    message: string;
-    timestamp: string;
-    messageType: string;
-    mediaUrl: string;
-    status: {
-      sent: boolean;
-      delivered: boolean;
-      read: boolean;
-    };
-    messageStatus: {
-      [userID: string]: {
-        sent: boolean;
-        delivered: boolean;
-        read: boolean;
-      };
-    };
-  };
-}
 
 async function sendMessage(chatId: string, message: Message): Promise<void> {
   try {
@@ -69,4 +33,3 @@ async function sendMessage(chatId: string, message: Message): Promise<void> {
 }
 
 export { sendMessage };
-

@@ -2,12 +2,9 @@
 import { database } from "../utills/firebaseConfig";
 
 import { ref, set, onValue, remove } from "firebase/database";
+import { Participant } from "../utills/types";
 
-interface Participant {
-  chatPartnerID: string;
-  userName: string;
-  userId: string;
-}
+
 
 export const addParticipant = async (
   roomId: string,

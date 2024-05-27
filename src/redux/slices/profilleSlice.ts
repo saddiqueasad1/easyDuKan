@@ -1,12 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-
-export interface IProfile {
-  username: string;
-  phoneNumber: string;
-  email: string;
-  address: string;
-  userId?: string;
-}
+import { IProfile } from "../../utills/types";
 
 const profileSilse = createSlice({
   name: "profile",

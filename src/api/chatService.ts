@@ -1,15 +1,9 @@
 import { getDatabase, ref, push, set, onValue } from "firebase/database";
 import { database } from "../utills/firebaseConfig";
+import { Message } from "../utills/types";
 
 const chatsRef = ref(database, "chats");
 
-export interface Message {
-  messageId: string;
-  userId: string;
-  userName: string;
-  text: string;
-  timestamp: number;
-}
 
 export const sendMessage = async (
   roomId: string,
