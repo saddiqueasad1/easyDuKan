@@ -10,16 +10,19 @@ import {
   ScrollView,
 } from "react-native";
 import { Picker } from "@react-native-picker/picker";
-import { doc, setDoc, collection, getDocs, addDoc } from "firebase/firestore";
-import { getFirestore } from "firebase/firestore";
+import {
+  doc,
+  setDoc,
+  collection,
+  getDocs,
+  addDoc,
+  getFirestore,
+} from "firebase/firestore";
 import { useDispatch, useSelector } from "react-redux";
 import { setCategories } from "../redux/slices/categoriesSlice";
 import { RootState } from "../redux/store";
-import {
-  addProduct,
-  IProduct,
-  updateProduct,
-} from "../redux/slices/productSlice";
+import { addProduct, updateProduct } from "../redux/slices/productSlice";
+import { IProduct } from "../utills/types";
 
 const EditProductScreen = ({
   route,

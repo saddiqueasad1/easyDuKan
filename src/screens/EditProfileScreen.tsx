@@ -9,8 +9,7 @@ import {
   View,
   ActivityIndicator,
 } from "react-native";
-import { doc, setDoc } from "firebase/firestore";
-import { getFirestore } from "firebase/firestore";
+import { doc, setDoc, getFirestore } from "firebase/firestore";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../redux/store";
 import { setProfile } from "../redux/slices/profilleSlice";

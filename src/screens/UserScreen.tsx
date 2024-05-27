@@ -18,9 +18,9 @@ import {
   where,
   addDoc,
 } from "firebase/firestore";
-import { IProfile } from "../redux/slices/profilleSlice";
 import { useSelector } from "react-redux";
 import { RootState } from "../redux/store";
+import { IProfile } from "../utills/types";
 
 const UserScreen = ({ navigation }: { navigation: any }) => {
   const [phoneNumber, setPhoneNumber] = useState("");

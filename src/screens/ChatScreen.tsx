@@ -13,7 +13,6 @@ import { ref, onValue, push, getDatabase, set } from "firebase/database";
 import { useSelector } from "react-redux";
 import { RouteProp } from "@react-navigation/native";
 import { RootState } from "../redux/store";
-import { getFirestore } from "firebase/firestore";
 
 import { IMessage } from "../utills/types";
 type RootStackParamList = {

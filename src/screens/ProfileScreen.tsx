@@ -6,14 +6,20 @@ import {
   FlatList,
   StyleSheet,
 } from "react-native";
-import { collection, doc, getDoc, getDocs } from "firebase/firestore";
-import { getFirestore } from "firebase/firestore";
+import {
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  getFirestore,
+} from "firebase/firestore";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../redux/store";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { Color } from "../utills/GlobalStyles";
 import { setProfile } from "../redux/slices/profilleSlice";
-import { IProduct, setProduct } from "../redux/slices/productSlice";
+import { setProduct } from "../redux/slices/productSlice";
+import { IProduct } from "../utills/types";
 
 const ProfileScreen = ({ navigation }: { navigation: any }) => {
   const user = useSelector((state: RootState) => state.user);
