@@ -26,14 +26,27 @@ const ContactSuggestions: React.FC<ContactSuggestionsProps> = ({
 
   const handleInputChange = (text: string) => {
     setInputText(text);
+    onSelectContact(text);
     if (text.length > 0) {
       const filtered = contacts.filter((contact) =>
         contact.username.toLowerCase().includes(text.toLowerCase()),
       );
+
       setFilteredContacts(filtered);
     } else {
       setFilteredContacts([]);
     }
+  };
+
+  const handleInputFocus = () => {
+    setFilteredContacts(contacts);
+  };
+
+  const handleInputBlur = () => {
+    // Add a slight delay to allow click events to register before clearing suggestions
+    setTimeout(() => {
+      setFilteredContacts([]);
+    }, 100);
   };
 
   const handleContactPress = (contactName: string) => {
@@ -48,6 +61,8 @@ const ContactSuggestions: React.FC<ContactSuggestionsProps> = ({
         style={styles.input}
         value={inputText}
         onChangeText={handleInputChange}
+        onFocus={handleInputFocus}
+        onBlur={handleInputBlur}
         placeholder="Enter customer name"
       />
       {filteredContacts.length > 0 && (

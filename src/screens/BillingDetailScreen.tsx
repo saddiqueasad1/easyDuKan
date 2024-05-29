@@ -20,11 +20,9 @@ const BillingDetailScreen = () => {
   const contacts = useSelector((state: RootState) => state.contacts.contacts);
 
   const saveDetails = () => {
-    console.log(customerName);
     Alert.alert(
-      "Details Saved",
-      "Customer billing details have been saved successfully. " +
-        { customerName },
+      customerName,
+      "Customer billing details have been saved successfully. ",
     );
   };
 
