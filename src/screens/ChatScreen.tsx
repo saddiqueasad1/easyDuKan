@@ -36,6 +36,7 @@ import {
   Text,
   TouchableOpacity,
   View,
+  Pressable
 } from "react-native";
 import {
   Actions,
