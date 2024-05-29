@@ -10,12 +10,12 @@ import {
 import { captureRef } from "react-native-view-shot";
 // import Share from "react-native-share";
 import * as Sharing from "expo-sharing";
-import RNHTMLtoPDF from "react-native-html-to-pdf";
 import { RootState } from "../redux/store";
 import { useSelector } from "react-redux";
 import { IItem } from "../utills/types";
 import { Color } from "../utills/GlobalStyles";
 import ContactSuggestions from "../components/ContactSuggestions";
+import * as Print from "expo-print";
 
 const BillingDetailScreen = () => {
   const [customerName, setCustomerName] = useState("");
@@ -36,11 +36,6 @@ const BillingDetailScreen = () => {
         format: "png",
         quality: 0.8,
       });
-      // await Share.open({
-      //   url: uri,
-      //   type: "image/png",
-      //   filename: "billing-details.png",
-      // });
       await Sharing.shareAsync(uri, {
         mimeType: "image/png",
         dialogTitle: "Share Image",
@@ -52,35 +47,29 @@ const BillingDetailScreen = () => {
 
   const shareAsPDF = async () => {
     const htmlContent = `
-      <h1>Billing Details</h1>
-      <p>Customer Name: ${customerName}</p>
-      <p>Total Quantity: ${bill?.totalQuantity}</p>
-      <p>Total Amount: Rs: ${bill?.totalAmount}</p>
-      <ul>
-        ${bill?.items.map(item => `
-          <li>
-            <p>Item: ${item.name}</p>
-            <p>Quantity: ${item.quantity}</p>
-            <p>Unit Price: ${item.unitPrice}</p>
-            <p>Total: ${item.total}</p>
-          </li>
-        `).join('')}
-      </ul>
-    `;
+    <h1>Billing Details</h1>
+    <p>Customer Name: ${customerName}</p>
+    <p>Total Quantity: ${bill?.totalQuantity}</p>
+    <p>Total Amount: Rs: ${bill?.totalAmount}</p>
+    <ul>
+      ${bill?.items
+        .map(
+          (item) => `
+        <li>
+          <p>Item: ${item.name}</p>
+          <p>Quantity: ${item.quantity}</p>
+          <p>Unit Price: ${item.unitPrice}</p>
+          <p>Total: ${item.total}</p>
+        </li>
+      `,
+        )
+        .join("")}
+    </ul>
+  `;
 
     try {
-      const { filePath } = await RNHTMLtoPDF.convert({
-        html: htmlContent,
-        fileName: "billing-details",
-        base64: true,
-      });
-
-      // await Share.open({
-      //   url: `file://${filePath}`,
-      //   type: "application/pdf",
-      //   filename: "billing-details.pdf",
-      // });
-      await Sharing.shareAsync(`file://${filePath}`, {
+      const { uri } = await Print.printToFileAsync({ html: htmlContent });
+      await Sharing.shareAsync(`file://${uri}`, {
         mimeType: "application/pdf",
         dialogTitle: "Share PDF",
       });
