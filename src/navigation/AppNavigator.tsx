@@ -20,15 +20,17 @@ import {
   remove,
   set,
 } from "firebase/database";
+import ContactProfileScreen from "../screens/ContactStore";
+import ChatView from "../screens/ChatScreen";
 const Stack = createNativeStackNavigator();
 
 const AppNavigator = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
-  const loginuser=useSelector((state:RootState)=>state.user)
+  const loginuser = useSelector((state: RootState) => state.user);
   const db = getDatabase();
   const appState = React.useRef(AppState.currentState);
   React.useEffect(() => {
     const subscription = AppState.addEventListener("change", (nextAppState) => {
-       appState.current = nextAppState;
+      appState.current = nextAppState;
       console.log("AppState in app", appState?.current);
       if (nextAppState === "active" || appState?.current === "active") {
         setTimeout(() => {
@@ -55,10 +57,6 @@ const AppNavigator = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
       }
     } catch (error) {}
   }
-
-
-
-
 
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
@@ -93,6 +91,11 @@ const AppNavigator = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
             name="BillingDetailScreen"
             component={BillingDetailScreen}
             options={{ headerShown: true, title: "Billing Detail" }}
+          />
+          <Stack.Screen
+            name="ContactProfileScreen"
+            component={ContactProfileScreen}
+            options={{ headerShown: true, title: "User Profile" }}
           />
         </>
       ) : (

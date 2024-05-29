@@ -25,9 +25,8 @@ import { useDispatch, useSelector } from "react-redux";
 // import { selectCurrentLanguage } from "../../redux/slices/language";
 // import { selectUserMeta } from "../../redux/slices/user";
 // import ScreenNames from "../../routes/routes";
-import {Color as AppColors} from "../utills/GlobalStyles";
+import { Color as AppColors } from "../utills/GlobalStyles";
 import { height, width } from "../utills/Dimension";
-
 
 // import { ThemeContext } from "../../theme";
 import GlobalMethods from "../utills/GlobalMethods";
@@ -60,13 +59,10 @@ export const DeleteView = () => {
 };
 
 export default function ChatIcon({ data, disable, mute }) {
-
-  console.log(data);
-  
   const { t } = useTranslation();
   const navigation = useNavigation();
   const database = getDatabase();
-  const user = useSelector((state :RootState)=>state.user);
+  const user = useSelector((state: RootState) => state.user);
   // const language = useSelector(selectCurrentLanguage);
   const dispatch = useDispatch();
   const [visible, setVisible] = useState(false);
@@ -207,12 +203,9 @@ export default function ChatIcon({ data, disable, mute }) {
   const handlePress = () => {
     if (data) {
       setNewMsg(false);
-      data?.user?._id &&
-        navigation.navigate(ScreenNames.CHAT, {
-          usr: data?.user,
-          userRoom: data?.roomId,
-          userItem: data?.product,
-        });
+      navigation.navigate("ContactProfileScreen", {
+        userId: data?.userId,
+      });
     }
   };
   const setMutedRoom = async (roomId, id, mute) => {
@@ -398,9 +391,7 @@ export default function ChatIcon({ data, disable, mute }) {
               selectedItem && { color: AppColors.deleteChat },
             ]}
           >
-            {userDetail?.userId
-              ? `${userDetail?.username}`
-              : "New User"}
+            {userDetail?.userId ? `${userDetail?.username}` : "New User"}
           </Text>
           <Text
             numberOfLines={1}
@@ -482,7 +473,7 @@ export default function ChatIcon({ data, disable, mute }) {
               //   :
               GlobalMethods.calculateTimeDifference(
                 showlatestMsg?.timestamp,
-                'en'
+                "en"
               )}
           </Text>
           {showlatestMsg?.timestamp != latestMsg?.timestamp ||
@@ -572,4 +563,4 @@ const getStyles = (AppColors) =>
       width: width(20),
     },
   });
-export {getStyles};
+export { getStyles };

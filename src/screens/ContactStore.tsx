@@ -15,32 +15,31 @@ import {
 } from "firebase/firestore";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../redux/store";
-import { FontAwesome5 } from "@expo/vector-icons";
+import { FontAwesome5, Ionicons } from "@expo/vector-icons";
 import { Color } from "../utills/GlobalStyles";
 import { setProfile } from "../redux/slices/profilleSlice";
-import { setProduct } from "../redux/slices/productSlice";
+// import { setProduct } from "../redux/slices/productSlice";
 import { IProduct } from "../utills/types";
 
-const ProfileScreen = ({ navigation,userId }: { navigation: any }) => {
-  const [user,setUser] = useState()
+const ContactProfileScreen = ({ navigation, route }: { navigation: any }) => {
+  const { userId } = route.params;
+  const [user, setUser] = useState();
   const profile = useSelector((state: RootState) => state.profile);
-  const products = useSelector((state: RootState) => state.products);
-  const { username, email, address } = profile;
-  const [phoneNumber] = useState(user.phoneNumber + "");
+  const [products, setProduct] = useState();
   const db = getFirestore();
   const dispatch = useDispatch();
 
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const docRef = doc(db, "users", user.uid);
+        const docRef = doc(db, "users", userId);
         const docSnap = await getDoc(docRef);
 
         if (docSnap.exists()) {
           const data = docSnap.data();
           // dispatch(setProfile(data as any));
-          console.log("og of other profile",data);
-          setUser(data)
+          console.log("og of other profile", data);
+          setUser(data);
         }
       } catch (error) {
         console.log(error);
@@ -50,31 +49,36 @@ const ProfileScreen = ({ navigation,userId }: { navigation: any }) => {
     fetchProfile();
     fetchItems();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user.uid, db, profile]);
+  }, [userId, db, profile]);
 
   const fetchItems = async () => {
     try {
-      const itemsCollectionRef = collection(db, "users", user.uid, "products");
+      const itemsCollectionRef = collection(db, "users", userId, "products");
+      // console.log("itemsCollectionRef id", itemsCollectionRef);
+
       const itemsSnapshot = await getDocs(itemsCollectionRef);
       const itemsList = itemsSnapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
       }));
-      dispatch(setProduct(itemsList as any));
+      console.log("+");
+
+      // dispatch(setProduct(itemsList as any));
+      setProduct(itemsList);
     } catch (error) {
-      console.log(error);
+      console.log("this one ", error);
     }
   };
 
   const renderItem = ({ item }: { item: IProduct }) => {
     return (
       <TouchableOpacity
-        // onPress={() =>
-        //   navigation.navigate("EditProductScreen", {
-        //     userId: user.uid,
-        //     itemId: item.id,
-        //   })
-        // }
+      // onPress={() =>
+      //   navigation.navigate("EditProductScreen", {
+      //     userId: user.uid,
+      //     itemId: item.id,
+      //   })
+      // }
       >
         <View style={styles.item}>
           <Text style={styles.itemText}>Name: {item.name}</Text>
@@ -91,11 +95,11 @@ const ProfileScreen = ({ navigation,userId }: { navigation: any }) => {
     );
   };
 
-  const addIProduct = async () => {
-    navigation.navigate("EditProductScreen", {
-      userId: user.uid,
-    });
-  };
+  // const addIProduct = async () => {
+  //   navigation.navigate("EditProductScreen", {
+  //     userId: user.uid,
+  //   });
+  // };
   const handleEditProfile = () => {
     navigation.navigate("EditProfileScreen");
   };
@@ -105,13 +109,28 @@ const ProfileScreen = ({ navigation,userId }: { navigation: any }) => {
       <View style={styles.profile}>
         <FontAwesome5 name="user-tie" size={50} color={Color.primaryColor} />
         <View style={styles.profileInfo}>
-          <Text style={styles.username}>{username}</Text>
-          <Text style={styles.email}>{email}</Text>
-          <Text style={styles.contact}>{phoneNumber}</Text>
-          <Text style={styles.address}>{address}</Text>
+          <Text style={styles.username}>{user?.username}</Text>
+          <Text style={styles.email}>{user?.email}</Text>
+          <Text style={styles.contact}>{user?.phoneNumber}</Text>
+          <Text style={styles.address}>{user?.address}</Text>
         </View>
-        <TouchableOpacity style={styles.editButton}>
-          <FontAwesome5 name="chat" size={20} color={Color.primaryColor} />
+        <TouchableOpacity
+          style={styles.editButton}
+          onPress={() => {
+            const new_user = { ...user, userId };
+            console.log(new_user);
+
+            navigation.navigate("ChatScreen", {
+              usr: new_user,
+              userRoom: user?.roomId,
+            });
+          }}
+        >
+          <Ionicons
+            name="chatbubbles-sharp"
+            size={20}
+            color={Color.primaryColor}
+          />
         </TouchableOpacity>
       </View>
       <View style={styles.sectionHeader}>
@@ -220,4 +239,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ProfileScreen;
+export default ContactProfileScreen;
