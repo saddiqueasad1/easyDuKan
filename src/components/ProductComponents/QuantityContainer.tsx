@@ -4,18 +4,19 @@ import { IProduct } from "../../utills/types";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 import AntDesign from "@expo/vector-icons/AntDesign";
+import { Color } from "../../utills/GlobalStyles";
 
 interface QuantityContainerProps {
   item: IProduct;
   handleIncreaseQuantity: (
     id: string,
     currentQuantity: number,
-    item: IProduct
+    item: IProduct,
   ) => void;
   handleDecreaseQuantity: (
     id: string,
     currentQuantity: number,
-    item: IProduct
+    item: IProduct,
   ) => void;
 }
 
@@ -62,9 +63,10 @@ const styles = StyleSheet.create({
   quantityText: {
     fontSize: 16,
     marginHorizontal: 10,
+    color: Color.colorDarkslateblue,
   },
   button: {
-    backgroundColor: "#007BFF",
+    backgroundColor: Color.primaryColor,
     borderRadius: 15,
     width: 30,
     height: 30,

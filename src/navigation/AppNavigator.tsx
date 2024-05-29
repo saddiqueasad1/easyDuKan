@@ -9,6 +9,7 @@ import EditProductScreen from "../screens/EditProductScreen";
 import AddCategoryScreen from "../screens/AddCategoryScreen";
 import EditProfileScreen from "../screens/EditProfileScreen";
 import ChatScreen from "../screens/ChatScreen";
+import BillingDetailScreen from "../screens/BillingDetailScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -41,6 +42,11 @@ const AppNavigator = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
             name="ChatScreen"
             component={ChatScreen}
             options={{ headerShown: true, title: "Chat" }}
+          />
+          <Stack.Screen
+            name="BillingDetailScreen"
+            component={BillingDetailScreen}
+            options={{ headerShown: true, title: "Billing Detail" }}
           />
         </>
       ) : (

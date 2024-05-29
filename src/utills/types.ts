@@ -82,6 +82,7 @@ export interface IBill {
   customerName: string;
   date: string;
   totalAmount: number;
+  totalQuantity: number;
   status: string;
   items: IItem[];
 }

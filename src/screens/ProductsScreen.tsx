@@ -17,6 +17,7 @@ import {
 } from "../redux/slices/billSlice";
 import { setProduct } from "../redux/slices/productSlice";
 import ProductItem from "../components/ProductComponents/ProductItem";
+import { Color } from "../utills/GlobalStyles";
 
 const ProductsScreen = ({ navigation }: { navigation: any }) => {
   const user = useSelector((state: RootState) => state.user);
@@ -77,6 +78,7 @@ const ProductsScreen = ({ navigation }: { navigation: any }) => {
         totalAmount: updatedItem.total,
         status: "pending", // Set initial status
         items: [itemNew],
+        totalQuantity: 1,
       };
       dispatch(setBill(newBill));
     }
@@ -105,7 +107,6 @@ const ProductsScreen = ({ navigation }: { navigation: any }) => {
       dispatch(decreaseQuantity(updatedItem));
     }
   };
-
   return (
     <View style={styles.container}>
       <FlatList
@@ -125,11 +126,18 @@ const ProductsScreen = ({ navigation }: { navigation: any }) => {
           <Text style={styles.noItemsText}>No items available</Text>
         }
       />
-      <TouchableOpacity>
-        <View style={styles.floatingButton}>
-          <Text style={styles.noItemsText}>{bill?.totalAmount}</Text>
-        </View>
-      </TouchableOpacity>
+
+      {bill?.totalAmount !== undefined && bill?.totalAmount !== 0 && (
+        <TouchableOpacity
+          onPress={() => navigation.navigate("BillingDetailScreen")}
+        >
+          <View style={styles.floatingButton}>
+            <Text style={styles.floatingText}> {bill.totalQuantity}</Text>
+            <Text style={styles.floatingText}> View Bill</Text>
+            <Text style={styles.floatingText}>Rs: {bill?.totalAmount}</Text>
+          </View>
+        </TouchableOpacity>
+      )}
     </View>
   );
 };
@@ -137,26 +145,32 @@ const ProductsScreen = ({ navigation }: { navigation: any }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#f8f9fa",
+    backgroundColor: Color.backgroundColor,
     padding: 10,
     marginTop: 30,
   },
   noItemsText: {
     textAlign: "center",
-    color: "#6c757d",
+    color: Color.colorDarkslateblue,
     marginVertical: 20,
   },
   itemsList: {
     paddingBottom: 20,
   },
   floatingButton: {
-    width: 60,
-    height: 60,
-    borderRadius: 30,
-    backgroundColor: "#ee6e73",
+    borderRadius: 10,
+    backgroundColor: Color.primaryColor,
     position: "absolute",
     bottom: 10,
-    right: 10,
+    paddingHorizontal: 15,
+    paddingVertical: 10,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "100%",
+  },
+  floatingText: {
+    color: Color.colorWhite,
+    fontWeight: "bold",
   },
 });
 

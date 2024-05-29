@@ -43,6 +43,10 @@ const billSlice = createSlice({
           (sum, item) => sum + item.total,
           0,
         );
+        state.bill.totalQuantity = state.bill.items.reduce(
+          (sum, item) => sum + item.quantity,
+          0,
+        );
       }
     },
 
@@ -61,6 +65,10 @@ const billSlice = createSlice({
           }
           state.bill.totalAmount = state.bill.items.reduce(
             (sum, item) => sum + item.total,
+            0,
+          );
+          state.bill.totalQuantity = state.bill.items.reduce(
+            (sum, item) => sum + item.quantity,
             0,
           );
         }
