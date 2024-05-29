@@ -10,12 +10,12 @@ interface QuantityContainerProps {
   handleIncreaseQuantity: (
     id: string,
     currentQuantity: number,
-    item: IProduct,
+    item: IProduct
   ) => void;
   handleDecreaseQuantity: (
     id: string,
     currentQuantity: number,
-    item: IProduct,
+    item: IProduct
   ) => void;
 }
 

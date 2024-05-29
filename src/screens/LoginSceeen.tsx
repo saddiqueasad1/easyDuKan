@@ -144,10 +144,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
   },
   rectangleViewBorder: {
-    borderColor: Color.primaryColor,
     borderStyle: "solid",
     borderRadius: 10,
-    backgroundColor: Color.primaryColor,
+    backgroundColor:"#6c9418",
     borderWidth: 1,
     height: 55,
     justifyContent: "center",
