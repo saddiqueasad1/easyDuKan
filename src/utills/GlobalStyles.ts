@@ -10,6 +10,7 @@ export const FontSize = {
 };
 /* Colors */
 export const Color = {
+  white:'white',
   colorWhite: "#fff",
   colorDimgray: "#575555",
   colorDarkslateblue: "#14224a",

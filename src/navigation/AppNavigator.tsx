@@ -1,5 +1,5 @@
 import * as React from "react";
-import { connect } from "react-redux";
+import { connect, useSelector } from "react-redux";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import LoginScreen from "../screens/LoginSceeen";
 import OtpVerification from "../screens/OtpVerification";
@@ -10,10 +10,56 @@ import AddCategoryScreen from "../screens/AddCategoryScreen";
 import EditProfileScreen from "../screens/EditProfileScreen";
 import ChatScreen from "../screens/ChatScreen";
 import BillingDetailScreen from "../screens/BillingDetailScreen";
-
+import { AppState } from "react-native";
+import {
+  get,
+  getDatabase,
+  off,
+  onValue,
+  ref,
+  remove,
+  set,
+} from "firebase/database";
 const Stack = createNativeStackNavigator();
 
 const AppNavigator = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
+  const loginuser=useSelector((state:RootState)=>state.user)
+  const db = getDatabase();
+  const appState = React.useRef(AppState.currentState);
+  React.useEffect(() => {
+    const subscription = AppState.addEventListener("change", (nextAppState) => {
+       appState.current = nextAppState;
+      console.log("AppState in app", appState?.current);
+      if (nextAppState === "active" || appState?.current === "active") {
+        setTimeout(() => {
+          fetchOlineStatus(true);
+        }, 1000);
+      } else {
+        fetchOlineStatus(false);
+      }
+    });
+
+    return () => {
+      subscription.remove();
+    };
+  });
+  React.useEffect(() => {
+    fetchOlineStatus(true);
+  }, [loginuser]);
+  async function fetchOlineStatus(check) {
+    try {
+      if (loginuser) {
+        let a = loginuser?.uid;
+        const userStatusRef = ref(db, `users/${a}/online`);
+        await set(userStatusRef, check);
+      }
+    } catch (error) {}
+  }
+
+
+
+
+
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       {isLoggedIn ? (

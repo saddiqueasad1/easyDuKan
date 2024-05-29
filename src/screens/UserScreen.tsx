@@ -21,6 +21,7 @@ import {
 import { useSelector } from "react-redux";
 import { RootState } from "../redux/store";
 import { IProfile } from "../utills/types";
+import ChatIcon from "../components/ChatIcon";
 
 const UserScreen = ({ navigation }: { navigation: any }) => {
   const [phoneNumber, setPhoneNumber] = useState("");
@@ -149,17 +150,20 @@ const UserScreen = ({ navigation }: { navigation: any }) => {
           keyExtractor={(item) => item.phoneNumber}
           renderItem={({ item }) => {
             return (
-              <TouchableOpacity
-                onPress={() => navigation.navigate("ChatScreen", item)}
-              >
-                <View style={styles.contactItem}>
-                  <Text style={styles.contactText}>Name: {item.username}</Text>
-                  <Text style={styles.contactText}>Email: {item.email}</Text>
-                  <Text style={styles.contactText}>
-                    Phone: {item.phoneNumber}
-                  </Text>
-                </View>
-              </TouchableOpacity>
+              <ChatIcon
+              data={item}
+              />
+              // <TouchableOpacity
+              //   onPress={() => navigation.navigate("ChatScreen", item)}
+              // >
+              //   <View style={styles.contactItem}>
+              //     <Text style={styles.contactText}>Name: {item.username}</Text>
+              //     <Text style={styles.contactText}>Email: {item.email}</Text>
+              //     <Text style={styles.contactText}>
+              //       Phone: {item.phoneNumber}
+              //     </Text>
+              //   </View>
+              // </TouchableOpacity>
             );
           }}
         />
