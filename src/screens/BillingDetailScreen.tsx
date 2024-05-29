@@ -1,4 +1,3 @@
-// BillingDetailScreen.tsx
 import React, { useState } from "react";
 import {
   View,
@@ -7,6 +6,7 @@ import {
   Alert,
   FlatList,
   TouchableOpacity,
+  Linking,
 } from "react-native";
 import { RootState } from "../redux/store";
 import { useSelector } from "react-redux";
@@ -26,7 +26,32 @@ const BillingDetailScreen = () => {
     );
   };
 
-  const shareOnWhatsApp = () => {};
+  const shareOnWhatsApp = () => {
+    if (!bill || bill.items.length === 0) {
+      Alert.alert("No items available to share");
+      return;
+    }
+
+    const message = `
+    Customer Name: ${customerName}
+    Billing Details:
+    ${bill.items.map((item) => `Item: ${item.name}, Quantity: ${item.quantity}, Unit Price: ${item.unitPrice}, Total: ${item.total}`).join("\n")}
+    Total Quantity: ${bill.totalQuantity}
+    Total Amount: Rs: ${bill.totalAmount}
+        `;
+
+    const url = `whatsapp://send?text=${encodeURIComponent(message)}`;
+
+    Linking.canOpenURL(url)
+      .then((supported) => {
+        if (supported) {
+          return Linking.openURL(url);
+        } else {
+          Alert.alert("WhatsApp is not installed on this device");
+        }
+      })
+      .catch((err) => console.error("An error occurred", err));
+  };
 
   const renderItem = ({ item }: { item: IItem }) => {
     return (

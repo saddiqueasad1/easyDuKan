@@ -18,10 +18,11 @@ import {
   where,
   addDoc,
 } from "firebase/firestore";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../redux/store";
 import { IProfile } from "../utills/types";
 import ChatIcon from "../components/ChatIcon";
+import { setAllContacts } from "../redux/slices/contactsSlice";
 
 const UserScreen = ({ navigation }: { navigation: any }) => {
   const [phoneNumber, setPhoneNumber] = useState("");
@@ -32,6 +33,7 @@ const UserScreen = ({ navigation }: { navigation: any }) => {
   const user = useSelector((state: RootState) => state.user);
   const userId = user.uid;
   const [loading, setLoading] = useState(false);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     fetchContacts();
@@ -49,6 +51,7 @@ const UserScreen = ({ navigation }: { navigation: any }) => {
       );
       setContacts(contactsList);
       setFullContacts(contactsList);
+      dispatch(setAllContacts(contactsList));
     } catch (error) {
       console.log(error);
       setError("An error occurred while fetching contacts");
@@ -150,9 +153,7 @@ const UserScreen = ({ navigation }: { navigation: any }) => {
           keyExtractor={(item) => item.phoneNumber}
           renderItem={({ item }) => {
             return (
-              <ChatIcon
-              data={item}
-              />
+              <ChatIcon data={item} />
               // <TouchableOpacity
               //   onPress={() => navigation.navigate("ChatScreen", item)}
               // >
