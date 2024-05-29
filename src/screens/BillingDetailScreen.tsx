@@ -17,11 +17,14 @@ import { Color } from "../utills/GlobalStyles";
 const BillingDetailScreen = () => {
   const [customerName, setCustomerName] = useState("");
   const bill = useSelector((state: RootState) => state.bill.bill);
+  const contacts = useSelector((state: RootState) => state.contacts.contacts);
+  console.log(contacts);
+  
 
   const saveDetails = () => {
     Alert.alert(
       "Details Saved",
-      "Customer billing details have been saved successfully.",
+      "Customer billing details have been saved successfully."
     );
   };
 
@@ -29,12 +32,14 @@ const BillingDetailScreen = () => {
 
   const renderItem = ({ item }: { item: IItem }) => {
     return (
-      <TouchableOpacity>
-        <View>
-          <Text>{item.name}</Text>
-          <Text>{item.quantity}</Text>
-          <Text>{item.unitPrice}</Text>
-          <Text>{item.total}</Text>
+      <TouchableOpacity style={styles.itemTouchable}>
+        <View style={styles.itemCard}>
+          <Text style={styles.itemName}>{item.name}</Text>
+          <View style={styles.itemDetails}>
+            <Text style={styles.itemText}>Quantity: {item.quantity}</Text>
+            <Text style={styles.itemText}>Unit Price: {item.unitPrice}</Text>
+            <Text style={styles.itemText}>Total: {item.total}</Text>
+          </View>
         </View>
       </TouchableOpacity>
     );
@@ -57,19 +62,20 @@ const BillingDetailScreen = () => {
         style={styles.itemContainer}
       />
 
-      <Text style={styles.total}>Total Amount: Rs: {0}</Text>
+      <Text style={styles.total}>Total Qty: {bill?.totalQuantity}</Text>
+      <Text style={styles.total}>Total Amount: Rs: {bill?.totalAmount}</Text>
       <View style={styles.containerButton}>
         <TouchableOpacity
           onPress={saveDetails}
           style={styles.rectangleViewBorder}
         >
-          <Text>Save</Text>
+          <Text style={styles.buttonText}>Save</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.rectangleViewBorder}
           onPress={shareOnWhatsApp}
         >
-          <Text>Share on WhatsApp</Text>
+          <Text style={styles.buttonText}>Share on WhatsApp</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -80,6 +86,7 @@ const styles = StyleSheet.create({
   container: {
     padding: 20,
     flex: 1,
+    backgroundColor: Color.backgroundColor,
   },
   label: {
     fontSize: 18,
@@ -90,9 +97,36 @@ const styles = StyleSheet.create({
     borderColor: "#ccc",
     padding: 10,
     marginVertical: 5,
+    borderRadius: 5,
+    backgroundColor: "#fff",
   },
   itemContainer: {
     marginBottom: 10,
+  },
+  itemTouchable: {
+    marginBottom: 10,
+  },
+  itemCard: {
+    backgroundColor: Color.colorWhite,
+    borderRadius: 10,
+    padding: 15,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 5,
+    elevation: 2,
+  },
+  itemName: {
+    fontSize: 18,
+    fontWeight: "bold",
+    marginBottom: 5,
+  },
+  itemDetails: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  itemText: {
+    fontSize: 16,
   },
   total: {
     fontSize: 18,
@@ -111,6 +145,11 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 10,
+  },
+  buttonText: {
+    color: Color.colorWhite,
+    fontSize: 16,
+    fontWeight: "bold",
   },
 });
 
