@@ -13,6 +13,9 @@ const billsSlice = createSlice({
   name: "bills",
   initialState,
   reducers: {
+    setBills(state, action: PayloadAction<IBill[]>) {
+      state.bills = action.payload;
+    },
     addItemToBill: (
       state,
       action: PayloadAction<{ billId: string; item: IItem }>,
@@ -38,5 +41,6 @@ const billsSlice = createSlice({
   },
 });
 
-export const { addItemToBill, removeItemFromBill } = billsSlice.actions;
+export const { addItemToBill, removeItemFromBill, setBills } =
+  billsSlice.actions;
 export default billsSlice.reducer;

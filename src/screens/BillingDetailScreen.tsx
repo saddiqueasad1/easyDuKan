@@ -15,18 +15,37 @@ import { IItem } from "../utills/types";
 import { Color } from "../utills/GlobalStyles";
 import ContactSuggestions from "../components/ContactSuggestions";
 import * as Print from "expo-print";
+import { addDoc, collection, doc, getFirestore } from "firebase/firestore";
+import RanderBillItems from "../components/BillingComponents/randerBillItems";
 
 const BillingDetailScreen = () => {
   const [customerName, setCustomerName] = useState("");
   const bill = useSelector((state: RootState) => state.bill.bill);
+  const BillItems = bill?.items;
   const contacts = useSelector((state: RootState) => state.contacts.contacts);
   const viewRef = useRef(null);
+  const db = getFirestore();
+  const user = useSelector((state: RootState) => state.user);
+  const userId = user.uid;
 
-  const saveDetails = () => {
-    Alert.alert(
-      customerName,
-      "Customer billing details have been saved successfully. ",
-    );
+  const saveDetails = async () => {
+    try {
+      console.log("saveDetails");
+      let myBill = {
+        ...bill,
+        customerName: customerName,
+      };
+      console.log("myBill");
+      console.log(myBill);
+
+      const result = await addDoc(
+        collection(db, "users", userId, "bills"),
+        myBill,
+      );
+      console.log(result);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const shareAsImage = async () => {
@@ -100,9 +119,9 @@ const BillingDetailScreen = () => {
         />
         <Text style={styles.label}>Billing Details:</Text>
         <FlatList
-          data={bill?.items}
+          data={BillItems}
           keyExtractor={(item) => item.id}
-          renderItem={renderItem}
+          renderItem={({ item }) => <RanderBillItems item={item} />}
           ListEmptyComponent={<Text>No items available</Text>}
           style={styles.itemContainer}
         />
@@ -149,28 +168,6 @@ const styles = StyleSheet.create({
   itemTouchable: {
     marginBottom: 10,
   },
-  itemCard: {
-    backgroundColor: Color.colorWhite,
-    borderRadius: 10,
-    padding: 15,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 5,
-    elevation: 2,
-  },
-  itemName: {
-    fontSize: 18,
-    fontWeight: "bold",
-    marginBottom: 5,
-  },
-  itemDetails: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-  },
-  itemText: {
-    fontSize: 16,
-  },
   total: {
     fontSize: 18,
     fontWeight: "bold",
@@ -184,7 +181,6 @@ const styles = StyleSheet.create({
   rectangleViewBorder: {
     backgroundColor: Color.primaryColor,
     height: 50,
-    // width: "38%",
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 10,
