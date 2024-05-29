@@ -8,7 +8,6 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { captureRef } from "react-native-view-shot";
-// import Share from "react-native-share";
 import * as Sharing from "expo-sharing";
 import { RootState } from "../redux/store";
 import { useSelector } from "react-redux";
@@ -92,22 +91,24 @@ const BillingDetailScreen = () => {
   );
 
   return (
-    <View style={styles.container} ref={viewRef}>
-      <Text style={styles.label}>Customer Name:</Text>
-      <ContactSuggestions
-        contacts={contacts}
-        onSelectContact={setCustomerName}
-      />
-      <Text style={styles.label}>Billing Details:</Text>
-      <FlatList
-        data={bill?.items}
-        keyExtractor={(item) => item.id}
-        renderItem={renderItem}
-        ListEmptyComponent={<Text>No items available</Text>}
-        style={styles.itemContainer}
-      />
-      <Text style={styles.total}>Total Qty: {bill?.totalQuantity}</Text>
-      <Text style={styles.total}>Total Amount: Rs: {bill?.totalAmount}</Text>
+    <View style={styles.container}>
+      <View style={styles.container} ref={viewRef}>
+        <Text style={styles.label}>Customer Name:</Text>
+        <ContactSuggestions
+          contacts={contacts}
+          onSelectContact={setCustomerName}
+        />
+        <Text style={styles.label}>Billing Details:</Text>
+        <FlatList
+          data={bill?.items}
+          keyExtractor={(item) => item.id}
+          renderItem={renderItem}
+          ListEmptyComponent={<Text>No items available</Text>}
+          style={styles.itemContainer}
+        />
+        <Text style={styles.total}>Total Qty: {bill?.totalQuantity}</Text>
+        <Text style={styles.total}>Total Amount: Rs: {bill?.totalAmount}</Text>
+      </View>
       <View style={styles.containerButton}>
         <TouchableOpacity
           onPress={saveDetails}
