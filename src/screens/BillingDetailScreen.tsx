@@ -96,19 +96,6 @@ const BillingDetailScreen = () => {
     }
   };
 
-  const renderItem = ({ item }: { item: IItem }) => (
-    <TouchableOpacity style={styles.itemTouchable}>
-      <View style={styles.itemCard}>
-        <Text style={styles.itemName}>{item.name}</Text>
-        <View style={styles.itemDetails}>
-          <Text style={styles.itemText}>Quantity: {item.quantity}</Text>
-          <Text style={styles.itemText}>Unit Price: {item.unitPrice}</Text>
-          <Text style={styles.itemText}>Total: {item.total}</Text>
-        </View>
-      </View>
-    </TouchableOpacity>
-  );
-
   return (
     <View style={styles.container}>
       <View style={styles.container} ref={viewRef}>
