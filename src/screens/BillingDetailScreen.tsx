@@ -3,7 +3,6 @@ import React, { useState } from "react";
 import {
   View,
   Text,
-  TextInput,
   StyleSheet,
   Alert,
   FlatList,
@@ -13,18 +12,17 @@ import { RootState } from "../redux/store";
 import { useSelector } from "react-redux";
 import { IItem } from "../utills/types";
 import { Color } from "../utills/GlobalStyles";
+import ContactSuggestions from "../components/ContactSuggestions";
 
 const BillingDetailScreen = () => {
   const [customerName, setCustomerName] = useState("");
   const bill = useSelector((state: RootState) => state.bill.bill);
   const contacts = useSelector((state: RootState) => state.contacts.contacts);
-  console.log(contacts);
-  
 
   const saveDetails = () => {
     Alert.alert(
-      "Details Saved",
-      "Customer billing details have been saved successfully."
+      customerName,
+      "Customer billing details have been saved successfully. ",
     );
   };
 
@@ -48,10 +46,9 @@ const BillingDetailScreen = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.label}>Customer Name:</Text>
-      <TextInput
-        style={styles.input}
-        value={customerName}
-        onChangeText={setCustomerName}
+      <ContactSuggestions
+        contacts={contacts}
+        onSelectContact={setCustomerName}
       />
       <Text style={styles.label}>Billing Details:</Text>
       <FlatList
@@ -91,14 +88,6 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 18,
     marginVertical: 10,
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: "#ccc",
-    padding: 10,
-    marginVertical: 5,
-    borderRadius: 5,
-    backgroundColor: "#fff",
   },
   itemContainer: {
     marginBottom: 10,
