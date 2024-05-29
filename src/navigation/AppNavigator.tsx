@@ -30,7 +30,7 @@ const AppNavigator = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
           <Stack.Screen
             name="AddCategoryScreen"
             component={AddCategoryScreen}
-            options={{ headerShown: true, title: "Edit Item" }}
+            options={{ headerShown: true, title: "Add Category" }}
           />
           <Stack.Screen
             name="EditProfileScreen"

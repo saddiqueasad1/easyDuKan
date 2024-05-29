@@ -5,6 +5,8 @@ import userReducer from "./slices/userSlice";
 import categoriesReducer from "./slices/categoriesSlice"; // Import your categories slice
 import profileReducer from "./slices/profilleSlice";
 import productsReducer from "./slices/productSlice";
+import billsReducer from "./slices/billsSlice";
+import billReducer from "./slices/billSlice";
 
 const persistConfig = {
   key: "root",
@@ -19,6 +21,8 @@ const store = configureStore({
     categories: categoriesReducer, // Include categories slice without persisting it
     profile: profileReducer,
     products: productsReducer,
+    bills: billsReducer,
+    bill: billReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

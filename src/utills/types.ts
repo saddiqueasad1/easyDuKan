@@ -48,6 +48,14 @@ export interface Category {
   name: string;
 }
 
+export interface IProfile {
+  username: string;
+  phoneNumber: string;
+  email: string;
+  address: string;
+  userId?: string;
+}
+
 export interface IProduct {
   category_id?: string;
   id: string;
@@ -58,10 +66,22 @@ export interface IProduct {
   purchasePrice: number;
 }
 
-export interface IProfile {
-  username: string;
-  phoneNumber: string;
-  email: string;
-  address: string;
-  userId?: string;
+export interface IItem {
+  id: string;
+  name: string;
+  description: string;
+  quantity: number;
+  unitPrice: number;
+  total: number;
+  totalAmount: number;
+}
+
+export interface IBill {
+  id: string;
+  customerId: string;
+  customerName: string;
+  date: string;
+  totalAmount: number;
+  status: string;
+  items: IItem[];
 }

@@ -2,7 +2,6 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../store";
 import { IProduct } from "../../utills/types";
 
-
 const initialState: IProduct[] = [];
 
 const productSlice = createSlice({

@@ -6,6 +6,8 @@ import SettingScreen from "../screens/SettingScreen";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import { Color } from "../utills/GlobalStyles";
 import ProfileScreen from "../screens/ProfileScreen";
+import BillScreen from "../screens/BillScreen";
+import ProductsScreen from "../screens/ProductsScreen";
 
 const Tab = createBottomTabNavigator();
 const MainStack = () => {
@@ -33,6 +35,26 @@ const MainStack = () => {
           tabBarLabel: "Profile",
           tabBarIcon: ({ color, size }) => (
             <AntDesign name="profile" color={color} size={size} />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="ProductsScreen"
+        component={ProductsScreen}
+        options={{
+          tabBarLabel: "Products",
+          tabBarIcon: ({ color, size }) => (
+            <AntDesign name="plus" color={color} size={size} />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="BillScreen"
+        component={BillScreen}
+        options={{
+          tabBarLabel: "Bill",
+          tabBarIcon: ({ color, size }) => (
+            <AntDesign name="table" color={color} size={size} />
           ),
         }}
       />
