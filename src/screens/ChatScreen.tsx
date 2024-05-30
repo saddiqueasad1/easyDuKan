@@ -36,7 +36,7 @@ import {
   Text,
   TouchableOpacity,
   View,
-  Pressable
+  Pressable,
 } from "react-native";
 import {
   Actions,
@@ -94,7 +94,7 @@ function ChatView({ route }) {
   const [check, setCheck] = useState(false);
 
   const navigation = useNavigation();
-  const user = useSelector((state: RootState) => state.user);
+  const user = useSelector((state: RootState) => state.profile);
   const [modal, setModal] = useState(false);
   // useFocusEffect(
   //   useCallback(() => {
@@ -123,7 +123,7 @@ function ChatView({ route }) {
   useEffect(() => {
     // setBadge(roomID, user?.userId);
     // getItems(roomID);
-    // getBadgeNumber(route?.params?.usr?._id)
+    // getBadgeNumber(route?.params?.user?.userId)
     //   .then((badgeNumber) => {
     //     setBadgeNumber(badgeNumber || []);
     //   })
@@ -136,7 +136,7 @@ function ChatView({ route }) {
         setCheck(status);
       }
       a();
-      // fetchMutedRooms(route?.params.usr?._id);
+      // fetchMutedRooms(route?.params.usr?.userId);
       setStater(false);
     }, 1200);
   }, []);
@@ -160,10 +160,10 @@ function ChatView({ route }) {
       roomID
         ? `chatrooms/${roomID}/lastDelete/${user?.userId}`
         : route.params?.userItem?.userId != user?.userId
-          ? `chatrooms/${`${user?.userId}_${route.params.usr?._id}_${route.params?.userItem?._id}`}/lastDelete/${
+          ? `chatrooms/${`${user?.userId}_${route.params.usr?.userId}_${route.params?.userItem?._id}`}/lastDelete/${
               user?.userId
             }`
-          : `chatrooms/${`${route.params.usr?._id}_${user?.userId}_${route.params?.userItem?._id}`}/lastDelete/${
+          : `chatrooms/${`${route.params.usr?.userId}_${user?.userId}_${route.params?.userItem?._id}`}/lastDelete/${
               user?.userId
             }`
     );
@@ -182,6 +182,8 @@ function ChatView({ route }) {
     if (!(route?.params?.userRoom == null)) {
       setRoomID(route?.params?.userRoom);
     } else {
+      console.log("from", user?.userId, "to", route.params.usr?.userId);
+
       setRoomID(`${user?.userId}_${route.params.usr?.userId}`);
     }
     setReceiver(route.params?.usr);
@@ -200,10 +202,10 @@ function ChatView({ route }) {
   });
 
   useEffect(() => {
-    if (route.params.usr?._id) {
+    if (route.params.usr?.userId) {
       const lastReadRe = ref(
         database,
-        `chatrooms/${roomID}/lastRead/${route.params.usr?._id}`
+        `chatrooms/${roomID}/lastRead/${route.params.usr?.userId}`
       );
       onValue(lastReadRe, (snapshot) => {
         if (snapshot.exists()) {
@@ -455,11 +457,11 @@ function ChatView({ route }) {
   // });
   // const sendNotification = async (title, message) => {
   //   try {
-  //     if (route.params?.usr?._id) {
-  //       // await setbadge(roomID, route?.params?.usr?._id);
+  //     if (route.params?.user?.userId) {
+  //       // await setbadge(roomID, route?.params?.user?.userId);
   //       const postUserTokenRef = ref(
   //         database,
-  //         `tokens/${route.params.usr?._id}/userTokens`
+  //         `tokens/${route.params.usr?.userId}/userTokens`
   //       );
   //       const tokenSnapshot = await get(postUserTokenRef);
   //       let array = [];
@@ -479,7 +481,7 @@ function ChatView({ route }) {
   //       } else {
   //         // Post user token not available, store notification along with postUserId
 
-  //         await push(ref(database, `notifications/${route.params?.usr?._id}`), {
+  //         await push(ref(database, `notifications/${route.params?.user?.userId}`), {
   //           title: "New Message",
   //           createdAt: serverTimestamp(),
   //         });
@@ -513,7 +515,7 @@ function ChatView({ route }) {
   //         roomCreated: true,
   //         userRoom: route?.params?.userRoom
   //           ? route?.params?.userRoom
-  //           : `${user?.userId}_${route.params.usr?._id}_${route.params?.userItem._id}`,
+  //           : `${user?.userId}_${route.params.usr?.userId}_${route.params?.userItem._id}`,
   //       },
   //     };
 
@@ -806,57 +808,61 @@ function ChatView({ route }) {
     }
   };
   const onSend = useCallback(async (messages = []) => {
-    console.log("Sending");
-    const newMessage = messages[0];
+    try {
+      console.log("Sending");
+      const newMessage = messages[0];
 
-    if (user?.userId == route.params.usr?._id) {
-      //flash msg
-    } else {
-      if (
-        (route.params?.userRoom == null ||
-          route.params?.userRoom == undefined) &&
-        roomID == null
-      ) {
-        let roomNew = `${user?.userId}_${route.params.usr?._id}_${route.params?.userItem?._id}`;
-        setRoomID(roomNew);
-        const newMessageRef = push(
-          ref(database, `chatrooms/${roomNew}/messages`)
-        );
-
-        await set(newMessageRef, {
-          refID: newMessageRef.key,
-          text: newMessage.text,
-          timestamp: Date.now(),
-          senderId: user?.userId, // Set the sender's user ID here
-        });
-        const lastReadRef = ref(
-          database,
-          `chatrooms/${roomNew}/lastRead/${user?.userId}`
-        );
-        await set(lastReadRef, Date.now());
-        await setRooms(roomNew, route.params.usr?._id, online);
-        await setRooms(roomNew, user?.userId);
+      if (user?.userId == route.params.usr?.userId) {
+        //flash msg
       } else {
-        const newMessageRef = push(
-          ref(database, `chatrooms/${roomID}/messages`)
-        );
+        if (
+          (route.params?.userRoom == null ||
+            route.params?.userRoom == undefined) &&
+          roomID == null
+        ) {
+          let roomNew = `${user?.userId}_${route.params.usr?.userId}_${route.params?.userItem?._id}`;
+          setRoomID(roomNew);
+          const newMessageRef = push(
+            ref(database, `chatrooms/${roomNew}/messages`)
+          );
 
-        set(newMessageRef, {
-          refID: newMessageRef.key,
-          text: newMessage.text,
-          timestamp: Date.now(),
-          senderId: user?.userId, // Set the sender's user ID here
-        });
+          await set(newMessageRef, {
+            refID: newMessageRef.key,
+            text: newMessage.text,
+            timestamp: Date.now(),
+            senderId: user?.userId, // Set the sender's user ID here
+          });
+          const lastReadRef = ref(
+            database,
+            `chatrooms/${roomNew}/lastRead/${user?.userId}`
+          );
+          await set(lastReadRef, Date.now());
+          await setRooms(roomNew, route.params.usr?.userId, online);
+          await setRooms(roomNew, user?.userId);
+        } else {
+          const newMessageRef = push(
+            ref(database, `chatrooms/${roomID}/messages`)
+          );
 
-        // await sendNotification(user?.firstName, newMessage.text);
-        await setRooms(roomID, route.params.usr?._id);
-        await setRooms(roomID, user?.userId);
-        const lastReadRef = ref(
-          database,
-          `chatrooms/${roomID}/lastRead/${user?.userId}`
-        );
-        await set(lastReadRef, Date.now());
+          set(newMessageRef, {
+            refID: newMessageRef.key,
+            text: newMessage.text,
+            timestamp: Date.now(),
+            senderId: user?.userId, // Set the sender's user ID here
+          });
+
+          // await sendNotification(user?.firstName, newMessage.text);
+          await setRooms(roomID, route.params.usr?.userId);
+          await setRooms(roomID, user?.userId);
+          const lastReadRef = ref(
+            database,
+            `chatrooms/${roomID}/lastRead/${user?.userId}`
+          );
+          await set(lastReadRef, Date.now());
+        }
       }
+    } catch (error) {
+      console.log(error);
     }
   });
   async function getBlobFromFile(imageUri) {
@@ -871,7 +877,7 @@ function ChatView({ route }) {
           route.params?.userRoom == undefined) &&
         roomID == null
       ) {
-        let roomNew = `${user?.userId}_${route.params.usr?._id}_${route.params?.userItem?._id}`;
+        let roomNew = `${user?.userId}_${route.params.usr?.userId}_${route.params?.userItem?._id}`;
         setRoomID(roomNew);
       }
       const storage = getStorage();
@@ -915,7 +921,7 @@ function ChatView({ route }) {
       }
 
       if (imageUrls.length > 0) {
-        await setRooms(roomID, route.params.usr?._id);
+        await setRooms(roomID, route.params.usr?.userId);
         await setRooms(roomID, user?.userId);
         await set(newMessageRef, {
           refID: newMessageRef.key,
@@ -1015,12 +1021,12 @@ function ChatView({ route }) {
             justifyContent: "center",
           }}
         >
-          <Ionicons name="timer" color={AppColors.readBtn} size={height(1.2)} />
+          <Ionicons name="timer" color={"grey"} size={height(1.2)} />
           <Text
             style={{
               fontSize: height(1.3),
               textAlign: "center",
-              color: AppColors.readBtn,
+              color: "grey",
               fontWeight: "bold",
               paddingHorizontal: width(0.1),
             }}
@@ -1028,9 +1034,7 @@ function ChatView({ route }) {
             {t("chat.disapermsg")}
           </Text>
         </View>
-        {(stater || fetchItemLoader) && (
-          <ActivityIndicator size="large" color={AppColors.primary} />
-        )}
+        {(stater || fetchItemLoader) && <ActivityIndicator size="large" />}
         <GiftedChat
           onSend={onSend}
           scrollToBottom={true}
@@ -1055,7 +1059,7 @@ function ChatView({ route }) {
           renderFooter={renderSeenStatus}
           textInputProps={{
             editable: route.params?.usr ? true : false,
-            color: AppColors.black,
+            color: "black",
             backgroundColor: AppColors.white,
           }}
           containerStyle={{ backgroundColor: AppColors.white }}

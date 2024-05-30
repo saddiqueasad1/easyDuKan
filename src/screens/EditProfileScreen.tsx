@@ -33,7 +33,7 @@ const EditProfileScreen = ({ navigation }: { navigation: any }) => {
         email,
         address,
       });
-      dispatch(setProfile({ username, phoneNumber, email, address }));
+      dispatch(setProfile({ username, phoneNumber, email, address, userId:  user.uid  }));
 
       Alert.alert("Success", "Profile saved successfully!", [
         { text: "OK", onPress: () => navigation.goBack() },

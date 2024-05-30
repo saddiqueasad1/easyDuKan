@@ -32,7 +32,7 @@ export default function ScreenWrapper({
 //   const { AppColors } = useContext(ThemeContext);
   const styles = getStyles(AppColors);
   if (backgroundImage) {
-    backgroundColor = AppColors.transparent;
+    backgroundColor = "transparent";
   }
   function FocusAwareStatusBar(props) {
     const isFocused = useIsFocused();

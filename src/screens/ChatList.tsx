@@ -46,7 +46,7 @@ export default function ChatList({ navigation, route }) {
   const dispatch = useDispatch();
   const db = getDatabase();
   const storage = getStorage();
-  const user = useSelector((state: RootState) => state.user);
+  const user = useSelector((state: RootState) => state.profile);
   // const { AppColors } = useContext(ThemeContext);
   const styles = getStyles(AppColors);
   const allRooms = useSelector(selectChatRooms) || [];
@@ -57,15 +57,17 @@ export default function ChatList({ navigation, route }) {
   const [mutedList, setMutedList] = useState([]);
   useFocusEffect(
     useCallback(() => {
-      fetchRooms(user?._id);
-      fetchMutedRooms(user?._id);
-    }, [user?._id])
+      fetchRooms(user?.userId);
+      fetchMutedRooms(user?.userId);
+    }, [user?.userId])
   );
   const fetchRooms = async (userId) => {
     try {
       let roomRef = ref(db, `users/${userId}/rooms`);
       const handleRoomUpdate = (snapshot) => {
         const room = snapshot.val() || [];
+        console.log("all rooms ", room);
+
         dispatch(setChatRooms(room));
       };
       onValue(roomRef, handleRoomUpdate);
@@ -105,7 +107,7 @@ export default function ChatList({ navigation, route }) {
   //           ? data.split("_")[1]
   //           : data.split("_")[0];
   //       const fetchedUser = await getUserForChat(search);
-  //       const response = fetchedUser?._id === user?._id ? false : fetchedUser;
+  //       const response = fetcheduser?.userId === user?.userId ? false : fetchedUser;
   //       return response;
   //     } else {
   //       return null;
@@ -117,7 +119,7 @@ export default function ChatList({ navigation, route }) {
       let lastmsg = {};
       const lastReadRef = await ref(
         db,
-        `chatrooms/${data}/lastRead/${user?._id}`
+        `chatrooms/${data}/lastRead/${user?.userId}`
       );
 
       // Assuming you're using Firebase Realtime Database
@@ -181,8 +183,8 @@ export default function ChatList({ navigation, route }) {
       await Promise.all(deletePromises);
 
       // Remove the chatroom from the database
-      await setRooms(chatroomId, user?._id);
-      await setBadge(chatroomId, user?._id);
+      await setRooms(chatroomId, user?.userId);
+      await setBadge(chatroomId, user?.userId);
       await remove(lastReadRef);
 
       console.log(
@@ -225,7 +227,7 @@ export default function ChatList({ navigation, route }) {
 
       const newData = await Promise.all(promises);
       if (newData.find((item) => item?.read == true)) {
-        if (user?._id) dispatch(setNewChat(true));
+        if (user?.userId) dispatch(setNewChat(true));
       } else {
         dispatch(setNewChat(false));
         // await Notifications.setBadgeCountAsync(0);
@@ -253,12 +255,12 @@ export default function ChatList({ navigation, route }) {
             //   : select == 1
             //     ? Chat?.filter(
             //         (item) =>
-            //           item?.product && item?.product?.userId !== user?._id
+            //           item?.product && item?.product?.userId !== user?.userId
             //       )
             //     : select == 2
             //       ? Chat?.filter(
             //           (item) =>
-            //             item?.product && item?.product?.userId === user?._id
+            //             item?.product && item?.product?.userId === user?.userId
             //         )
             //       :
             Chat
@@ -298,13 +300,13 @@ export default function ChatList({ navigation, route }) {
                 <Ionicons
                   name="chatbubbles-outline"
                   size={width(50)}
-                  color={AppColors.bgIcon}
+                  color="black"
                 />
                 <Text
                   style={{
                     fontWeight: "bold",
                     fontSize: height(2),
-                    color: AppColors.black,
+                    color: "black",
                   }}
                 >
                   {t("commmon.nochatMsg")}
@@ -344,6 +346,7 @@ export default function ChatList({ navigation, route }) {
   );
 }
 import { StyleSheet } from "react-native";
+import { RootState } from "../redux/store";
 
 const getStyles = (AppColors) =>
   StyleSheet.create({

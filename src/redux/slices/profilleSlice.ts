@@ -8,6 +8,7 @@ const profileSilse = createSlice({
     phoneNumber: "",
     email: "",
     address: "",
+    userId: ""
   },
   reducers: {
     setProfile(state, action: PayloadAction<IProfile>) {
@@ -15,6 +16,7 @@ const profileSilse = createSlice({
       state.phoneNumber = action.payload.phoneNumber;
       state.email = action.payload.email;
       state.address = action.payload.address;
+      state.userId = action.payload.userId || '';
     },
   },
 });

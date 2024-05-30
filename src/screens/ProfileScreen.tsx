@@ -38,7 +38,8 @@ const ProfileScreen = ({ navigation }: { navigation: any }) => {
 
         if (docSnap.exists()) {
           const data = docSnap.data();
-          dispatch(setProfile(data as any));
+          const newData = { ...data, userId: user.uid };
+          dispatch(setProfile(newData as any));
         }
       } catch (error) {
         console.log(error);

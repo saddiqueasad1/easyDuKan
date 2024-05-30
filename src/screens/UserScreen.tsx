@@ -34,6 +34,8 @@ const UserScreen = ({ navigation }: { navigation: any }) => {
   const userId = user.uid;
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
+console.log("user========");
+console.log(userId);
 
   useEffect(() => {
     fetchContacts();
