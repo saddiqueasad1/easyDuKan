@@ -373,7 +373,7 @@ function ChatView({ route }) {
     return (
       <View {...props}>
         <Image
-          source={{ uri: receiver?.image }}
+          source={{ uri: receiver?.image ||"https://cdn-icons-png.flaticon.com/512/149/149071.png", }}
           style={{
             width: height(5),
             height: height(5),

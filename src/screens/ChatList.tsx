@@ -13,7 +13,13 @@ import {
   listAll,
   ref as storageRef,
 } from "firebase/storage";
-
+import {
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  getFirestore,
+} from "firebase/firestore";
 import React, { useCallback, useContext, useEffect, useState } from "react";
 import { Platform, FlatList, Text, View } from "react-native";
 
@@ -45,6 +51,7 @@ export default function ChatList({ navigation, route }) {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const db = getDatabase();
+  const dbStore = getFirestore();
   const storage = getStorage();
   const user = useSelector((state: RootState) => state.profile);
   // const { AppColors } = useContext(ThemeContext);
@@ -58,7 +65,7 @@ export default function ChatList({ navigation, route }) {
   useFocusEffect(
     useCallback(() => {
       fetchRooms(user?.userId);
-      fetchMutedRooms(user?.userId);
+      // fetchMutedRooms(user?.userId);
     }, [user?.userId])
   );
   const fetchRooms = async (userId) => {
@@ -80,40 +87,62 @@ export default function ChatList({ navigation, route }) {
       console.error("Error fetching room data:", error);
     }
   };
-  const fetchMutedRooms = async (userId) => {
-    try {
-      let roomRef = ref(db, `users/${userId}/mutedRoom`);
+  // const fetchMutedRooms = async (userId) => {
+  //   try {
+  //     let roomRef = ref(db, `users/${userId}/mutedRoom`);
 
-      const handleRoomUpdate = (snapshot) => {
-        const room = snapshot.val() || [];
-        setMutedList(room);
-      };
-      onValue(roomRef, handleRoomUpdate);
-      return () => {
-        if (roomRef) {
-          off(roomRef, handleRoomUpdate);
-        }
-      };
+  //     const handleRoomUpdate = (snapshot) => {
+  //       const room = snapshot.val() || [];
+  //       setMutedList(room);
+  //     };
+  //     onValue(roomRef, handleRoomUpdate);
+  //     return () => {
+  //       if (roomRef) {
+  //         off(roomRef, handleRoomUpdate);
+  //       }
+  //     };
+  //   } catch (error) {
+  //     console.error("Error fetching room data:", error);
+  //   }
+  // };
+
+  const fetchData = async (data) => {
+
+console.log("id in funtion",data);
+    try {
+      if (user) {
+        const search =
+          user.userId === data.split("_")[0]
+            ? data.split("_")[1]
+            : data.split("_")[0];
+            console.log(search);
+            
+        const fetchedUser = await fetchProfile(search);
+        console.log("fetched user==============> ",fetchedUser);
+        
+        const response = fetchedUser;
+        return response;
+      } else {
+        return null;
+      }
+    } catch (error) {}
+  };
+  const fetchProfile = async (id) => {
+    try {
+      const docRef = doc(dbStore, "users", id);
+      const docSnap = await getDoc(docRef);
+
+      if (docSnap.exists()) {
+        const data = docSnap.data();
+        const newData = { ...data, userId:id };
+        // dispatch(setProfile(newData as any));
+        return newData
+      }
+      return undefined
     } catch (error) {
-      console.error("Error fetching room data:", error);
+      console.log(error);
     }
   };
-
-  // const fetchData = async (data) => {
-  //   try {
-  //     if (user) {
-  //       const search =
-  //         user._id === data.split("_")[0]
-  //           ? data.split("_")[1]
-  //           : data.split("_")[0];
-  //       const fetchedUser = await getUserForChat(search);
-  //       const response = fetcheduser?.userId === user?.userId ? false : fetchedUser;
-  //       return response;
-  //     } else {
-  //       return null;
-  //     }
-  //   } catch (error) {}
-  // };
   const myFunction = async (data) => {
     try {
       let lastmsg = {};
@@ -154,22 +183,22 @@ export default function ChatList({ navigation, route }) {
       }
     } catch (error) {}
   };
-  const setBadge = async (roomId, id) => {
-    try {
-      const userRef = ref(db, `users/${id}/badge`);
-      const snapshot = await get(userRef);
+  // const setBadge = async (roomId, id) => {
+  //   try {
+  //     const userRef = ref(db, `users/${id}/badge`);
+  //     const snapshot = await get(userRef);
 
-      if (snapshot.exists()) {
-        const currentRooms = snapshot.val() || [];
+  //     if (snapshot.exists()) {
+  //       const currentRooms = snapshot.val() || [];
 
-        // Filter out the room to be removed
-        const updatedRooms = currentRooms?.filter((room) => room !== roomId);
+  //       // Filter out the room to be removed
+  //       const updatedRooms = currentRooms?.filter((room) => room !== roomId);
 
-        // Update the user's data with the updated rooms array
-        await set(userRef, updatedRooms);
-      }
-    } catch (error) {}
-  };
+  //       // Update the user's data with the updated rooms array
+  //       await set(userRef, updatedRooms);
+  //     }
+  //   } catch (error) {}
+  // };
   const deleteChatroom = async (chatroomId) => {
     try {
       const lastReadRef = ref(db, `chatrooms/${chatroomId}`);
@@ -184,7 +213,7 @@ export default function ChatList({ navigation, route }) {
 
       // Remove the chatroom from the database
       await setRooms(chatroomId, user?.userId);
-      await setBadge(chatroomId, user?.userId);
+      // await setBadge(chatroomId, user?.userId);
       await remove(lastReadRef);
 
       console.log(
@@ -205,9 +234,11 @@ export default function ChatList({ navigation, route }) {
     try {
       setLoading(true);
       const promises = allRooms?.map(async (element) => {
-        //   let u = Chat.find((i) => element === i?.roomId)
-        //     ? Chat.find((i) => element === i.roomId)?.user
-        //     : await fetchData(element);
+          let u =
+          //  Chat.find((i) => element === i?.roomId)
+          //   ? Chat.find((i) => element === i.roomId)?.user
+          //   :
+             await fetchData(element);
         let l = await myFunction(element);
         // let i = Chat.find((i) => element === i?.roomId)
         //   ? Chat.find((i) => element === i?.roomId)?.product
@@ -218,7 +249,7 @@ export default function ChatList({ navigation, route }) {
         //   }
         return {
           roomId: element,
-          // user: u,
+          user: u,
           lastmsg: l?.lastmsg,
           // product: i,
           read: l?.readd,

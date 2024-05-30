@@ -77,7 +77,7 @@ const AppNavigator = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
           <Stack.Screen
             name="ChatScreen"
             component={ChatScreen}
-            options={{ headerShown: true, title: "Chat" }}
+            options={{ headerShown: false }}
           />
           <Stack.Screen
             name="BillingDetailScreen"

@@ -59,6 +59,8 @@ export const DeleteView = () => {
 };
 
 export default function ChatIcon({ data, disable, mute }) {
+  console.log("chat icomn",data);
+  
   const { t } = useTranslation();
   const navigation = useNavigation();
   const database = getDatabase();
@@ -78,7 +80,7 @@ export default function ChatIcon({ data, disable, mute }) {
   const styles = getStyles(AppColors);
   useEffect(() => {
     if (data) {
-      const userStatusRef = ref(database, `users/${data?.userId}/online`);
+      const userStatusRef = ref(database, `users/${data?.user?.userId}/online`);
       onValue(userStatusRef, (snapshot) => {
         const status = snapshot.val();
         setOnline(status);
@@ -203,8 +205,9 @@ export default function ChatIcon({ data, disable, mute }) {
   const handlePress = () => {
     if (data) {
       setNewMsg(false);
-      navigation.navigate("ContactProfileScreen", {
-        userId: data?.userId,
+      navigation.navigate("ChatScreen", {
+        usr: data?.user,
+        userRoom:data.roomId
       });
     }
   };
@@ -391,7 +394,7 @@ export default function ChatIcon({ data, disable, mute }) {
               selectedItem && { color: AppColors.deleteChat },
             ]}
           >
-            {userDetail?.userId ? `${userDetail?.username}` : "New User"}
+            {userDetail?.user?.userId ? `${userDetail?.user?.username}` : "New User"}
           </Text>
           <Text
             numberOfLines={1}
@@ -411,8 +414,8 @@ export default function ChatIcon({ data, disable, mute }) {
               selectedItem && { color: AppColors.deleteChat },
             ]}
           >
-            {userDetail?.phoneNumber
-              ? `${userDetail?.phoneNumber}`
+            {userDetail?.user?.phoneNumber
+              ? `${userDetail?.user?.phoneNumber}`
               : t("chat.deleted")}
           </Text>
           <Text
