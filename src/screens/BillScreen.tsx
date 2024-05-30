@@ -52,6 +52,9 @@ const BillScreen = ({ route, navigation }: { route: any; navigation: any }) => {
   const handleDetail = (item: IBill) => {
     navigation.navigate("BillingDetailScreen", { bill: item });
   };
+  const handleReports = () => {
+    navigation.navigate("DailyReportScreen");
+  };
 
   const renderBillItem = ({ item, index }: { item: IBill; index: number }) => (
     <TouchableOpacity style={styles.item} onPress={() => handleDetail(item)}>
@@ -66,7 +69,13 @@ const BillScreen = ({ route, navigation }: { route: any; navigation: any }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>Bill Items</Text>
+      <View style={styles.item}>
+        <Text style={styles.header}>Bill Items</Text>
+        <TouchableOpacity onPress={() => handleReports()}>
+          <Text style={styles.header}>Reports</Text>
+        </TouchableOpacity>
+      </View>
+
       {loading ? (
         <ActivityIndicator style={styles.loader} size="large" color="#0000ff" />
       ) : error ? (

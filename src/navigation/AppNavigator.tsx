@@ -11,17 +11,9 @@ import EditProfileScreen from "../screens/EditProfileScreen";
 import ChatScreen from "../screens/ChatScreen";
 import BillingDetailScreen from "../screens/BillingDetailScreen";
 import { AppState } from "react-native";
-import {
-  get,
-  getDatabase,
-  off,
-  onValue,
-  ref,
-  remove,
-  set,
-} from "firebase/database";
+import { getDatabase, ref, set } from "firebase/database";
 import ContactProfileScreen from "../screens/ContactStore";
-import ChatView from "../screens/ChatScreen";
+import DailyReportScreen from "../screens/DailyReportScreen";
 const Stack = createNativeStackNavigator();
 
 const AppNavigator = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
@@ -48,7 +40,7 @@ const AppNavigator = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
   React.useEffect(() => {
     fetchOlineStatus(true);
   }, [loginuser]);
-  async function fetchOlineStatus(check) {
+  async function fetchOlineStatus(check: any) {
     try {
       if (loginuser) {
         let a = loginuser?.uid;
@@ -96,6 +88,11 @@ const AppNavigator = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
             name="ContactProfileScreen"
             component={ContactProfileScreen}
             options={{ headerShown: true, title: "User Profile" }}
+          />
+          <Stack.Screen
+            name="DailyReportScreen"
+            component={DailyReportScreen}
+            options={{ headerShown: true, title: "Daily Report" }}
           />
         </>
       ) : (
