@@ -18,6 +18,7 @@ const BillScreen = ({ route, navigation }: { route: any; navigation: any }) => {
   const userId = user.uid;
   const dispatch: AppDispatch = useDispatch();
   const bills = useSelector((state: RootState) => state.bills.bills);
+  const bill = useSelector((state: RootState) => state.bill);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -38,7 +39,7 @@ const BillScreen = ({ route, navigation }: { route: any; navigation: any }) => {
     };
 
     loadBills();
-  }, [userId]);
+  }, [userId, bill]);
 
   const fetchBills = async (userId: string): Promise<IBill[]> => {
     const billsCollection = collection(db, "users", userId, "bills");

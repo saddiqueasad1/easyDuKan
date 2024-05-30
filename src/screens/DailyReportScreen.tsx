@@ -1,62 +1,95 @@
-// screens/DailyReportScreen.tsx
-import React, { useState } from "react";
-import { View, Text, StyleSheet, FlatList, Button } from "react-native";
+import React, { useEffect, useState } from "react";
+import { View, Text, StyleSheet } from "react-native";
 import { useSelector } from "react-redux";
-// import DateTimePicker from "@react-native-community/datetimepicker";
+import { format } from "date-fns";
 import { RootState } from "../redux/store";
 
 const DailyReportScreen: React.FC = () => {
   const [selectedDate, setSelectedDate] = useState(new Date());
-  const [showDatePicker, setShowDatePicker] = useState(false);
-  const bills = useSelector((state: RootState) => state.bills.bills);
   const products = useSelector((state: RootState) => state.products);
+  const bills = useSelector((state: RootState) => state.bills.bills);
 
-  const onDateChange = (event: Event, date?: Date) => {
-    setShowDatePicker(false);
-    if (date) {
-      setSelectedDate(date);
+  const [report, setReport] = useState({
+    profit: 0,
+    loss: 0,
+    totalSales: 0,
+    totalQuantity: 0,
+  });
+
+  useEffect(() => {
+    calculateDailyReport();
+  }, [selectedDate, products, bills]);
+
+  const calculateDailyReport = () => {
+    try {
+      let profit = 0;
+      let loss = 0;
+      let totalSales = 0;
+      let totalQuantity = 0;
+      console.log(bills[0].date);
+
+      const todayBills = bills.filter(
+        (bill) =>
+          format(new Date(bill.date), "yyyy-MM-dd") ===
+          format(selectedDate, "yyyy-MM-dd"),
+      );
+
+      todayBills.forEach((bill) => {
+        bill.items.forEach((item) => {
+          const product = products.find((p) => p.id === item.id);
+          console.log("foind");
+          console.log(product);
+          if (product) {
+            const itemProfit =
+              (item.unitPrice - product.purchasePrice) * item.quantity;
+            profit += itemProfit;
+            totalSales += item.total;
+            totalQuantity += item.quantity;
+
+            if (itemProfit < 0) {
+              loss += Math.abs(itemProfit);
+            }
+          }
+        });
+      });
+
+      setReport({ profit, loss, totalSales, totalQuantity });
+    } catch (error) {
+      console.log(error);
     }
   };
 
-  const filteredItems = bills.filter(
-    (item) => new Date(item.date).toDateString() === selectedDate.toDateString()
-  );
-
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Daily Report</Text>
-      <Button title="Select Date" onPress={() => setShowDatePicker(true)} />
-      {/* {showDatePicker && (
-        <DateTimePicker
-          value={selectedDate}
-          mode="date"
-          display="default"
-          onChange={onDateChange}
-        />
-      )} */}
-      <FlatList
-        data={filteredItems}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => (
-          <View style={styles.itemContainer}>
-            <Text>{item.name}</Text>
-            <Text>
-              {item.quantity} x ${item.unitPrice}
-            </Text>
-            <Text>Total: ${item.total}</Text>
-          </View>
-        )}
-      />
-      <View style={styles.summaryContainer}>
-        <Text>
-          Total Quantity:{" "}
-          {filteredItems.reduce((sum, item) => sum + item.quantity, 0)}
-        </Text>
-        <Text>
-          Total Amount: $
-          {filteredItems.reduce((sum, item) => sum + item.total, 0)}
-        </Text>
+      <Text style={styles.header}>
+        Daily Report for {format(selectedDate, "yyyy-MM-dd")}
+      </Text>
+      {/* <DatePicker
+        style={styles.datePicker}
+        date={selectedDate}
+        mode="date"
+        placeholder="Select date"
+        format="YYYY-MM-DD"
+        confirmBtnText="Confirm"
+        cancelBtnText="Cancel"
+        onDateChange={(date) => setSelectedDate(new Date(date))}
+      /> */}
+      <View style={styles.reportItem}>
+        <Text>Total Sales: ${report.totalSales.toFixed(2)}</Text>
       </View>
+      <View style={styles.reportItem}>
+        <Text>Total Quantity Sold: {report.totalQuantity}</Text>
+      </View>
+      <View style={styles.reportItem}>
+        <Text>Profit: ${report.profit.toFixed(2)}</Text>
+      </View>
+      <View style={styles.reportItem}>
+        <Text>Loss: ${report.loss.toFixed(2)}</Text>
+      </View>
+      <View style={styles.reportItem}>
+        <Text>Total Profit: ${(report.profit - report.loss).toFixed(2)}</Text>
+      </View>
+      {/* Add a date picker or buttons to change the date */}
     </View>
   );
 };
@@ -65,22 +98,19 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
-    backgroundColor: "#fff",
+    backgroundColor: "#f5f5f5",
   },
-  title: {
+  header: {
     fontSize: 24,
     fontWeight: "bold",
     marginBottom: 16,
   },
-  itemContainer: {
-    padding: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: "#ccc",
-  },
-  summaryContainer: {
-    padding: 16,
-    borderTopWidth: 1,
-    borderTopColor: "#ccc",
+  reportItem: {
+    padding: 8,
+    marginBottom: 8,
+    backgroundColor: "#fff",
+    borderRadius: 4,
+    elevation: 2,
   },
 });
 
