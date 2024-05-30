@@ -190,7 +190,7 @@ function ChatView({ route }) {
     if (route.params?.usr) {
       const userStatusRef = ref(
         database,
-        `users/${route.params?.usr?._id}/online`
+        `users/${route.params?.usr?.userId}/online`
       );
       onValue(userStatusRef, (snapshot) => {
         const status = snapshot.val();

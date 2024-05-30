@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { useTranslation } from "react-i18next";
-import { TouchableOpacity, View,Pressable } from "react-native";
+import { TouchableOpacity, View,Pressable ,Text} from "react-native";
 import Modal from "react-native-modal";
 import { height, width } from "../utills/Dimension";
 

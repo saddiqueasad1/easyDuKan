@@ -3,11 +3,12 @@ import * as React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import UserScreen from "../screens/UserScreen";
 import SettingScreen from "../screens/SettingScreen";
-import AntDesign from "@expo/vector-icons/AntDesign";
+import {AntDesign,Ionicons} from "@expo/vector-icons";
 import { Color } from "../utills/GlobalStyles";
 import ProfileScreen from "../screens/ProfileScreen";
 import BillScreen from "../screens/BillScreen";
 import ProductsScreen from "../screens/ProductsScreen";
+import ChatList from "../screens/ChatList";
 
 const Tab = createBottomTabNavigator();
 const MainStack = () => {
@@ -29,12 +30,17 @@ const MainStack = () => {
         }}
       />
       <Tab.Screen
-        name="ProfileScreem"
-        component={ProfileScreen}
+        name="chatListScreen"
+        component={ChatList}
         options={{
           tabBarLabel: "Profile",
           tabBarIcon: ({ color, size }) => (
-            <AntDesign name="profile" color={color} size={size} />
+            // <AntDesign name="profile" color={color} size={size} />
+            <Ionicons
+            name="chatbubbles-sharp"
+            color={color}
+            size={size}
+          />
           ),
         }}
       />
@@ -59,6 +65,16 @@ const MainStack = () => {
         }}
       />
       <Tab.Screen
+        name="ProfileScreem"
+        component={ProfileScreen}
+        options={{
+          tabBarLabel: "Profile",
+          tabBarIcon: ({ color, size }) => (
+            <AntDesign name="profile" color={color} size={size} />
+          ),
+        }}
+      />
+      {/* <Tab.Screen
         name="SettingScreen"
         component={SettingScreen}
         options={{
@@ -67,7 +83,7 @@ const MainStack = () => {
             <AntDesign name="setting" color={color} size={size} />
           ),
         }}
-      />
+      /> */}
     </Tab.Navigator>
   );
 };

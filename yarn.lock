@@ -4717,6 +4717,11 @@ hermes-profile-transformer@^0.0.6:
   dependencies:
     source-map "^0.7.3"
 
+hex-to-rgba@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/hex-to-rgba/-/hex-to-rgba-2.0.1.tgz#4176977882a1cb32b83ce5ab1db6828ab84d5a13"
+  integrity sha512-5XqPJBpsEUMsseJUi2w2Hl7cHFFi3+OO10M2pzAvKB1zL6fc+koGMhmBqoDOCB4GemiRM/zvDMRIhVw6EkB8dQ==
+
 hoist-non-react-statics@^3.3.0:
   version "3.3.2"
   resolved "https://registry.yarnpkg.com/hoist-non-react-statics/-/hoist-non-react-statics-3.3.2.tgz#ece0acaf71d62c2969c2ec59feff42a4b1a85b45"
@@ -6773,6 +6778,13 @@ react-native-dialog@^9.3.0:
   version "9.3.0"
   resolved "https://registry.yarnpkg.com/react-native-dialog/-/react-native-dialog-9.3.0.tgz#9d745cc51653a1e2ae08076b46f11d99723c47f6"
   integrity sha512-JEOJY/0AzTM9grIl0BL8o/IJPIJru7k5MPj9POTE9RRezUEtgn0YSvCpTlBtG0obWgOdzg2otMz1OQvMXS0wMQ==
+
+react-native-easy-content-loader@^0.3.2:
+  version "0.3.2"
+  resolved "https://registry.yarnpkg.com/react-native-easy-content-loader/-/react-native-easy-content-loader-0.3.2.tgz#5c0dcd69c84c5370365153162b21fe82098459c3"
+  integrity sha512-gLlfEVjOgflWKWoB255GFMgvIkSv5ScVbCvkCGj6KDelFenqMuePnW3yqDvkSGl1xAds76NpqO+JgOuYq7gXMw==
+  dependencies:
+    hex-to-rgba "^2.0.1"
 
 react-native-gifted-chat@^2.4.0:
   version "2.4.0"
