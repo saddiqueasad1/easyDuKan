@@ -62,7 +62,7 @@ const ContactSuggestions: React.FC<ContactSuggestionsProps> = ({
         value={inputText}
         onChangeText={handleInputChange}
         onFocus={handleInputFocus}
-        onBlur={handleInputBlur}
+        // onBlur={handleInputBlur}
         placeholder="Enter customer name"
       />
       {filteredContacts.length > 0 && (

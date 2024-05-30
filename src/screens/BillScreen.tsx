@@ -13,7 +13,7 @@ import { collection, getDocs, getFirestore } from "firebase/firestore";
 import { IBill } from "../utills/types";
 import { setBills } from "../redux/slices/billsSlice";
 
-const BillScreen = () => {
+const BillScreen = ({ route, navigation }: { route: any; navigation: any }) => {
   const user = useSelector((state: RootState) => state.user);
   const userId = user.uid;
   const dispatch: AppDispatch = useDispatch();
@@ -49,9 +49,12 @@ const BillScreen = () => {
     }));
     return billsList;
   };
+  const handleDetail = (item: IBill) => {
+    navigation.navigate("BillingDetailScreen", { bill: item });
+  };
 
   const renderBillItem = ({ item, index }: { item: IBill; index: number }) => (
-    <TouchableOpacity style={styles.item}>
+    <TouchableOpacity style={styles.item} onPress={() => handleDetail(item)}>
       <Text style={styles.index}>{index + 1}</Text>
       <View style={styles.billDetails}>
         <Text>{item.customerName}</Text>
@@ -71,7 +74,7 @@ const BillScreen = () => {
       ) : (
         <FlatList
           data={bills || []}
-          keyExtractor={(item, index) => String(index)}
+          keyExtractor={(_item, index) => String(index)}
           renderItem={renderBillItem}
           ListEmptyComponent={
             <Text style={styles.emptyText}>No bills available</Text>

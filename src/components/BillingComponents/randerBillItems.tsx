@@ -24,12 +24,13 @@ const RanderBillItems: React.FC<ProductItemProps> = ({ item }) => {
 
 const styles = StyleSheet.create({
   itemTouchable: {
-    marginBottom: 10,
+    marginBottom: 5,
   },
   itemCard: {
     backgroundColor: Color.colorWhite,
     borderRadius: 10,
-    padding: 15,
+    paddingVertical: 5,
+    paddingHorizontal: 10,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
