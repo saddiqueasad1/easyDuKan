@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     alignContent: "center",
     margin: height(1),
-    width: width(90),
+    width: width(100),
   },
   image: {
     width: height(8),
@@ -52,6 +52,8 @@ const styles = StyleSheet.create({
   },
   textContainer: {
     flexDirection: "column",
+    width:width(90),
+   
   },
   text: {
     fontSize: height(2),

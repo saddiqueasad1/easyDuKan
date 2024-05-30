@@ -10,5 +10,28 @@
     "enter_Code": "Enter Verification Code",
     "automatically_Detecting": "We Are Automatically detecting a SMS Sent to your Number",
     "submit": "Submit"
-  }
+  },
+  "chat": {
+    "deleted": "Delete",
+    "placeholder": "Type a message..",
+    "viewad": "View Ad",
+    "all": "All",
+    "buying": "Buying",
+    "selling": "Selling",
+    "unread": "Unread",
+    "delete": "Delete Chat",
+    "deleteChatIconMsg": "Do you want to delete the chat?",
+    "remove": "Remove",
+    "copy": "Copy",
+    "cancel": "Cancel",
+    "send": "send",
+    "seen": "seen",
+    "mute": "Mute",
+    "unmute": "Unmute",
+    "Delivered": "Delivered",
+    "deletemsg": "Message Deleted",
+    "disapermsg":
+      "New messages will disappear from the chat 15 days after they're sent",
+    "load": "Loading All Chats ....",
+  },
 }

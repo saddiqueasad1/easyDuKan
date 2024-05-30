@@ -24,6 +24,7 @@ import { IProfile } from "../utills/types";
 import ChatIcon from "../components/ChatIcon";
 import { setAllContacts } from "../redux/slices/contactsSlice";
 import ContactView from "../components/contactView";
+import { width } from "../utills/Dimension";
 
 const UserScreen = ({ navigation }: { navigation: any }) => {
   const [phoneNumber, setPhoneNumber] = useState("");
@@ -35,7 +36,7 @@ const UserScreen = ({ navigation }: { navigation: any }) => {
   const userId = user.uid;
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
-console.log("user========");
+// console.log("user========");
 console.log(userId);
 
   useEffect(() => {
@@ -184,7 +185,7 @@ console.log(userId);
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
+    padding: width(4),
     marginTop: 70,
   },
   searchContainer: {
@@ -204,15 +205,6 @@ const styles = StyleSheet.create({
     color: "red",
     marginBottom: 10,
     textAlign: "center",
-  },
-  profileContainer: {
-    marginVertical: 20,
-    padding: 10,
-    backgroundColor: "#f0f0f0",
-    borderRadius: 5,
-  },
-  profileText: {
-    marginBottom: 10,
   },
   contactsContainer: {
     marginTop: 20,

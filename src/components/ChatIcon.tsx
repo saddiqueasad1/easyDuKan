@@ -62,7 +62,7 @@ export default function ChatIcon({ data, disable, mute }) {
   const { t } = useTranslation();
   const navigation = useNavigation();
   const database = getDatabase();
-  const user = useSelector((state: RootState) => state.user);
+  const user = useSelector((state: RootState) => state.profile);
   // const language = useSelector(selectCurrentLanguage);
   const dispatch = useDispatch();
   const [visible, setVisible] = useState(false);
@@ -157,11 +157,11 @@ export default function ChatIcon({ data, disable, mute }) {
     try {
       const lastReadRef = ref(
         database,
-        `chatrooms/${chatroomId}/lastDelete/${user._id}`
+        `chatrooms/${chatroomId}/lastDelete/${user.userId}`
       );
       await set(lastReadRef, Date.now());
-      await setRooms(chatroomId, user?._id);
-      await setBadge(chatroomId, user?._id);
+      await setRooms(chatroomId, user?.userId);
+      await setBadge(chatroomId, user?.userId);
     } catch (error) {
       console.error("Error deleting chatroom:", error.message);
       // Handle errors as needed
@@ -242,7 +242,7 @@ export default function ChatIcon({ data, disable, mute }) {
     let lastmsg = {};
     const lastReadRef = ref(
       database,
-      `chatrooms/${userDetail?.roomId}/lastRead/${user?._id}`
+      `chatrooms/${userDetail?.roomId}/lastRead/${user?.userId}`
     );
     const snapsho = await get(lastReadRef);
     let lastReadTimestamp = await snapsho.val();
@@ -254,7 +254,7 @@ export default function ChatIcon({ data, disable, mute }) {
     }
     setLatestMsg(lastmsg);
     setNewMsg(
-      lastReadTimestamp < lastmsg?.timestamp && lastmsg.senderId != user?._id
+      lastReadTimestamp < lastmsg?.timestamp && lastmsg.senderId != user?.userId
     );
     if (lastReadTimestamp < lastmsg?.timestamp) {
       // console.log(data?.roomId, userDetail?.roomId);
@@ -289,16 +289,16 @@ export default function ChatIcon({ data, disable, mute }) {
               {t("Delete")}
             </Text>
           </MenuItem>
-          <MenuItem
+          {/* <MenuItem
             onPress={() => {
               setVisibleModel(false);
-              setMutedRoom(data?.roomId, user._id, !mute);
+              setMutedRoom(data?.roomId, user.userId, !mute);
             }}
           >
             <Text style={{ fontSize: height(1.5), color: AppColors.black }}>
               {mute ? t("Mutex") : t("chat.mute")}
             </Text>
-          </MenuItem>
+          </MenuItem> */}
         </Menu>
       </View>
       <TouchableOpacity

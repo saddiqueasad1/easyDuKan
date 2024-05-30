@@ -113,8 +113,8 @@ export default function ChatList({ navigation, route }) {
           user.userId === data.split("_")[0]
             ? data.split("_")[1]
             : data.split("_")[0];
-            console.log(search);
-            
+        console.log(search);
+
         const fetchedUser = await fetchProfile(search);
         const response = fetchedUser;
         return response;
@@ -130,11 +130,11 @@ export default function ChatList({ navigation, route }) {
 
       if (docSnap.exists()) {
         const data = docSnap.data();
-        const newData = { ...data, userId:id };
+        const newData = { ...data, userId: id };
         // dispatch(setProfile(newData as any));
-        return newData
+        return newData;
       }
-      return undefined
+      return undefined;
     } catch (error) {
       console.log(error);
     }
@@ -220,34 +220,20 @@ export default function ChatList({ navigation, route }) {
       // Handle errors as needed
     }
   };
-  // const getItems = async (data) => {
-  //   try {
-  //     const response = await getAdForChat(data.split("_")[2]);
-  //     return response;
-  //   } catch (error) {}
-  // };
   const promisFuntion = async () => {
+    // console.log(Chat);
+
     try {
       setLoading(true);
       const promises = allRooms?.map(async (element) => {
-          let u =
-          //  Chat.find((i) => element === i?.roomId)
-          //   ? Chat.find((i) => element === i.roomId)?.user
-          //   :
-             await fetchData(element);
+        let u = Chat.find((i) => element === i?.roomId)
+          ? Chat.find((i) => element === i.roomId)?.user
+          : await fetchData(element);
         let l = await myFunction(element);
-        // let i = Chat.find((i) => element === i?.roomId)
-        //   ? Chat.find((i) => element === i?.roomId)?.product
-        //   : await getItems(element);
-        //   if (u?.data == false && u?.message == "User Not Found") {
-        //     console.log("delete", element);
-        //     deleteChatroom(element);
-        //   }
         return {
           roomId: element,
           user: u,
           lastmsg: l?.lastmsg,
-          // product: i,
           read: l?.readd,
         };
       });

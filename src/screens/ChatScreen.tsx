@@ -52,20 +52,13 @@ import ImageViewer from "react-native-image-zoom-viewer";
 import Modal from "react-native-modal";
 import SwiperFlatList from "react-native-swiper-flatlist";
 import { useSelector } from "react-redux";
-// import { getDataofAdByID, setRoomIDInMDB } from "../../../backend/api";
-// AdView,
-// Button,
-// DropDownMenu,
 import ScreenWrapper from "../components/ScreenWrapper";
 import { DeleteView } from "../components/ChatIcon";
-// import { selectUserMeta } from "../../../redux/slices/user";
-// import ScreenNames from "../../../routes/routes";
-// import { ThemeContext } from "../../../theme";
 import { height, width } from "../utills/Dimension";
-// import getStyles from "./styles";
 import { Color as AppColors } from "../utills/GlobalStyles";
 import DropDownMenu from "../components/DropDownMenu";
 import { RootState } from "../redux/store";
+
 function ChatView({ route }) {
   const { t } = useTranslation();
   // const { AppColors } = useContext(ThemeContext);
@@ -89,7 +82,6 @@ function ChatView({ route }) {
   const [mutedList, setMutedList] = useState([]);
   const [stater, setStater] = useState(true);
   const [fetchItemLoader, setFetchItemLoader] = useState(false);
-
   const [badgeNumber, setBadgeNumber] = useState([]);
   const [check, setCheck] = useState(false);
 
@@ -178,13 +170,21 @@ function ChatView({ route }) {
   useEffect(() => {
     myfuntion();
   }, [roomID, deleteMsg]);
+  async function checkRoom(id) {
+    const lastReadRe = ref(database, `chatrooms/${id}/messages`);
+    const snapshot = await get(lastReadRe);
+    // console.log("this ", snapshot.exists());
+    if (snapshot.exists()) {
+      setRoomID(`${user?.userId}_${route.params.usr?.userId}`);
+      return;
+    }
+    setRoomID(`${route.params.usr?.userId}_${user?.userId}`);
+  }
   useEffect(() => {
     if (!(route?.params?.userRoom == null)) {
       setRoomID(route?.params?.userRoom);
     } else {
-      // console.log("from", user?.userId, "to", route.params.usr?.userId);
-
-      setRoomID(`${user?.userId}_${route.params.usr?.userId}`);
+      checkRoom(`${user?.userId}_${route.params.usr?.userId}`);
     }
     setReceiver(route.params?.usr);
   }, []);
@@ -295,23 +295,23 @@ function ChatView({ route }) {
       console.log(error);
     }
   };
-  const getBadgeNumber = async (id) => {
-    try {
-      const userRef = ref(database, `users/${id}/badge`);
-      const snapshot = await get(userRef);
-      // If the snapshot exists and contains data, return the badge number
-      if (snapshot.exists()) {
-        return snapshot.val();
-      } else {
-        // If the snapshot doesn't exist or doesn't contain data, return null or any default value
-        return null; // or return any default value you prefer
-      }
-    } catch (error) {
-      console.log(error);
-      // Handle error accordingly, you can throw an error or return a default value
-      throw error;
-    }
-  };
+  // const getBadgeNumber = async (id) => {
+  //   try {
+  //     const userRef = ref(database, `users/${id}/badge`);
+  //     const snapshot = await get(userRef);
+  //     // If the snapshot exists and contains data, return the badge number
+  //     if (snapshot.exists()) {
+  //       return snapshot.val();
+  //     } else {
+  //       // If the snapshot doesn't exist or doesn't contain data, return null or any default value
+  //       return null; // or return any default value you prefer
+  //     }
+  //   } catch (error) {
+  //     console.log(error);
+  //     // Handle error accordingly, you can throw an error or return a default value
+  //     throw error;
+  //   }
+  // };
   const renderBubble = (props) => {
     const handleCustomLongPress = (context, message) => {
       setDeleteModal(true);
@@ -373,7 +373,11 @@ function ChatView({ route }) {
     return (
       <View {...props}>
         <Image
-          source={{ uri: receiver?.image ||"https://cdn-icons-png.flaticon.com/512/149/149071.png", }}
+          source={{
+            uri:
+              receiver?.image ||
+              "https://cdn-icons-png.flaticon.com/512/149/149071.png",
+          }}
           style={{
             width: height(5),
             height: height(5),
@@ -797,7 +801,7 @@ function ChatView({ route }) {
   };
   //Simple message acurate code
   const renderSeenStatus = (message) => {
-    if (message.messages[0]?.user?.userId === user?.userId && seenmsg) {
+    if (message.messages[0]?.user?._id === user?.userId && seenmsg) {
       return (
         <Text style={styles.seenText}>
           {message.messages[0]?._id < seenmsg
@@ -877,9 +881,11 @@ function ChatView({ route }) {
           route.params?.userRoom == undefined) &&
         roomID == null
       ) {
-        let roomNew = `${user?.userId}_${route.params.usr?.userId}_${route.params?.userItem?._id}`;
-        setRoomID(roomNew);
+        // let roomNew = `${user?.userId}_${route.params.usr?.userId}_${route.params?.userItem?._id}`;
+        // setRoomID(roomNew);
       }
+      // console.log("in send image",roomID);
+      
       const storage = getStorage();
       const newMessageRef = push(ref(database, `chatrooms/${roomID}/messages`));
 
@@ -1149,12 +1155,12 @@ function ChatView({ route }) {
                 </View>
               )}
             />
-            {/* <Button
+            <Button
               isLoading={sendImageLoader}
               containerStyle={{ marginTop: height(3) }}
               title={"chat.send"}
               onPress={saveImages}
-            /> */}
+            />
           </View>
         </Modal>
 
@@ -1174,7 +1180,7 @@ function ChatView({ route }) {
       <DropDownMenu
         isVisible={deleteModal}
         secondBtnText={
-          deletechat?.user?.userId == user?.userId && t("chat.remove")
+          deletechat?.user?._id == user?.userId && t("chat.remove")
         }
         firstBtnText={t("chat.copy")}
         onClose={() => {
@@ -1182,7 +1188,7 @@ function ChatView({ route }) {
         }}
         onPressSecondBtn={() => {
           setDeleteModal(false);
-          if (deletechat?.user?.userId == user?.userId) {
+          if (deletechat?.user?._id == user?.userId) {
             if (deletechat.image) deleteImageMessage(roomID, deletechat);
             else deleteChatMessage(roomID, deletechat);
           } else {
@@ -1270,6 +1276,7 @@ function ChatView({ route }) {
   );
 }
 import { StyleSheet } from "react-native";
+import Button from "../components/button";
 
 const getStyles = (AppColors) =>
   StyleSheet.create({
