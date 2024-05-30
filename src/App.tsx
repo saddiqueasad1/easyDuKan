@@ -24,7 +24,7 @@ const App = () => {
   });
 
   React.useEffect(() => {
-
+    console.log(app.automaticDataCollectionEnabled);
     const fetchProfile = async () => {
       try {
         const docRef = doc(db, "users", user.uid);
