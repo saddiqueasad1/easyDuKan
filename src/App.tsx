@@ -24,7 +24,6 @@ const App = () => {
   });
 
   React.useEffect(() => {
-    console.log(app.automaticDataCollectionEnabled);
 
     const fetchProfile = async () => {
       try {

@@ -73,7 +73,7 @@ export default function ChatList({ navigation, route }) {
       let roomRef = ref(db, `users/${userId}/rooms`);
       const handleRoomUpdate = (snapshot) => {
         const room = snapshot.val() || [];
-        console.log("all rooms ", room);
+        // console.log("all rooms ", room);
 
         dispatch(setChatRooms(room));
       };
@@ -107,8 +107,6 @@ export default function ChatList({ navigation, route }) {
   // };
 
   const fetchData = async (data) => {
-
-console.log("id in funtion",data);
     try {
       if (user) {
         const search =
@@ -118,8 +116,6 @@ console.log("id in funtion",data);
             console.log(search);
             
         const fetchedUser = await fetchProfile(search);
-        console.log("fetched user==============> ",fetchedUser);
-        
         const response = fetchedUser;
         return response;
       } else {

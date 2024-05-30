@@ -59,8 +59,6 @@ export const DeleteView = () => {
 };
 
 export default function ChatIcon({ data, disable, mute }) {
-  console.log("chat icomn",data);
-  
   const { t } = useTranslation();
   const navigation = useNavigation();
   const database = getDatabase();
@@ -259,7 +257,7 @@ export default function ChatIcon({ data, disable, mute }) {
       lastReadTimestamp < lastmsg?.timestamp && lastmsg.senderId != user?._id
     );
     if (lastReadTimestamp < lastmsg?.timestamp) {
-      console.log(data?.roomId, userDetail?.roomId);
+      // console.log(data?.roomId, userDetail?.roomId);
       if (data?.roomId == userDetail?.roomId) {
       }
       // dispatch(setNewChat(lastReadTimestamp < lastmsg?.timestamp));

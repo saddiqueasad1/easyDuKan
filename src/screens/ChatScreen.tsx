@@ -170,7 +170,7 @@ function ChatView({ route }) {
     onValue(lastDeleteRef, (snapshot) => {
       if (snapshot.exists()) {
         const lastReadData = snapshot.val();
-        console.log(lastReadData);
+        // console.log(lastReadData);
         setDeleteMsg(lastReadData);
       }
     });
@@ -182,7 +182,7 @@ function ChatView({ route }) {
     if (!(route?.params?.userRoom == null)) {
       setRoomID(route?.params?.userRoom);
     } else {
-      console.log("from", user?.userId, "to", route.params.usr?.userId);
+      // console.log("from", user?.userId, "to", route.params.usr?.userId);
 
       setRoomID(`${user?.userId}_${route.params.usr?.userId}`);
     }
@@ -282,7 +282,7 @@ function ChatView({ route }) {
           }
         });
         const snapshot = await get(messagesRef);
-        console.log("this ", snapshot.exists());
+        // console.log("this ", snapshot.exists());
         if (snapshot.exists()) {
           const lastReadRef = ref(
             database,

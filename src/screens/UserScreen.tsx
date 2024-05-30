@@ -23,6 +23,7 @@ import { RootState } from "../redux/store";
 import { IProfile } from "../utills/types";
 import ChatIcon from "../components/ChatIcon";
 import { setAllContacts } from "../redux/slices/contactsSlice";
+import ContactView from "../components/contactView";
 
 const UserScreen = ({ navigation }: { navigation: any }) => {
   const [phoneNumber, setPhoneNumber] = useState("");
@@ -155,7 +156,7 @@ console.log(userId);
           keyExtractor={(item) => item.phoneNumber}
           renderItem={({ item }) => {
             return (
-              <ChatIcon data={item} />
+              <ContactView data={item} />
               // <TouchableOpacity
               //   onPress={() => navigation.navigate("ChatScreen", item)}
               // >
