@@ -3,23 +3,23 @@ import {
   View,
   Text,
   StyleSheet,
-  Alert,
   FlatList,
   TouchableOpacity,
+  Modal,
 } from "react-native";
 import { captureRef } from "react-native-view-shot";
 import * as Sharing from "expo-sharing";
 import { RootState } from "../redux/store";
 import { useSelector } from "react-redux";
-import { IItem } from "../utills/types";
 import { Color } from "../utills/GlobalStyles";
 import ContactSuggestions from "../components/ContactSuggestions";
 import * as Print from "expo-print";
-import { addDoc, collection, doc, getFirestore } from "firebase/firestore";
+import { addDoc, collection, getFirestore } from "firebase/firestore";
 import RanderBillItems from "../components/BillingComponents/randerBillItems";
 
 const BillingDetailScreen = () => {
   const [customerName, setCustomerName] = useState("");
+  const [modalVisible, setModalVisible] = useState(false);
   const bill = useSelector((state: RootState) => state.bill.bill);
   const BillItems = bill?.items;
   const contacts = useSelector((state: RootState) => state.contacts.contacts);
@@ -54,6 +54,7 @@ const BillingDetailScreen = () => {
         format: "png",
         quality: 0.8,
       });
+      saveDetails();
       await Sharing.shareAsync(uri, {
         mimeType: "image/png",
         dialogTitle: "Share Image",
@@ -87,6 +88,7 @@ const BillingDetailScreen = () => {
 
     try {
       const { uri } = await Print.printToFileAsync({ html: htmlContent });
+      saveDetails();
       await Sharing.shareAsync(`file://${uri}`, {
         mimeType: "application/pdf",
         dialogTitle: "Share PDF",
@@ -124,17 +126,47 @@ const BillingDetailScreen = () => {
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.rectangleViewBorder}
-          onPress={shareAsImage}
+          onPress={() => setModalVisible(true)}
         >
-          <Text style={styles.buttonText}>Share as Image</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.rectangleViewBorder}
-          onPress={shareAsPDF}
-        >
-          <Text style={styles.buttonText}>Share as PDF</Text>
+          <Text style={styles.buttonText}>Save & Share</Text>
         </TouchableOpacity>
       </View>
+
+      <Modal
+        visible={modalVisible}
+        transparent={true}
+        animationType="slide"
+        onRequestClose={() => setModalVisible(false)}
+      >
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <TouchableOpacity
+              style={styles.modalButton}
+              onPress={() => {
+                setModalVisible(false);
+                shareAsImage();
+              }}
+            >
+              <Text style={styles.buttonText}>Share as Image</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.modalButton}
+              onPress={() => {
+                setModalVisible(false);
+                shareAsPDF();
+              }}
+            >
+              <Text style={styles.buttonText}>Share as PDF</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[styles.modalButton, styles.cancelButton]}
+              onPress={() => setModalVisible(false)}
+            >
+              <Text style={styles.buttonText}>Cancel</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 };
@@ -171,12 +203,37 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 10,
-    paddingHorizontal: 15,
+    flex: 1,
+    marginHorizontal: 10,
   },
   buttonText: {
     color: Color.colorWhite,
     fontSize: 16,
     fontWeight: "bold",
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0,0,0,0.5)",
+  },
+  modalContent: {
+    width: 300,
+    padding: 20,
+    backgroundColor: "white",
+    borderRadius: 10,
+    alignItems: "center",
+  },
+  modalButton: {
+    backgroundColor: Color.primaryColor,
+    padding: 15,
+    borderRadius: 10,
+    marginVertical: 5,
+    width: "100%",
+    alignItems: "center",
+  },
+  cancelButton: {
+    backgroundColor: "red",
   },
 });
 
