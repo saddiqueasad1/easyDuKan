@@ -22,7 +22,8 @@ const billSlice = createSlice({
 
     increaseQuantity: (state, action: PayloadAction<IItem>) => {
       if (state.bill) {
-        const { id, description, unitPrice, name } = action.payload;
+        const { id, description, unitPrice, name, purchasePrice } =
+          action.payload;
         let item = state.bill.items.find((item) => item.id === id);
         if (item) {
           item.quantity += 1;
@@ -34,7 +35,7 @@ const billSlice = createSlice({
             quantity: 1,
             unitPrice,
             total: unitPrice,
-            totalAmount: 0,
+            purchasePrice,
             name: name,
           };
           state.bill.items.push(itemNew);

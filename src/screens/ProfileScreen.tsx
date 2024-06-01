@@ -20,6 +20,7 @@ import { Color } from "../utills/GlobalStyles";
 import { setProfile } from "../redux/slices/profilleSlice";
 import { setProduct } from "../redux/slices/productSlice";
 import { IProduct } from "../utills/types";
+import { clearUser } from "../redux/slices/userSlice";
 
 const ProfileScreen = ({ navigation }: { navigation: any }) => {
   const user = useSelector((state: RootState) => state.user);
@@ -91,9 +92,10 @@ const ProfileScreen = ({ navigation }: { navigation: any }) => {
   };
 
   const addIProduct = async () => {
-    navigation.navigate("EditProductScreen", {
-      userId: user.uid,
-    });
+    dispatch(clearUser());
+    // navigation.navigate("EditProductScreen", {
+    //   userId: user.uid,
+    // });
   };
   const handleEditProfile = () => {
     navigation.navigate("EditProfileScreen");

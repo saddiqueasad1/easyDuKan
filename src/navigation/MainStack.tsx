@@ -20,10 +20,20 @@ const MainStack = () => {
       }}
     >
       <Tab.Screen
+        name="ProductsScreen"
+        component={ProductsScreen}
+        options={{
+          tabBarLabel: "My stocks",
+          tabBarIcon: ({ color, size }) => (
+            <AntDesign name="plus" color={color} size={size} />
+          ),
+        }}
+      />
+      <Tab.Screen
         name="UserScreen"
         component={UserScreen}
         options={{
-          tabBarLabel: "user",
+          tabBarLabel: "contants",
           tabBarIcon: ({ color, size }) => (
             <AntDesign name="user" color={color} size={size} />
           ),
@@ -33,22 +43,13 @@ const MainStack = () => {
         name="chatListScreen"
         component={ChatList}
         options={{
-          tabBarLabel: "Profile",
+          tabBarLabel: "Chats",
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="chatbubbles-sharp" color={color} size={size} />
           ),
         }}
       />
-      <Tab.Screen
-        name="ProductsScreen"
-        component={ProductsScreen}
-        options={{
-          tabBarLabel: "Products",
-          tabBarIcon: ({ color, size }) => (
-            <AntDesign name="plus" color={color} size={size} />
-          ),
-        }}
-      />
+
       <Tab.Screen
         name="BillScreen"
         component={BillScreen}

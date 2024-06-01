@@ -17,6 +17,11 @@ const RanderBillItems: React.FC<ProductItemProps> = ({ item }) => {
           <Text style={styles.itemText}>Unit Price: {item.unitPrice}</Text>
           <Text style={styles.itemText}>Total: {item.total}</Text>
         </View>
+        <View style={styles.itemDetails}>
+          <Text style={styles.itemText}>
+            purchasePrice: {item.purchasePrice}
+          </Text>
+        </View>
       </View>
     </TouchableOpacity>
   );

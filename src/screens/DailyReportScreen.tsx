@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, ScrollView } from "react-native";
 import { useSelector } from "react-redux";
 import { format } from "date-fns";
 import { RootState } from "../redux/store";
+import ProfitGraph from "../components/ProfitGraphComponents/ProfitGraph";
 
 const DailyReportScreen: React.FC = () => {
   const [selectedDate, setSelectedDate] = useState(new Date());
@@ -26,8 +27,6 @@ const DailyReportScreen: React.FC = () => {
       let loss = 0;
       let totalSales = 0;
       let totalQuantity = 0;
-      console.log(bills[0].date);
-
       const todayBills = bills.filter(
         (bill) =>
           format(new Date(bill.date), "yyyy-MM-dd") ===
@@ -37,15 +36,12 @@ const DailyReportScreen: React.FC = () => {
       todayBills.forEach((bill) => {
         bill.items.forEach((item) => {
           const product = products.find((p) => p.id === item.id);
-          console.log("foind");
-          console.log(product);
           if (product) {
             const itemProfit =
               (item.unitPrice - product.purchasePrice) * item.quantity;
             profit += itemProfit;
             totalSales += item.total;
             totalQuantity += item.quantity;
-
             if (itemProfit < 0) {
               loss += Math.abs(itemProfit);
             }
@@ -60,11 +56,14 @@ const DailyReportScreen: React.FC = () => {
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.header}>
-        Daily Report for {format(selectedDate, "yyyy-MM-dd")}
-      </Text>
-      {/* <DatePicker
+    <ScrollView style={styles.container}>
+      <ProfitGraph />
+
+      <View style={styles.container}>
+        <Text style={styles.header}>
+          Daily Report for {format(selectedDate, "yyyy-MM-dd")}
+        </Text>
+        {/* <DatePicker
         style={styles.datePicker}
         date={selectedDate}
         mode="date"
@@ -74,23 +73,23 @@ const DailyReportScreen: React.FC = () => {
         cancelBtnText="Cancel"
         onDateChange={(date) => setSelectedDate(new Date(date))}
       /> */}
-      <View style={styles.reportItem}>
-        <Text>Total Sales: ${report.totalSales.toFixed(2)}</Text>
+        <View style={styles.reportItem}>
+          <Text>Total Sales: ${report.totalSales.toFixed(2)}</Text>
+        </View>
+        <View style={styles.reportItem}>
+          <Text>Total Quantity Sold: {report.totalQuantity}</Text>
+        </View>
+        <View style={styles.reportItem}>
+          <Text>Profit: ${report.profit.toFixed(2)}</Text>
+        </View>
+        <View style={styles.reportItem}>
+          <Text>Loss: ${report.loss.toFixed(2)}</Text>
+        </View>
+        <View style={styles.reportItem}>
+          <Text>Total Profit: ${(report.profit - report.loss).toFixed(2)}</Text>
+        </View>
       </View>
-      <View style={styles.reportItem}>
-        <Text>Total Quantity Sold: {report.totalQuantity}</Text>
-      </View>
-      <View style={styles.reportItem}>
-        <Text>Profit: ${report.profit.toFixed(2)}</Text>
-      </View>
-      <View style={styles.reportItem}>
-        <Text>Loss: ${report.loss.toFixed(2)}</Text>
-      </View>
-      <View style={styles.reportItem}>
-        <Text>Total Profit: ${(report.profit - report.loss).toFixed(2)}</Text>
-      </View>
-      {/* Add a date picker or buttons to change the date */}
-    </View>
+    </ScrollView>
   );
 };
 
@@ -107,7 +106,7 @@ const styles = StyleSheet.create({
   },
   reportItem: {
     padding: 8,
-    marginBottom: 8,
+    marginVertical: 8,
     backgroundColor: "#fff",
     borderRadius: 4,
     elevation: 2,

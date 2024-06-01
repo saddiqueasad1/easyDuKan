@@ -73,7 +73,7 @@ export interface IItem {
   quantity: number;
   unitPrice: number;
   total: number;
-  totalAmount: number;
+  purchasePrice: number;
 }
 
 export interface IBill {

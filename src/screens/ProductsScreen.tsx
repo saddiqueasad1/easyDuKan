@@ -54,7 +54,6 @@ const ProductsScreen = ({ navigation }: { navigation: any }) => {
       ...item,
       quantity: currentQuantity + 1,
       total: (currentQuantity + 1) * item?.unitPrice,
-      totalAmount: 0,
     };
 
     if (bill) {
@@ -66,7 +65,7 @@ const ProductsScreen = ({ navigation }: { navigation: any }) => {
         quantity: 1,
         unitPrice: item.unitPrice,
         total: item.unitPrice,
-        totalAmount: item.unitPrice,
+        purchasePrice: item.purchasePrice,
         name: item.name,
       };
 
@@ -100,7 +99,6 @@ const ProductsScreen = ({ navigation }: { navigation: any }) => {
       ...item,
       quantity: currentQuantity - 1,
       total: (currentQuantity - 1) * item?.unitPrice,
-      totalAmount: 0,
     };
 
     if (bill) {
