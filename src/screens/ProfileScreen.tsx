@@ -92,10 +92,9 @@ const ProfileScreen = ({ navigation }: { navigation: any }) => {
   };
 
   const addIProduct = async () => {
-    dispatch(clearUser());
-    // navigation.navigate("EditProductScreen", {
-    //   userId: user.uid,
-    // });
+    navigation.navigate("EditProductScreen", {
+      userId: user.uid,
+    });
   };
   const handleEditProfile = () => {
     navigation.navigate("EditProfileScreen");
