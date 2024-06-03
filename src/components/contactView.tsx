@@ -25,7 +25,7 @@ const ContactView: React.FC<UserProfileProps> = ({ data }) => {
         source={{
           uri:
             data.imageUrl ||
-            "https://cdn-icons-png.flaticon.com/512/149/149071.png",
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTA-MNSjK1KQq5QyX3QxBm3y20qUxhJVWvRmQ&usqp=CAU",
         }}
         style={styles.image}
       />
@@ -49,11 +49,11 @@ const styles = StyleSheet.create({
     width: height(8),
     height: height(8),
     marginRight: 10,
+    borderRadius: height(10),
   },
   textContainer: {
     flexDirection: "column",
-    width:width(90),
-   
+    width: width(90),
   },
   text: {
     fontSize: height(2),

@@ -14,6 +14,7 @@ import { AppState } from "react-native";
 import { getDatabase, ref, set } from "firebase/database";
 import ContactProfileScreen from "../screens/ContactStore";
 import DailyReportScreen from "../screens/DailyReportScreen";
+import MyDrawer from "./Drawr";
 const Stack = createNativeStackNavigator();
 
 const AppNavigator = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
@@ -55,8 +56,8 @@ const AppNavigator = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
       {isLoggedIn ? (
         <>
           <Stack.Screen
-            name="MainStack"
-            component={MainStack}
+            name="drawr"
+            component={MyDrawer}
             options={{ headerShown: false, title: "" }}
           />
           <Stack.Screen

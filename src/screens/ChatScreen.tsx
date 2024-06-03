@@ -1009,11 +1009,6 @@ function ChatView({ route }) {
             )}
           </View>
         </View>
-        {/* {selectedItem && (
-          <View>
-            <AdView detail={selectedItem} />
-          </View>
-        )} */}
         <View
           style={{
             backgroundColor: AppColors.greybackground,
@@ -1414,6 +1409,5 @@ const getStyles = (AppColors) =>
       alignItems: "center",
     },
   });
-export default getStyles;
 
 export default ChatView;
