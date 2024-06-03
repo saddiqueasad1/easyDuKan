@@ -13,7 +13,7 @@ export const Color = {
   colorWhite: "#fff",
   colorDimgray: "#575555",
   colorDarkslateblue: "#14224a",
-  primaryColor: "#6c9418",
+  primaryColor: "#1CAD63",
   lightgray: "#D3D3D3",
   backgroundColor: "#f8f9fa",
   primary: "#FF0100",

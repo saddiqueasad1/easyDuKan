@@ -12,17 +12,30 @@ import {
 } from "react-native";
 import { Color as AppColors } from "../utills/GlobalStyles";
 import { height, width } from "../utills/Dimension";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../redux/store";
+import { getAuth, signOut } from "firebase/auth";
+import { clearUser } from "../redux/slices/userSlice";
 const CustomDrawer = ({ navigation }) => {
   const user = useSelector((state: RootState) => state.user);
   const profile = useSelector((state: RootState) => state.profile);
   const { username, email, address } = profile;
   const [phoneNumber] = useState(user?.phoneNumber + "");
-
+  const dispatch = useDispatch();
   const styles = getStyles(AppColors);
   const handleEditProfile = () => {
     navigation.navigate("EditProfileScreen");
+  };
+  const logout = async () => {
+    const auth = getAuth();
+    await signOut(auth)
+      .then(() => {
+        dispatch(clearUser());
+        console.log("logout");
+      })
+      .catch((error) => {
+        console.log("ertyuiop", error);
+      });
   };
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -38,12 +51,7 @@ const CustomDrawer = ({ navigation }) => {
               profile?.Image ||
               "https://cdn-icons-png.flaticon.com/512/149/149071.png",
           }}
-          style={{
-            width: height(10),
-            height: height(10),
-            alignSelf: "center",
-            marginVertical: height(5),
-          }}
+          style={styles.image}
         />
         <View style={styles.profile}>
           <View style={styles.profileInfo}>
@@ -60,14 +68,14 @@ const CustomDrawer = ({ navigation }) => {
           </TouchableOpacity>
         </View>
       </View>
-      <View>
+      <View style={{marginVertical:height(1)}}>
         <TouchableOpacity
           onPress={() => {
             navigation.closeDrawer();
           }}
           style={styles.drawrbtn}
         >
-          <Text>All Categories</Text>
+          <Text style={styles.dbtext}>All Categories</Text>
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => {
@@ -75,7 +83,7 @@ const CustomDrawer = ({ navigation }) => {
           }}
           style={styles.drawrbtn}
         >
-          <Text>All Products</Text>
+          <Text style={styles.dbtext}>All Products</Text>
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => {
@@ -83,17 +91,17 @@ const CustomDrawer = ({ navigation }) => {
           }}
           style={styles.drawrbtn}
         >
-          <Text>Add new product</Text>
+          <Text style={styles.dbtext}>Add new product</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
           onPress={() => {
-            
+            logout();
             navigation.closeDrawer();
           }}
           style={styles.drawrbtn}
         >
-          <Text>Log Out</Text>
+          <Text style={[styles.dbtext, { color: "red" }]}>Log Out</Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>
@@ -113,6 +121,19 @@ const getStyles = (AppColors) =>
       borderTopLeftRadius: 0,
       borderBottomLeftRadius: 0,
       justifyContent: "flex-start",
+    },
+    image: {
+      width: height(15),
+      height: height(15),
+      alignSelf: "center",
+      marginVertical: height(2),
+      borderWidth: height(0.3),
+      borderColor: "white",
+      borderRadius: height(20),
+    },
+    dbtext: {
+      fontSize: height(1.6),
+      fontWeight: "500",
     },
     icon: {
       color: "white",
