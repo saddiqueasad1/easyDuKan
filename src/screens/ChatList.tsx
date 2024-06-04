@@ -60,7 +60,8 @@ export default function ChatList({ navigation, route }) {
   const Chat = useSelector(selectChatRedux);
   const [loading, setLoading] = useState(false);
   const [select, setSelect] = useState(0);
-  const [search, setSearch] = useState("");
+  const [searchText, setSearchText] = useState("");
+
   const [mutedList, setMutedList] = useState([]);
   useFocusEffect(
     useCallback(() => {
@@ -257,8 +258,24 @@ export default function ChatList({ navigation, route }) {
   }, [allRooms]);
   const d = ["chat.all", "chat.buying", "chat.selling", "chat.unread"];
   return (
-    <ScreenWrapper refreshing={loading} onRefresh={promisFuntion} scrollEnabled>
+    <ScreenWrapper
+      refreshing={loading}
+      onRefresh={promisFuntion}
+      scrollEnabled
+      headerUnScrollable={() => (
+        <Header searchText={searchText} setSearchText={setSearchText} />
+      )}
+    >
       <View style={styles.mainViewContainer}>
+        <Text
+          style={{
+            fontSize: 24,
+            fontWeight: "bold",
+            marginBottom: 20,
+          }}
+        >
+          Chats
+        </Text>
         <FlatList
           scrollEnabled={false}
           showsVerticalScrollIndicator={false}
@@ -279,25 +296,24 @@ export default function ChatList({ navigation, route }) {
             Chat
           }
           renderItem={({ item }) => {
-            // if (
-            //   item?.product?.title
-            //     ?.toLowerCase()
-            //     ?.includes(search?.toLowerCase()) ||
-            //   item?.user?.firstName
-            //     ?.toLowerCase()
-            //     ?.includes(search?.toLowerCase()) ||
-            //   item?.user?.lastName
-            //     ?.toLowerCase()
-            //     ?.includes(search?.toLowerCase())
-            // ) {
-            return (
-              <ChatIcon
-                disable={loading}
-                data={item}
-                mute={mutedList.includes(item?.roomId)}
-              />
-            );
-            // }
+            console.log("chat", item);
+
+            if (
+              item?.user?.username
+                ?.toLowerCase()
+                ?.includes(searchText?.toLowerCase()) ||
+              item?.user?.phoneNumber
+                ?.toLowerCase()
+                ?.includes(searchText?.toLowerCase())
+            ) {
+              return (
+                <ChatIcon
+                  disable={loading}
+                  data={item}
+                  mute={mutedList.includes(item?.roomId)}
+                />
+              );
+            }
           }}
           keyExtractor={(item, index) => item?.roomId}
           ListEmptyComponent={() => {
@@ -360,15 +376,17 @@ export default function ChatList({ navigation, route }) {
 }
 import { StyleSheet } from "react-native";
 import { RootState } from "../redux/store";
+import Header from "../components/Head";
 
 const getStyles = (AppColors) =>
   StyleSheet.create({
     mainViewContainer: {
-      alignItems: "center",
+      
       padding: width(1),
       paddingBottom: height(8),
       flex: 1,
       backgroundColor: AppColors.white,
       marginTop: height(1),
+      paddingHorizontal:width(3)
     },
   });

@@ -5,6 +5,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import { Color } from "../../utills/GlobalStyles";
+import { height } from "../../utills/Dimension";
 
 interface QuantityContainerProps {
   item: IProduct;
@@ -59,10 +60,13 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     marginTop: 10,
+    backgroundColor:'rgba(255,255,255,.6)',
+    borderRadius:height(1.7)
   },
   quantityText: {
-    fontSize: 16,
+    fontSize: height(2),
     marginHorizontal: 10,
+    fontWeight:'condensedBold',
     color: Color.colorDarkslateblue,
   },
   button: {

@@ -11,6 +11,7 @@ import ProductsScreen from "../screens/ProductsScreen";
 import ChatList from "../screens/ChatList";
 import { height, width } from "../utills/Dimension";
 import { View } from "react-native";
+import OrdersScreen from "../screens/Orders";
 
 const Tab = createBottomTabNavigator();
 const MainStack = () => {
@@ -96,10 +97,10 @@ const MainStack = () => {
       />
 
       <Tab.Screen
-        name="BillScreen"
-        component={BillScreen}
+        name="OrderScreen"
+        component={OrdersScreen}
         options={{
-          tabBarLabel: "Bill",
+          tabBarLabel: "Orders",
           tabBarIcon: ({ color, size, focused }) => (
             <View
               style={{

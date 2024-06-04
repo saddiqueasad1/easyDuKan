@@ -16,6 +16,7 @@ import ContactProfileScreen from "../screens/ContactStore";
 import DailyReportScreen from "../screens/DailyReportScreen";
 import MyDrawer from "./Drawr";
 import ProfileScreen from "../screens/ProfileScreen";
+import BillScreen from "../screens/BillScreen";
 const Stack = createNativeStackNavigator();
 
 const AppNavigator = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
@@ -101,6 +102,12 @@ const AppNavigator = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
             component={ProfileScreen}
             options={{ headerShown: true, title: "All Products" }}
           />
+           <Stack.Screen
+            name="BillScreen"
+            component={BillScreen}
+            options={{ headerShown: true, title: "All Products" }}
+          />
+          
         </>
       ) : (
         <>

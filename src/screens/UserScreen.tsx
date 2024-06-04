@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import {
   View,
   TextInput,
-  Button,
   Text,
   StyleSheet,
   FlatList,
@@ -10,6 +9,7 @@ import {
   ActivityIndicator,
   TouchableOpacity,
 } from "react-native";
+import Modal from "react-native-modal";
 import {
   collection,
   getDocs,
@@ -21,14 +21,23 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../redux/store";
 import { IProfile } from "../utills/types";
+import AntDesign from "@expo/vector-icons/AntDesign";
+
 import ChatIcon from "../components/ChatIcon";
 import { setAllContacts } from "../redux/slices/contactsSlice";
 import ContactView from "../components/contactView";
-import { width } from "../utills/Dimension";
+import { height, width } from "../utills/Dimension";
+import ScreenWrapper from "../components/ScreenWrapper";
+import Header from "../components/Head";
+import { Color } from "../utills/GlobalStyles";
+import Button from "../components/button";
 
 const UserScreen = ({ navigation }: { navigation: any }) => {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [error, setError] = useState("");
+  const [searchText, setSearchText] = useState("");
+  const [addModal, setAddModal] = useState(false);
+
   const [contacts, setContacts] = useState<IProfile[]>([]);
   const [fullContacts, setFullContacts] = useState<IProfile[]>([]);
   const db = getFirestore();
@@ -36,8 +45,8 @@ const UserScreen = ({ navigation }: { navigation: any }) => {
   const userId = user.uid;
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
-// console.log("user========");
-console.log(userId);
+  // console.log("user========");
+  console.log(userId);
 
   useEffect(() => {
     fetchContacts();
@@ -51,7 +60,7 @@ console.log(userId);
       const contactsCollection = collection(db, "users", userId, "contacts");
       const contactsSnapshot = await getDocs(contactsCollection);
       const contactsList = contactsSnapshot.docs.map(
-        (doc) => doc.data() as IProfile,
+        (doc) => doc.data() as IProfile
       );
       setContacts(contactsList);
       setFullContacts(contactsList);
@@ -85,12 +94,12 @@ console.log(userId);
     } else {
       // Filter the full dataset based on the search text
       const filteredData = fullContacts.filter((item) =>
-        item.phoneNumber.toLowerCase().includes(text.toLowerCase()),
+        item.phoneNumber.toLowerCase().includes(text.toLowerCase())
       );
       setContacts(filteredData);
     }
   };
-
+  const closeModel = () => setAddModal(false);
   const fetchProfile = async () => {
     try {
       setError("");
@@ -121,7 +130,7 @@ console.log(userId);
               onPress: () => saveContact(fetchedProfile, contactId),
             },
           ],
-          { cancelable: false },
+          { cancelable: false }
         );
 
         setError("");
@@ -137,69 +146,96 @@ console.log(userId);
   };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.searchContainer}>
-        <TextInput
-          style={styles.input}
-          // onChangeText={(text) => setPhoneNumber(text)}
-          onChangeText={handleSearch}
-          value={phoneNumber}
-          placeholder="Enter Phone Number"
-          keyboardType="phone-pad"
-        />
-        <Button onPress={fetchProfile} title="Search" color="#007AFF" />
-      </View>
-      {error ? <Text style={styles.error}>{error}</Text> : null}
-      <View style={styles.contactsContainer}>
-        <Text style={styles.contactsTitle}>Contacts List</Text>
-        <FlatList
-          data={contacts}
-          keyExtractor={(item) => item.phoneNumber}
-          renderItem={({ item }) => {
-            return (
-              <ContactView data={item} />
-              // <TouchableOpacity
-              //   onPress={() => navigation.navigate("ChatScreen", item)}
-              // >
-              //   <View style={styles.contactItem}>
-              //     <Text style={styles.contactText}>Name: {item.username}</Text>
-              //     <Text style={styles.contactText}>Email: {item.email}</Text>
-              //     <Text style={styles.contactText}>
-              //       Phone: {item.phoneNumber}
-              //     </Text>
-              //   </View>
-              // </TouchableOpacity>
-            );
-          }}
-        />
-      </View>
-      {loading && (
-        <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color="#0000ff" />
-        </View>
+    <ScreenWrapper
+      headerUnScrollable={() => (
+        <Header searchText={searchText} setSearchText={setSearchText} />
       )}
-    </View>
+    >
+      <View style={styles.container}>
+        {error ? <Text style={styles.error}>{error}</Text> : null}
+        <View style={styles.contactsContainer}>
+          <Text style={styles.contactsTitle}>Contacts List</Text>
+          <FlatList
+            data={contacts}
+            keyExtractor={(item) => item.phoneNumber}
+            renderItem={({ item }) => {
+              console.log(item);
+              
+              if (
+                item?.username?.toLowerCase()?.includes(searchText?.toLowerCase())||
+                item?.phoneNumber?.toLowerCase()?.includes(searchText?.toLowerCase())
+              ) {
+                return <ContactView data={item} />;
+              }
+            }}
+          />
+        </View>
+
+        {loading && (
+          <View style={styles.loadingContainer}>
+            <ActivityIndicator size="large" color="#0000ff" />
+          </View>
+        )}
+        <TouchableOpacity
+          onPress={() => setAddModal(true)}
+          style={{
+            position: "absolute",
+            bottom: height(3),
+            right: height(2),
+            backgroundColor: "white",
+          }}
+        >
+          <AntDesign
+            name={"pluscircle"}
+            color={Color.primaryColor}
+            size={height(5)}
+          />
+        </TouchableOpacity>
+        <Modal
+          backdropOpacity={0.3}
+          isVisible={addModal}
+          onBackdropPress={closeModel}
+          onBackButtonPress={closeModel}
+        >
+          <View style={styles.searchContainer}>
+            <TextInput
+              style={styles.input}
+              // onChangeText={(text) => setPhoneNumber(text)}
+              onChangeText={handleSearch}
+              value={phoneNumber}
+              placeholder="Enter Phone Number"
+              keyboardType="phone-pad"
+            />
+            {/* <Button style={{}} onPress={fetchProfile} title="Search" color="#007AFF" /> */}
+            <Button
+             title="Search"
+            onPress={fetchProfile}
+            containerStyle={{width:width(20)}}
+            />
+          </View>
+        </Modal>
+      </View>
+    </ScreenWrapper>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: width(4),
-    marginTop: 70,
+    padding: width(1),
   },
   searchContainer: {
     flexDirection: "row",
     alignItems: "center",
     marginBottom: 20,
+    backgroundColor: "white",
+    height: height(10),
+    borderRadius: height(3),
+    padding: height(2),
   },
   input: {
-    height: 40,
     flex: 1,
-    borderColor: "gray",
-    borderWidth: 1,
     paddingHorizontal: 10,
-    marginRight: 10,
   },
   error: {
     color: "red",
@@ -211,10 +247,9 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   contactsTitle: {
-    fontSize: 18,
+    fontSize: height(2.5),
     fontWeight: "bold",
-    marginBottom: 10,
-    textAlign: "center",
+    marginHorizontal: width(3),
   },
   contactItem: {
     padding: 10,

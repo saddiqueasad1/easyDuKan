@@ -20,8 +20,21 @@ import ProductItem from "../components/ProductComponents/ProductItem";
 import { Color } from "../utills/GlobalStyles";
 import Header from "../components/Head";
 import ScreenWrapper from "../components/ScreenWrapper";
-import { width } from "../utills/Dimension";
+import { height, width } from "../utills/Dimension";
+  const categories: Category[] = [
+    { id: "0", name: "All" },
+    { id: "1", name: "Clothes" },
+    { id: "2", name: "Shoes" },
+    { id: "3", name: "Kind" },
+    { id: "4", name: "Clothes" },
+    { id: "5", name: "Shoes" },
+    { id: "6", name: "Kind" },
+    { id: "17", name: "Clothes" },
+    { id: "27", name: "Shoes" },
+    { id: "38", name: "Kind" },
 
+    // Add more categories as needed
+  ];
 const ProductsScreen = ({ navigation }: { navigation: any }) => {
   const user = useSelector((state: RootState) => state.user);
   const products = useSelector((state: RootState) => state.products);
@@ -118,6 +131,7 @@ const ProductsScreen = ({ navigation }: { navigation: any }) => {
           setSearchText={setSearchText}
           selectValue={selectValue}
           SetSelectValue={SetSelectValue}
+          categories={categories}
         />
       )}
       footerUnScrollable={() => {
@@ -180,15 +194,16 @@ const styles = StyleSheet.create({
     paddingBottom: 20,
   },
   floatingButton: {
-    borderRadius: 10,
+    borderRadius: height(5),
     backgroundColor: Color.primaryColor,
     position: "absolute",
-    bottom: 10,
-    paddingHorizontal: 15,
-    paddingVertical: 10,
+    bottom: height(1),
+    paddingHorizontal: height(2),
+    paddingVertical: height(2),
     flexDirection: "row",
     justifyContent: "space-between",
-    width: "100%",
+    width: width(96),
+    alignSelf:'center'
   },
   floatingText: {
     color: Color.colorWhite,

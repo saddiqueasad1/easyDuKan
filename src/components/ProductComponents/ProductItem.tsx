@@ -27,7 +27,7 @@ const ProductItem: React.FC<ProductItemProps> = ({
   handleDecreaseQuantity,
 }) => {
   return (
-    <TouchableOpacity style={styles.item}>
+    <View style={styles.item}>
       <Image source={Icons.p1} style={styles.imaage} />
       <Text
         style={[styles.itemText, { fontSize: height(2), fontWeight: "bold" }]}
@@ -44,7 +44,7 @@ const ProductItem: React.FC<ProductItemProps> = ({
           handleDecreaseQuantity={handleDecreaseQuantity}
         />
       </View>
-    </TouchableOpacity>
+    </View>
   );
 };
 

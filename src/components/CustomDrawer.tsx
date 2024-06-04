@@ -51,6 +51,8 @@ const CustomDrawer = ({ navigation }) => {
         style={{
           backgroundColor: AppColors.primaryColor,
           paddingVertical: height(2),
+          borderBottomRightRadius:height(3),
+          borderBottomLeftRadius:height(3)
         }}
       >
         <Image
@@ -87,7 +89,7 @@ const CustomDrawer = ({ navigation }) => {
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => {
-            viewAllProducts()
+            viewAllProducts();
             navigation.closeDrawer();
           }}
           style={styles.drawrbtn}
@@ -105,19 +107,32 @@ const CustomDrawer = ({ navigation }) => {
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => {
+            navigation.navigate("DailyReportScreen");
             navigation.closeDrawer();
           }}
           style={styles.drawrbtn}
         >
-          <Text style={styles.dbtext}>Statistics</Text>
+          <Text style={styles.dbtext}>Reposrt & Statistics</Text>
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => {
+            navigation.navigate("BillScreen");
+
             navigation.closeDrawer();
           }}
           style={styles.drawrbtn}
         >
           <Text style={styles.dbtext}>All Invoices</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => {
+            // navigation.navigate("BillScreen");
+
+            navigation.closeDrawer();
+          }}
+          style={styles.drawrbtn}
+        >
+          <Text style={styles.dbtext}>My Orders</Text>
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => {
@@ -182,6 +197,7 @@ const getStyles = (AppColors) =>
     profile: {
       flexDirection: "row",
       alignItems: "center",
+      
     },
     profileInfo: {
       marginLeft: 20,
@@ -259,6 +275,6 @@ const getStyles = (AppColors) =>
       backgroundColor: "#EBEBED",
       marginVertical: height(0.5),
       marginHorizontal: height(1),
-      borderRadius: height(1),
+      borderRadius: height(3),
     },
   });

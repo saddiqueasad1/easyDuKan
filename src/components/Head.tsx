@@ -10,8 +10,9 @@ import {
 } from "react-native";
 import { height, width } from "../utills/Dimension";
 import { Color } from "../utills/GlobalStyles";
-import Icons from "../assets/images";
 import { useNavigation } from "@react-navigation/native";
+import {Entypo} from "@expo/vector-icons";
+
 
 interface Category {
   id: string;
@@ -23,6 +24,7 @@ const Header: React.FC = ({
   setSearchText,
   selectValue,
   SetSelectValue,
+  categories
 }) => {
   const categoryListRef = useRef<FlatList<Category>>(null);
   const navigation = useNavigation();
@@ -43,29 +45,18 @@ const Header: React.FC = ({
         styles.categoryItem,
         {
           backgroundColor:
-            item.id == selectValue ? Color.secondaryColor : "white",
+            item.id == selectValue ? Color.primaryColor : "#f0f0f0",
         },
       ]}
       onPress={() => SetSelectValue(item.id)}
     >
-      <Text style={styles.categoryText}>{item.name}</Text>
+      <Text style={[styles.categoryText,{
+        color: item.id == selectValue ?  "white":'black',
+      }]}>{item.name}</Text>
     </TouchableOpacity>
   );
 
-  const categories: Category[] = [
-    { id: "0", name: "All" },
-    { id: "1", name: "Clothes" },
-    { id: "2", name: "Shoes" },
-    { id: "3", name: "Kind" },
-    { id: "4", name: "Clothes" },
-    { id: "5", name: "Shoes" },
-    { id: "6", name: "Kind" },
-    { id: "17", name: "Clothes" },
-    { id: "27", name: "Shoes" },
-    { id: "38", name: "Kind" },
 
-    // Add more categories as needed
-  ];
 
   return (
     <View style={styles.header}>
@@ -83,7 +74,8 @@ const Header: React.FC = ({
               style={styles.clearButton}
               onPress={handleClearSearch}
             >
-              <Text style={styles.clearButtonText}>X</Text>
+              {/* <Text style={styles.clearButtonText}>X</Text> */}
+              <Entypo name={"circle-with-cross"} color={Color.primaryColor} size={height(2.5)}/>
             </TouchableOpacity>
           )}
         </View>
@@ -91,18 +83,22 @@ const Header: React.FC = ({
           style={{ paddingHorizontal: height(1) }}
           onPress={() => navigation.openDrawer()}
         >
-          {/* <Text style={styles.clearButtonText}>X</Text> */}
-          <Image source={Icons.p2} style={styles.ProfileIcon} />
+          <Image
+            source={{
+              uri: "https://cdn-icons-png.flaticon.com/512/149/149071.png",
+            }}
+            style={styles.ProfileIcon}
+          />
         </TouchableOpacity>
       </View>
-      <FlatList
+     {categories&& <FlatList
         ref={categoryListRef}
         data={categories}
         horizontal={true}
         showsHorizontalScrollIndicator={false}
         renderItem={renderCategory}
         keyExtractor={(item) => item.id}
-      />
+      />}
     </View>
   );
 };
@@ -111,13 +107,13 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: "column",
     padding: 10,
-    backgroundColor: "#f0f0f0",
+    backgroundColor: "white",
   },
   searchBarContainer: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "#fff",
-    borderRadius: 5,
+    backgroundColor: "#f0f0f0",
+    borderRadius: height(5),
     paddingHorizontal: height(1),
     width: width(80),
   },
@@ -135,12 +131,12 @@ const styles = StyleSheet.create({
     color: "black",
   },
   categoryItem: {
-    margin: height(1),
+    marginVertical: height(1),
     paddingHorizontal: height(3),
     paddingVertical: height(1),
-    marginRight: height(0.5),
+    marginHorizontal: height(0.2),
     backgroundColor: "#eee",
-    borderRadius: height(1),
+    borderRadius: height(3),
   },
   categoryText: {
     fontSize: 14,

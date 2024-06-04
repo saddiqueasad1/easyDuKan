@@ -72,9 +72,9 @@ const BillScreen = ({ route, navigation }: { route: any; navigation: any }) => {
     <View style={styles.container}>
       <View style={styles.item}>
         <Text style={styles.header}>Bill Items</Text>
-        <TouchableOpacity onPress={() => handleReports()}>
+        {/* <TouchableOpacity onPress={() => handleReports()}>
           <Text style={styles.header}>Reports</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </View>
 
       {loading ? (

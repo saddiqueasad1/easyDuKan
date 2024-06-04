@@ -7,7 +7,7 @@ const getStyles = (AppColors) =>
       justifyContent: "center",
       alignItems: "center",
       borderRadius: width(25),
-      backgroundColor: AppColors.primary,
+      backgroundColor: AppColors.primaryColor,
       width: width(85),
       alignSelf: "center",
       paddingVertical: height(1.8),
