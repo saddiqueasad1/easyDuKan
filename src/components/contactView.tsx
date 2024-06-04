@@ -31,7 +31,7 @@ const ContactView: React.FC<UserProfileProps> = ({ data }) => {
       />
       <View style={styles.textContainer}>
         <Text style={styles.text}>{data.username}</Text>
-        <Text style={styles.text}>{data.phoneNumber}</Text>
+        <Text style={styles.phone}>{data.phoneNumber}</Text>
       </View>
     </TouchableOpacity>
   );
@@ -46,8 +46,8 @@ const styles = StyleSheet.create({
     width: width(100),
   },
   image: {
-    width: height(8),
-    height: height(8),
+    width: height(6),
+    height: height(6),
     marginRight: 10,
     borderRadius: height(10),
   },
@@ -57,7 +57,12 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: height(2),
+    fontWeight:'bold'
   },
+  phone:{
+    fontSize: height(1.8),
+    fontWeight:'400'
+  }
 });
 
 export default ContactView;

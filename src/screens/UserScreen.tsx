@@ -206,7 +206,6 @@ const UserScreen = ({ navigation }: { navigation: any }) => {
               placeholder="Enter Phone Number"
               keyboardType="phone-pad"
             />
-            {/* <Button style={{}} onPress={fetchProfile} title="Search" color="#007AFF" /> */}
             <Button
              title="Search"
             onPress={fetchProfile}

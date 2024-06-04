@@ -22,7 +22,8 @@ const AddCategoryScreen = ({ navigation }: { navigation: any }) => {
   const { categories } = useSelector((state: RootState) => state.categories);
   const user = useSelector((state: RootState) => state.user);
   const db = getFirestore();
-
+  // console.log(categories);
+  
   const addCategory = async () => {
     if (!newCategoryName.trim()) {
       setInputError("Category name cannot be empty.");

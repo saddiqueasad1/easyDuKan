@@ -250,7 +250,6 @@ export default function ChatList({ navigation, route }) {
       setLoading(false);
     } catch (e) {
       setLoading(false);
-      console.log("chat", e, "iner chat ", Platform.OS);
     }
   };
   useEffect(() => {
@@ -296,8 +295,6 @@ export default function ChatList({ navigation, route }) {
             Chat
           }
           renderItem={({ item }) => {
-            console.log("chat", item);
-
             if (
               item?.user?.username
                 ?.toLowerCase()

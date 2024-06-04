@@ -51,8 +51,8 @@ const CustomDrawer = ({ navigation }) => {
         style={{
           backgroundColor: AppColors.primaryColor,
           paddingVertical: height(2),
-          borderBottomRightRadius:height(3),
-          borderBottomLeftRadius:height(3)
+          borderBottomRightRadius: height(3),
+          borderBottomLeftRadius: height(3),
         }}
       >
         <Image
@@ -81,6 +81,7 @@ const CustomDrawer = ({ navigation }) => {
       <View style={{ marginVertical: height(1) }}>
         <TouchableOpacity
           onPress={() => {
+            navigation.navigate("AddCategoryScreen");
             navigation.closeDrawer();
           }}
           style={styles.drawrbtn}
@@ -126,7 +127,7 @@ const CustomDrawer = ({ navigation }) => {
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => {
-            // navigation.navigate("BillScreen");
+            // navigation.navigate("myhorder");
 
             navigation.closeDrawer();
           }}
@@ -197,7 +198,6 @@ const getStyles = (AppColors) =>
     profile: {
       flexDirection: "row",
       alignItems: "center",
-      
     },
     profileInfo: {
       marginLeft: 20,
