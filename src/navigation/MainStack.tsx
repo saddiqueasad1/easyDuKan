@@ -34,7 +34,7 @@ const MainStack = () => {
             <View
               style={{
                 backgroundColor: focused ? "#D1FFBD" : "white",
-                paddingHorizontal: width(3.5),
+                  paddingHorizontal: width(5),
                 borderRadius: width(5),
                 paddingVertical: width(0.5),
               }}
@@ -57,7 +57,7 @@ const MainStack = () => {
             <View
               style={{
                 backgroundColor: focused ? "#D1FFBD" : "white",
-                paddingHorizontal: width(3.5),
+                  paddingHorizontal: width(5),
                 borderRadius: width(5),
                 paddingVertical: width(0.5),
               }}
@@ -80,7 +80,7 @@ const MainStack = () => {
             <View
               style={{
                 backgroundColor: focused ? "#D1FFBD" : "white",
-                paddingHorizontal: width(3.5),
+                  paddingHorizontal: width(5),
                 borderRadius: width(5),
                 paddingVertical: width(0.5),
               }}
@@ -104,7 +104,7 @@ const MainStack = () => {
             <View
               style={{
                 backgroundColor: focused ? "#D1FFBD" : "white",
-                paddingHorizontal: width(3.5),
+                  paddingHorizontal: width(5),
                 borderRadius: width(5),
                 paddingVertical: width(0.5),
               }}
@@ -118,7 +118,7 @@ const MainStack = () => {
           ),
         }}
       />
-      <Tab.Screen
+      {/* <Tab.Screen
         name="ProfileScreem"
         component={ProfileScreen}
         options={{
@@ -127,7 +127,7 @@ const MainStack = () => {
             <View
               style={{
                 backgroundColor: focused ? "#D1FFBD" : "white",
-                paddingHorizontal: width(3.5),
+                  paddingHorizontal: width(5),
                 borderRadius: width(5),
                 paddingVertical: width(0.5),
               }}
@@ -140,7 +140,7 @@ const MainStack = () => {
             </View>
           ),
         }}
-      />
+      /> */}
       {/* <Tab.Screen
         name="SettingScreen"
         component={SettingScreen}

@@ -306,7 +306,7 @@ export default function ChatIcon({ data, disable, mute }) {
         style={[
           styles.main,
           visibleModel && {
-            backgroundColor: "pink",
+            backgroundColor: "#D1FFBD",
             paddingHorizontal: width(2),
             borderRadius: height(1),
           },

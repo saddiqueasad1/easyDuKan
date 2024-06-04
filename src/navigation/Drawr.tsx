@@ -9,7 +9,7 @@ function MyDrawer() {
   return (
     <Drawer.Navigator
       screenOptions={{
-        // headerShown: false,
+        headerShown: false,
         drawerStyle: {
           backgroundColor: 'white',
         },

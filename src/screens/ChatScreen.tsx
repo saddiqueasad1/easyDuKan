@@ -331,7 +331,7 @@ function ChatView({ route }) {
           alignItems: "center",
           justifyContent: "center",
           right: {
-            backgroundColor: "#FAD0D0",
+            backgroundColor: "#D1FFBD",
             marginVertical: width(1), // Change the background color for sent messages
           },
           left: {

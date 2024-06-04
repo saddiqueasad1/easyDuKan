@@ -14,6 +14,7 @@ export const Color = {
   colorDimgray: "#575555",
   colorDarkslateblue: "#14224a",
   primaryColor: "#1CAD63",
+  secondaryColor:"#D1FFBD",
   lightgray: "#D3D3D3",
   backgroundColor: "#f8f9fa",
   primary: "#FF0100",

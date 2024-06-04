@@ -1,8 +1,10 @@
 import React from "react";
-import { TouchableOpacity, Text, StyleSheet, View } from "react-native";
+import { TouchableOpacity, Text, StyleSheet, View, Image } from "react-native";
 import { IProduct } from "../../utills/types";
 import QuantityContainer from "./QuantityContainer";
 import { Color } from "../../utills/GlobalStyles";
+import { height, width } from "../../utills/Dimension";
+import Icons from "../../assets/images";
 
 interface ProductItemProps {
   item: IProduct;
@@ -10,12 +12,12 @@ interface ProductItemProps {
   handleIncreaseQuantity: (
     id: string,
     currentQuantity: number,
-    item: IProduct,
+    item: IProduct
   ) => void;
   handleDecreaseQuantity: (
     id: string,
     currentQuantity: number,
-    item: IProduct,
+    item: IProduct
   ) => void;
 }
 
@@ -26,9 +28,14 @@ const ProductItem: React.FC<ProductItemProps> = ({
 }) => {
   return (
     <TouchableOpacity style={styles.item}>
-      <Text style={styles.itemText}>Name: {item.name}</Text>
-      <Text style={styles.itemText}>Description: {item.description}</Text>
-      <Text style={styles.itemText}>Unit Price: {item.unitPrice}</Text>
+      <Image source={Icons.p1} style={styles.imaage} />
+      <Text
+        style={[styles.itemText, { fontSize: height(2), fontWeight: "bold" }]}
+      >
+        {item.name}
+      </Text>
+      <Text style={styles.itemText}>{item.description}</Text>
+      <Text style={styles.itemText}>Price: {item.unitPrice}</Text>
       {/* <Text style={styles.itemText}>Total Quantity: {item.totalQuantity}</Text> */}
       <View style={styles.quantityContainer}>
         <QuantityContainer
@@ -43,23 +50,30 @@ const ProductItem: React.FC<ProductItemProps> = ({
 
 const styles = StyleSheet.create({
   item: {
-    flex: 1,
-    margin: 10,
-    padding: 15,
+    width: width(48),
+    margin: height(.3),
+    padding: height(.3),
     borderWidth: 1,
     borderColor: "#dee2e6",
-    borderRadius: 8,
-    backgroundColor: Color.colorWhite,
+    borderRadius: height(1.5),
+    backgroundColor: Color.white,
   },
   itemText: {
-    fontSize: 16,
+    fontSize: height(1.8),
     color: Color.colorDarkslateblue,
-    marginBottom: 5,
+    marginBottom: 1,
+    marginLeft:width(2)
   },
   quantityContainer: {
     position: "absolute",
-    right: 5,
-    top: 0,
+    right: height(1),
+    top: height(10),
+  },
+  imaage: {
+    height: height(15),
+    width: "100%",
+    borderRadius: height(2),
+    marginBottom: height(2),
   },
 });
 

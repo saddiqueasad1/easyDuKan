@@ -96,24 +96,10 @@ const ProfileScreen = ({ navigation }: { navigation: any }) => {
       userId: user.uid,
     });
   };
-  const handleEditProfile = () => {
-    navigation.navigate("EditProfileScreen");
-  };
+
 
   const headerItem = () => (
     <>
-      <View style={styles.profile}>
-        <FontAwesome5 name="user-tie" size={50} color={Color.primaryColor} />
-        <View style={styles.profileInfo}>
-          <Text style={styles.username}>{username}</Text>
-          <Text style={styles.email}>{email}</Text>
-          <Text style={styles.contact}>{phoneNumber}</Text>
-          <Text style={styles.address}>{address}</Text>
-        </View>
-        <TouchableOpacity style={styles.editButton} onPress={handleEditProfile}>
-          <FontAwesome5 name="edit" size={20} color={Color.primaryColor} />
-        </TouchableOpacity>
-      </View>
       <View style={styles.sectionHeader}>
         <Text style={styles.sectionTitle}>My Products</Text>
         <TouchableOpacity style={styles.addButton} onPress={addIProduct}>

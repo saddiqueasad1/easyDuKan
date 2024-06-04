@@ -15,6 +15,7 @@ import { getDatabase, ref, set } from "firebase/database";
 import ContactProfileScreen from "../screens/ContactStore";
 import DailyReportScreen from "../screens/DailyReportScreen";
 import MyDrawer from "./Drawr";
+import ProfileScreen from "../screens/ProfileScreen";
 const Stack = createNativeStackNavigator();
 
 const AppNavigator = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
@@ -94,6 +95,11 @@ const AppNavigator = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
             name="DailyReportScreen"
             component={DailyReportScreen}
             options={{ headerShown: true, title: "Daily Report" }}
+          />
+           <Stack.Screen
+            name="ProfileScreem"
+            component={ProfileScreen}
+            options={{ headerShown: true, title: "All Products" }}
           />
         </>
       ) : (

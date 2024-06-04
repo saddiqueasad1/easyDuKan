@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   FlatList,
@@ -18,6 +18,9 @@ import {
 import { setProduct } from "../redux/slices/productSlice";
 import ProductItem from "../components/ProductComponents/ProductItem";
 import { Color } from "../utills/GlobalStyles";
+import Header from "../components/Head";
+import ScreenWrapper from "../components/ScreenWrapper";
+import { width } from "../utills/Dimension";
 
 const ProductsScreen = ({ navigation }: { navigation: any }) => {
   const user = useSelector((state: RootState) => state.user);
@@ -25,6 +28,8 @@ const ProductsScreen = ({ navigation }: { navigation: any }) => {
   const bill = useSelector((state: RootState) => state.bill.bill);
   const db = getFirestore();
   const dispatch = useDispatch();
+  const [searchText, setSearchText] = useState("");
+  const [selectValue, SetSelectValue] = useState("0");
 
   useEffect(() => {
     fetchItems();
@@ -48,7 +53,7 @@ const ProductsScreen = ({ navigation }: { navigation: any }) => {
   const handleIncreaseQuantity = (
     id: string,
     currentQuantity: number,
-    item: IProduct,
+    item: IProduct
   ) => {
     const updatedItem: IItem = {
       ...item,
@@ -93,7 +98,7 @@ const ProductsScreen = ({ navigation }: { navigation: any }) => {
   const handleDecreaseQuantity = (
     id: string,
     currentQuantity: number,
-    item: IProduct,
+    item: IProduct
   ) => {
     const updatedItem: IItem = {
       ...item,
@@ -106,46 +111,65 @@ const ProductsScreen = ({ navigation }: { navigation: any }) => {
     }
   };
   return (
-    <View style={styles.container}>
-      <FlatList
-        data={products}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => (
-          <ProductItem
-            item={item}
-            navigation={navigation}
-            handleIncreaseQuantity={handleIncreaseQuantity}
-            handleDecreaseQuantity={handleDecreaseQuantity}
-          />
-        )}
-        contentContainerStyle={styles.itemsList}
-        numColumns={2}
-        ListEmptyComponent={
-          <Text style={styles.noItemsText}>No items available</Text>
-        }
-      />
-
-      {bill?.totalAmount !== undefined && bill?.totalAmount !== 0 && (
-        <TouchableOpacity
-          onPress={() => navigation.navigate("BillingDetailScreen")}
-        >
-          <View style={styles.floatingButton}>
-            <Text style={styles.floatingText}> {bill.totalQuantity}</Text>
-            <Text style={styles.floatingText}> View Bill</Text>
-            <Text style={styles.floatingText}>Rs: {bill?.totalAmount}</Text>
-          </View>
-        </TouchableOpacity>
+    <ScreenWrapper
+      headerUnScrollable={() => (
+        <Header
+          searchText={searchText}
+          setSearchText={setSearchText}
+          selectValue={selectValue}
+          SetSelectValue={SetSelectValue}
+        />
       )}
-    </View>
+      footerUnScrollable={() => {
+        return bill?.totalAmount !== undefined && bill?.totalAmount !== 0 ? (
+          <TouchableOpacity
+            onPress={() => navigation.navigate("BillingDetailScreen")}
+          >
+            <View style={styles.floatingButton}>
+              <Text style={styles.floatingText}> {bill.totalQuantity}</Text>
+              <Text style={styles.floatingText}> View Bill</Text>
+              <Text style={styles.floatingText}>Rs: {bill?.totalAmount}</Text>
+            </View>
+          </TouchableOpacity>
+        ) : (
+          <></>
+        );
+      }}
+    >
+      <View style={styles.container}>
+        <FlatList
+          data={products}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => {
+            if (
+              item?.name?.toLowerCase()?.includes(searchText?.toLowerCase())
+            ) {
+              return (
+                <ProductItem
+                  item={item}
+                  navigation={navigation}
+                  handleIncreaseQuantity={handleIncreaseQuantity}
+                  handleDecreaseQuantity={handleDecreaseQuantity}
+                />
+              );
+            }
+          }}
+          contentContainerStyle={styles.itemsList}
+          numColumns={2}
+          ListEmptyComponent={
+            <Text style={styles.noItemsText}>No items available</Text>
+          }
+        />
+      </View>
+    </ScreenWrapper>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Color.backgroundColor,
-    padding: 10,
-    marginTop: 30,
+    // alignItems: "center",
+    marginHorizontal:width(1)
   },
   noItemsText: {
     textAlign: "center",

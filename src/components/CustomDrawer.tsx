@@ -37,6 +37,14 @@ const CustomDrawer = ({ navigation }) => {
         console.log("ertyuiop", error);
       });
   };
+  const addIProduct = async () => {
+    navigation.navigate("EditProductScreen", {
+      userId: user?.uid,
+    });
+  };
+  const viewAllProducts = async () => {
+    navigation.navigate("ProfileScreem");
+  };
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <View
@@ -68,7 +76,7 @@ const CustomDrawer = ({ navigation }) => {
           </TouchableOpacity>
         </View>
       </View>
-      <View style={{marginVertical:height(1)}}>
+      <View style={{ marginVertical: height(1) }}>
         <TouchableOpacity
           onPress={() => {
             navigation.closeDrawer();
@@ -79,6 +87,7 @@ const CustomDrawer = ({ navigation }) => {
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => {
+            viewAllProducts()
             navigation.closeDrawer();
           }}
           style={styles.drawrbtn}
@@ -87,13 +96,29 @@ const CustomDrawer = ({ navigation }) => {
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => {
+            addIProduct();
             navigation.closeDrawer();
           }}
           style={styles.drawrbtn}
         >
           <Text style={styles.dbtext}>Add new product</Text>
         </TouchableOpacity>
-
+        <TouchableOpacity
+          onPress={() => {
+            navigation.closeDrawer();
+          }}
+          style={styles.drawrbtn}
+        >
+          <Text style={styles.dbtext}>Statistics</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => {
+            navigation.closeDrawer();
+          }}
+          style={styles.drawrbtn}
+        >
+          <Text style={styles.dbtext}>All Invoices</Text>
+        </TouchableOpacity>
         <TouchableOpacity
           onPress={() => {
             logout();
