@@ -91,7 +91,6 @@ const LoginScreen = ({ navigation }: { navigation: any }) => {
         </TouchableOpacity>
       </View>
       {recaptcha}
-      {recaptchaBanner}
       {loading && (
         <View style={styles.overlay}>
           <ActivityIndicator size="large" color={Color.primaryColor} />
@@ -146,7 +145,7 @@ const styles = StyleSheet.create({
   rectangleViewBorder: {
     borderStyle: "solid",
     borderRadius: 10,
-    backgroundColor:"#6c9418",
+    backgroundColor: "#6c9418",
     borderWidth: 1,
     height: 55,
     justifyContent: "center",
