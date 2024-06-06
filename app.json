@@ -19,7 +19,8 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.easydukan.easydukan"
+      "package": "com.easydukan.easydukan",
+      "googleServicesFile": "./google-services.json"
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -28,6 +29,7 @@
       "eas": {
         "projectId": "de2e21f8-f28a-48ac-9f52-5341041c9475"
       }
-    }
+    },
+    "scheme": "easydukan"
   }
 }

@@ -54,6 +54,8 @@ export interface IProfile {
   email: string;
   address: string;
   userId?: string;
+  emailVerified?: boolean;
+  photoURL?: string;
 }
 
 export interface IProduct {

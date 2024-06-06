@@ -15,6 +15,7 @@ import { useTranslation } from "react-i18next";
 import { useFirebaseLogin } from "@itzsunny/firebase-login";
 import { getAuth } from "firebase/auth";
 import { getApp } from "firebase/app";
+import GoogleLoginComponents from "../components/GoogleLoginComponents";
 
 const LoginScreen = ({ navigation }: { navigation: any }) => {
   const [phoneNumber, setPhoneNumber] = React.useState("3002918546");
@@ -89,6 +90,7 @@ const LoginScreen = ({ navigation }: { navigation: any }) => {
         >
           <Text style={styles.sendOtp}>{t("login.send_otp")}</Text>
         </TouchableOpacity>
+        <GoogleLoginComponents setLoading={setLoading} />
       </View>
       {recaptcha}
       {loading && (

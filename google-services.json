@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "777069971997",
+    "firebase_url": "https://east-dukan-default-rtdb.firebaseio.com",
+    "project_id": "east-dukan",
+    "storage_bucket": "east-dukan.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:777069971997:android:64a4c7e64055136edb94f4",
+        "android_client_info": {
+          "package_name": "com.easydukan.easydukan"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "777069971997-0kkvncld2jhkurqcp5qp5l3v993ef03f.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.easydukan.easydukan",
+            "certificate_hash": "a2893c602b4cdba176fc08d7dd5c3cddac779b7c"
+          }
+        },
+        {
+          "client_id": "777069971997-jv0vlf1l28tebth52oa85frlscnmkltb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDFAfloQjXaVkiuDQwX9u12DUtT2PW72gM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "777069971997-jv0vlf1l28tebth52oa85frlscnmkltb.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

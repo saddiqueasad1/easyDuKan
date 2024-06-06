@@ -4,7 +4,8 @@
     "confirmation_message": "We will send you a confirmation code",
     "send_otp": "Send OTP",
     "invalid_phone_number": "Invalid Phone Number",
-    "valid_phone_number": "Please enter a valid Pakistani phone number."
+    "valid_phone_number": "Please enter a valid Pakistani phone number.",
+    "login_with_google": "Login with google"
   },
   "OtpVerification": {
     "enter_Code": "Enter Verification Code",
@@ -30,8 +31,7 @@
     "unmute": "Unmute",
     "Delivered": "Delivered",
     "deletemsg": "Message Deleted",
-    "disapermsg":
-      "New messages will disappear from the chat 15 days after they're sent",
-    "load": "Loading All Chats ....",
-  },
+    "disapermsg": "New messages will disappear from the chat 15 days after they're sent",
+    "load": "Loading All Chats ...."
+  }
 }
