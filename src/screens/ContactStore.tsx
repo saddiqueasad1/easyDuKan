@@ -20,6 +20,8 @@ import { Color } from "../utills/GlobalStyles";
 import { setProfile } from "../redux/slices/profilleSlice";
 // import { setProduct } from "../redux/slices/productSlice";
 import { IProduct } from "../utills/types";
+import ProductShopItem from "../components/ProductComponentShop/ProductItem";
+import { height } from "../utills/Dimension";
 
 const ContactProfileScreen = ({ navigation, route }: { navigation: any }) => {
   const { userId } = route.params;
@@ -71,27 +73,30 @@ const ContactProfileScreen = ({ navigation, route }: { navigation: any }) => {
   };
 
   const renderItem = ({ item }: { item: IProduct }) => {
+    console.log(item);
+
     return (
-      <TouchableOpacity
-      // onPress={() =>
-      //   navigation.navigate("EditProductScreen", {
-      //     userId: user.uid,
-      //     itemId: item.id,
-      //   })
-      // }
-      >
-        <View style={styles.item}>
-          <Text style={styles.itemText}>Name: {item.name}</Text>
-          <Text style={styles.itemText}>Description: {item.description}</Text>
-          <Text style={styles.itemText}>Unit Price: {item.unitPrice}</Text>
-          <Text style={styles.itemText}>
-            {item.purchasePrice ? " Purchase Price:" + item.purchasePrice : ""}
-          </Text>
-          <Text style={styles.itemText}>
-            Total Quantity: {item.totalQuantity}
-          </Text>
-        </View>
-      </TouchableOpacity>
+      <ProductShopItem item={item} />
+      // <TouchableOpacity
+      // // onPress={() =>
+      // //   navigation.navigate("EditProductScreen", {
+      // //     userId: user.uid,
+      // //     itemId: item.id,
+      // //   })
+      // // }
+      // >
+      //   <View style={styles.item}>
+      //     <Text style={styles.itemText}>Name: {item.name}</Text>
+      //     <Text style={styles.itemText}>Description: {item.description}</Text>
+      //     <Text style={styles.itemText}>Unit Price: {item.unitPrice}</Text>
+      //     <Text style={styles.itemText}>
+      //       {item.purchasePrice ? " Purchase Price:" + item.purchasePrice : ""}
+      //     </Text>
+      //     <Text style={styles.itemText}>
+      //       Total Quantity: {item.totalQuantity}
+      //     </Text>
+      //   </View>
+      // </TouchableOpacity>
     );
   };
 
@@ -134,7 +139,7 @@ const ContactProfileScreen = ({ navigation, route }: { navigation: any }) => {
         </TouchableOpacity>
       </View>
       <View style={styles.sectionHeader}>
-        <Text style={styles.sectionTitle}>My Products</Text>
+        <Text style={styles.sectionTitle}>All Products</Text>
         {/* <TouchableOpacity style={styles.addButton} onPress={addIProduct}>
           <Text style={styles.addButtonText}>Add Products</Text>
         </TouchableOpacity> */}
@@ -153,6 +158,7 @@ const ContactProfileScreen = ({ navigation, route }: { navigation: any }) => {
         ListEmptyComponent={
           <Text style={styles.noItemsText}>No items available</Text>
         }
+        numColumns={2}
       />
     </View>
   );
@@ -162,14 +168,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#f8f9fa",
-    padding: 20,
-    paddingTop: 40,
-    marginTop: 30,
   },
   profile: {
     flexDirection: "row",
     alignItems: "center",
-    marginBottom: 20,
+    margin: height(3),
   },
   profileInfo: {
     marginLeft: 20,
@@ -200,7 +203,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginBottom: 20,
+    margin: height(2),
   },
   sectionTitle: {
     fontSize: 24,

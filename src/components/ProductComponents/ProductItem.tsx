@@ -29,14 +29,24 @@ const ProductItem: React.FC<ProductItemProps> = ({
   return (
     <View style={styles.item}>
       <Image source={Icons.p1} style={styles.imaage} />
-      <Text
-        style={[styles.itemText, { fontSize: height(2), fontWeight: "bold" }]}
-      >
-        {item.name}
-      </Text>
-      <Text style={styles.itemText}>{item.description}</Text>
-      <Text style={styles.itemText}>Price: {item.unitPrice}</Text>
-      {/* <Text style={styles.itemText}>Total Quantity: {item.totalQuantity}</Text> */}
+
+      <View style={{width:width(35)}}>
+        <Text
+          style={[styles.itemText, { fontSize: height(2), fontWeight: "bold",color:Color.colorDarkslateblue }]}
+        >
+          {item.name}
+        </Text>
+        <Text style={styles.itemText}>{item?.category}</Text>
+      </View>
+      <View>
+        <Text style={styles.itemText}>Price: 
+        <Text style={{color:'green',fontWeight:'bold'}}>  {item.unitPrice}</Text>
+        
+        </Text>
+        <Text style={styles.itemText}>
+        Total Quantity: <Text style={{color:'red',fontWeight:'bold'}}> {item.totalQuantity}</Text>
+        </Text>
+      </View>
       <View style={styles.quantityContainer}>
         <QuantityContainer
           item={item}
@@ -50,30 +60,29 @@ const ProductItem: React.FC<ProductItemProps> = ({
 
 const styles = StyleSheet.create({
   item: {
-    width: width(48),
-    margin: height(.3),
-    padding: height(.3),
+    width: width(97),
+    margin: height(0.3),
+    padding: height(0.3),
     borderWidth: 1,
     borderColor: "#dee2e6",
     borderRadius: height(1.5),
     backgroundColor: Color.white,
+    flexDirection: "row",
   },
   itemText: {
     fontSize: height(1.8),
     color: Color.colorDarkslateblue,
     marginBottom: 1,
-    marginLeft:width(2)
+    marginLeft: width(2),
   },
   quantityContainer: {
     position: "absolute",
     right: height(1),
-    top: height(10),
   },
   imaage: {
-    height: height(15),
-    width: "100%",
-    borderRadius: height(2),
-    marginBottom: height(2),
+    height: height(6),
+    width: height(6),
+    borderRadius: height(1),
   },
 });
 

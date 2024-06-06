@@ -17,6 +17,7 @@ import DailyReportScreen from "../screens/DailyReportScreen";
 import MyDrawer from "./Drawr";
 import ProfileScreen from "../screens/ProfileScreen";
 import BillScreen from "../screens/BillScreen";
+import ChatList from "../screens/ChatList";
 const Stack = createNativeStackNavigator();
 
 const AppNavigator = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
@@ -107,6 +108,12 @@ const AppNavigator = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
             component={BillScreen}
             options={{ headerShown: true, title: "All Products" }}
           />
+            <Stack.Screen
+            name="chatListScreen"
+            component={ChatList}
+            options={{ headerShown: false}}
+          />
+          
           
         </>
       ) : (

@@ -11,8 +11,7 @@ import {
 import { height, width } from "../utills/Dimension";
 import { Color } from "../utills/GlobalStyles";
 import { useNavigation } from "@react-navigation/native";
-import {Entypo} from "@expo/vector-icons";
-
+import { Entypo, Ionicons } from "@expo/vector-icons";
 
 interface Category {
   id: string;
@@ -24,7 +23,7 @@ const Header: React.FC = ({
   setSearchText,
   selectValue,
   SetSelectValue,
-  categories
+  categories,
 }) => {
   const categoryListRef = useRef<FlatList<Category>>(null);
   const navigation = useNavigation();
@@ -50,16 +49,77 @@ const Header: React.FC = ({
       ]}
       onPress={() => SetSelectValue(item.id)}
     >
-      <Text style={[styles.categoryText,{
-        color: item.id == selectValue ?  "white":'black',
-      }]}>{item.name}</Text>
+      <Text
+        style={[
+          styles.categoryText,
+          {
+            color: item.id == selectValue ? "white" : "black",
+          },
+        ]}
+      >
+        {item.name}
+      </Text>
     </TouchableOpacity>
   );
 
-
-
   return (
     <View style={styles.header}>
+      <View
+        style={{
+          flexDirection: "row",
+          alignItems: "center",
+          marginBottom: height(1),
+        }}
+      >
+        <TouchableOpacity
+          style={{ paddingHorizontal: height(1) }}
+          onPress={() => navigation.openDrawer()}
+        >
+          <Image
+            source={{
+              uri: "https://cdn-icons-png.flaticon.com/512/149/149071.png",
+            }}
+            style={styles.ProfileIcon}
+          />
+        </TouchableOpacity>
+        <Text
+          style={{
+            fontSize: height(3),
+            fontWeight: "bold",
+            color: Color.primaryColor,
+            fontStyle: "italic",
+            width: width(60),
+          }}
+        >
+          eassyDukan
+        </Text>
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "space-evenly",
+            alignContent: "center",
+            width: width(25),
+          }}
+        >
+          <TouchableOpacity
+            style={{ padding: height(0.5) }}
+            // onPress={() => navigation.navigate("chatListScreen")}
+          >
+            <Ionicons
+              name={"notifications-sharp"}
+              color={"grey"}
+              size={height(2.5)}
+            />
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={{ padding: height(0.5) }}
+            onPress={() => navigation.navigate("chatListScreen")}
+          >
+            <Ionicons name="chatbubble" color={"grey"} size={height(2.5)} />
+          </TouchableOpacity>
+        </View>
+      </View>
       <View style={{ flexDirection: "row" }}>
         <View style={styles.searchBarContainer}>
           <TextInput
@@ -75,30 +135,25 @@ const Header: React.FC = ({
               onPress={handleClearSearch}
             >
               {/* <Text style={styles.clearButtonText}>X</Text> */}
-              <Entypo name={"circle-with-cross"} color={Color.primaryColor} size={height(2.5)}/>
+              <Entypo
+                name={"circle-with-cross"}
+                color={Color.primaryColor}
+                size={height(2.5)}
+              />
             </TouchableOpacity>
           )}
         </View>
-        <TouchableOpacity
-          style={{ paddingHorizontal: height(1) }}
-          onPress={() => navigation.openDrawer()}
-        >
-          <Image
-            source={{
-              uri: "https://cdn-icons-png.flaticon.com/512/149/149071.png",
-            }}
-            style={styles.ProfileIcon}
-          />
-        </TouchableOpacity>
       </View>
-     {categories&& <FlatList
-        ref={categoryListRef}
-        data={categories}
-        horizontal={true}
-        showsHorizontalScrollIndicator={false}
-        renderItem={renderCategory}
-        keyExtractor={(item) => item.id}
-      />}
+      {categories && (
+        <FlatList
+          ref={categoryListRef}
+          data={categories}
+          horizontal={true}
+          showsHorizontalScrollIndicator={false}
+          renderItem={renderCategory}
+          keyExtractor={(item) => item.id}
+        />
+      )}
     </View>
   );
 };
@@ -115,7 +170,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#f0f0f0",
     borderRadius: height(5),
     paddingHorizontal: height(1),
-    width: width(80),
+    width: width(95),
   },
   searchBar: {
     flex: 1,
@@ -142,8 +197,8 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   ProfileIcon: {
-    height: height(5),
-    width: height(5),
+    height: height(4),
+    width: height(4),
     borderRadius: height(5),
     borderWidth: height(0.3),
     borderColor: Color.secondaryColor,

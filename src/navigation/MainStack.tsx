@@ -72,7 +72,7 @@ const MainStack = () => {
           ),
         }}
       />
-      <Tab.Screen
+      {/* <Tab.Screen
         name="chatListScreen"
         component={ChatList}
         options={{
@@ -94,7 +94,7 @@ const MainStack = () => {
             </View>
           ),
         }}
-      />
+      /> */}
 
       <Tab.Screen
         name="OrderScreen"

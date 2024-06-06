@@ -5,11 +5,14 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
+  Image,
 } from "react-native";
 import { collection, getDocs, getFirestore } from "firebase/firestore";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../redux/store";
 import { IBill, IItem, IProduct } from "../utills/types";
+import AntDesign from "@expo/vector-icons/AntDesign";
+
 import {
   decreaseQuantity,
   increaseQuantity,
@@ -21,20 +24,21 @@ import { Color } from "../utills/GlobalStyles";
 import Header from "../components/Head";
 import ScreenWrapper from "../components/ScreenWrapper";
 import { height, width } from "../utills/Dimension";
-  const categories: Category[] = [
-    { id: "0", name: "All" },
-    { id: "1", name: "Clothes" },
-    { id: "2", name: "Shoes" },
-    { id: "3", name: "Kind" },
-    { id: "4", name: "Clothes" },
-    { id: "5", name: "Shoes" },
-    { id: "6", name: "Kind" },
-    { id: "17", name: "Clothes" },
-    { id: "27", name: "Shoes" },
-    { id: "38", name: "Kind" },
+import Icons from "../assets/images";
+const categories: Category[] = [
+  { id: "0", name: "All" },
+  { id: "1", name: "Clothes" },
+  { id: "2", name: "Shoes" },
+  { id: "3", name: "Kind" },
+  { id: "4", name: "Clothes" },
+  { id: "5", name: "Shoes" },
+  { id: "6", name: "Kind" },
+  { id: "17", name: "Clothes" },
+  { id: "27", name: "Shoes" },
+  { id: "38", name: "Kind" },
 
-    // Add more categories as needed
-  ];
+  // Add more categories as needed
+];
 const ProductsScreen = ({ navigation }: { navigation: any }) => {
   const user = useSelector((state: RootState) => state.user);
   const products = useSelector((state: RootState) => state.products);
@@ -169,9 +173,40 @@ const ProductsScreen = ({ navigation }: { navigation: any }) => {
             }
           }}
           contentContainerStyle={styles.itemsList}
-          numColumns={2}
           ListEmptyComponent={
-            <Text style={styles.noItemsText}>No items available</Text>
+            <View
+              style={{
+                alignItems: "center",
+                height: height(70),
+                backgroundColor: "white",
+                justifyContent: "center",
+              }}
+            >
+              <Image
+                source={Icons.empty}
+                style={{ height: height(30), width: height(30) }}
+              />
+              <Text
+                style={{
+                  fontSize: height(1.2),
+                  margin: height(3),
+                }}
+              >
+                No Product found
+              </Text>
+
+              <TouchableOpacity
+                onPress={() => {
+                  navigation.navigate("EditProductScreen", {
+                    userId: user?.uid,
+                  });
+                }}
+                style={styles.drawrbtn}
+              >
+                <AntDesign name="plus" size={height(2)} />
+                <Text style={styles.dbtext}>Add New Product</Text>
+              </TouchableOpacity>
+            </View>
           }
         />
       </View>
@@ -183,7 +218,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     // alignItems: "center",
-    marginHorizontal:width(1)
+    marginHorizontal: width(1),
   },
   noItemsText: {
     textAlign: "center",
@@ -203,11 +238,24 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     width: width(96),
-    alignSelf:'center'
+    alignSelf: "center",
   },
   floatingText: {
     color: Color.colorWhite,
     fontWeight: "bold",
+  },
+  drawrbtn: {
+    padding: height(2),
+    backgroundColor: Color.secondaryColor,
+    marginVertical: height(0.5),
+    marginHorizontal: height(1),
+    borderRadius: height(3),
+    flexDirection: "row",
+  },
+  dbtext: {
+    fontSize: height(1.6),
+    fontWeight: "500",
+    marginHorizontal: height(1),
   },
 });
 

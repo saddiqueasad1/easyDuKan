@@ -1,4 +1,10 @@
-import { AntDesign, Entypo, FontAwesome, Ionicons } from "@expo/vector-icons";
+import {
+  AntDesign,
+  Entypo,
+  FontAwesome,
+  Ionicons,
+  Octicons,
+} from "@expo/vector-icons";
 import React, { useContext, useState } from "react";
 import { FontAwesome5 } from "@expo/vector-icons";
 import {
@@ -86,6 +92,8 @@ const CustomDrawer = ({ navigation }) => {
           }}
           style={styles.drawrbtn}
         >
+          <Ionicons name="grid-outline" size={height(2)} color={'grey'}/>
+
           <Text style={styles.dbtext}>All Categories</Text>
         </TouchableOpacity>
         <TouchableOpacity
@@ -95,6 +103,7 @@ const CustomDrawer = ({ navigation }) => {
           }}
           style={styles.drawrbtn}
         >
+          <AntDesign name="shoppingcart" size={height(2)}color={'grey'} />
           <Text style={styles.dbtext}>All Products</Text>
         </TouchableOpacity>
         <TouchableOpacity
@@ -104,6 +113,7 @@ const CustomDrawer = ({ navigation }) => {
           }}
           style={styles.drawrbtn}
         >
+          <AntDesign name="addfile" size={height(2)} color={'grey'}/>
           <Text style={styles.dbtext}>Add new product</Text>
         </TouchableOpacity>
         <TouchableOpacity
@@ -113,6 +123,8 @@ const CustomDrawer = ({ navigation }) => {
           }}
           style={styles.drawrbtn}
         >
+          <Ionicons name="stats-chart-outline" size={height(2)}color={'grey'} />
+
           <Text style={styles.dbtext}>Reposrt & Statistics</Text>
         </TouchableOpacity>
         <TouchableOpacity
@@ -123,6 +135,8 @@ const CustomDrawer = ({ navigation }) => {
           }}
           style={styles.drawrbtn}
         >
+          <Octicons name="list-unordered" size={height(2)} color={'grey'}/>
+
           <Text style={styles.dbtext}>All Invoices</Text>
         </TouchableOpacity>
         <TouchableOpacity
@@ -133,7 +147,20 @@ const CustomDrawer = ({ navigation }) => {
           }}
           style={styles.drawrbtn}
         >
+          <AntDesign name="profile" size={height(2)} color={'grey'}/>
+
           <Text style={styles.dbtext}>My Orders</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => {
+            // logout();
+            navigation.closeDrawer();
+          }}
+          style={styles.drawrbtn}
+        >
+          <AntDesign name="infocirlceo" size={height(2)} color={'grey'}/>
+
+          <Text style={[styles.dbtext]}>About Us</Text>
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => {
@@ -142,6 +169,8 @@ const CustomDrawer = ({ navigation }) => {
           }}
           style={styles.drawrbtn}
         >
+          <AntDesign name="logout" size={height(2)} color={"red"} />
+
           <Text style={[styles.dbtext, { color: "red" }]}>Log Out</Text>
         </TouchableOpacity>
       </View>
@@ -175,6 +204,8 @@ const getStyles = (AppColors) =>
     dbtext: {
       fontSize: height(1.6),
       fontWeight: "500",
+      marginHorizontal: height(1),
+      color:'grey'
     },
     icon: {
       color: "white",
@@ -276,5 +307,6 @@ const getStyles = (AppColors) =>
       marginVertical: height(0.5),
       marginHorizontal: height(1),
       borderRadius: height(3),
+      flexDirection: "row",
     },
   });

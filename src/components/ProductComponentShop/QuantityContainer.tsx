@@ -65,7 +65,7 @@ const styles = StyleSheet.create({
   },
   quantityText: {
     fontSize: height(2),
-    marginHorizontal: height(3),
+    marginHorizontal: height(4),
     fontWeight:'condensedBold',
     color: Color.colorDarkslateblue,
   },
