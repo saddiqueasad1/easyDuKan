@@ -13,6 +13,10 @@ import { doc, setDoc, getFirestore } from "firebase/firestore";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../redux/store";
 import { setProfile } from "../redux/slices/profilleSlice";
+import ScreenWrapper from "../components/ScreenWrapper";
+import { height, width } from "../utills/Dimension";
+import { Color } from "../utills/GlobalStyles";
+import Button from "../components/button";
 
 const EditProfileScreen = ({ navigation }: { navigation: any }) => {
   const user = useSelector((state: RootState) => state.user);
@@ -34,7 +38,7 @@ const EditProfileScreen = ({ navigation }: { navigation: any }) => {
         address,
       });
       dispatch(
-        setProfile({ username, phoneNumber, email, address, userId: user.uid }),
+        setProfile({ username, phoneNumber, email, address, userId: user.uid })
       );
 
       Alert.alert("Success", "Profile saved successfully!", [
@@ -49,76 +53,85 @@ const EditProfileScreen = ({ navigation }: { navigation: any }) => {
   };
 
   return (
-    <ScrollView style={styles.container}>
-      <Text style={styles.title}>Profile</Text>
-      <Text style={styles.text}>Name</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Username"
-        value={username}
-        onChangeText={setUsername}
-      />
-      <Text style={styles.text}>Phone Number</Text>
+    <ScreenWrapper scrollEnabled>
+      <View style={styles.container}>
+        <Text style={styles.title}>Profile</Text>
+        <Text style={styles.text}>Name</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Username"
+          value={username}
+          onChangeText={setUsername}
+        />
+        <Text style={styles.text}>Phone Number</Text>
 
-      <TextInput
-        style={styles.input}
-        placeholder="Phone Number"
-        value={phoneNumber}
-        onChangeText={setPhoneNumber}
-        editable={false}
-      />
-      <Text style={styles.text}>Email</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Phone Number"
+          value={phoneNumber}
+          onChangeText={setPhoneNumber}
+          editable={false}
+        />
+        <Text style={styles.text}>Email</Text>
 
-      <TextInput
-        style={styles.input}
-        placeholder="Email"
-        value={email}
-        onChangeText={setEmail}
-      />
-      <Text style={styles.text}>Address</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Email"
+          value={email}
+          onChangeText={setEmail}
+        />
+        <Text style={styles.text}>Address</Text>
 
-      <TextInput
-        style={styles.input}
-        placeholder="Address"
-        value={address}
-        onChangeText={setAddress}
-      />
-      <TouchableOpacity style={styles.saveButton} onPress={saveProfile}>
-        <Text style={styles.saveButtonText}>Save Profile</Text>
-      </TouchableOpacity>
-      {loading && (
-        <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color="#0000ff" />
-        </View>
-      )}
-    </ScrollView>
+        <TextInput
+          style={styles.input}
+          placeholder="Address"
+          value={address}
+          onChangeText={setAddress}
+        />
+        <Button
+        title={'Save Profile'}
+        onPress={saveProfile}
+        containerStyle={{width:width(90),marginTop:height(3)}}
+        />
+        {/* <TouchableOpacity style={styles.saveButton} >
+          <Text style={styles.saveButtonText}>Save Profile</Text>
+        </TouchableOpacity> */}
+        {loading && (
+          <View style={styles.loadingContainer}>
+            <ActivityIndicator size="large" color="#0000ff" />
+          </View>
+        )}
+      </View>
+    </ScreenWrapper>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
-    padding: 20,
-    backgroundColor: "#f8f9fa",
+    padding: height(2),
   },
   title: {
-    fontSize: 28,
+    fontSize: height(3),
     fontWeight: "bold",
     textAlign: "center",
-    marginVertical: 20,
-    color: "#343a40",
+    marginVertical: height(3),
+    color: Color.primaryColor,
   },
   text: {
     textAlign: "left",
     width: "100%",
+    fontSize:height(1.8),
+    fontWeight:'700'
   },
   input: {
-    borderWidth: 1,
+
     borderColor: "#ced4da",
     padding: 12,
-    marginVertical: 10,
-    borderRadius: 8,
-    backgroundColor: "#fff",
+    marginVertical: width(2),
+    borderRadius: height(3),
+    backgroundColor: Color.backgroundColor,
+    
   },
   saveButton: {
     backgroundColor: "#007bff",

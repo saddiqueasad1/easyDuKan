@@ -36,9 +36,7 @@ const ProductItem: React.FC<ProductItemProps> = ({
         >
           {item.name}
         </Text>
-        <Text style={styles.itemText}>{item?.category}</Text>
-      </View>
-      <View>
+        {/* <Text style={styles.itemText}>{item?.category}</Text> */}
         <Text style={styles.itemText}>Price: 
         <Text style={{color:'green',fontWeight:'bold'}}>  {item.unitPrice}</Text>
         
@@ -78,10 +76,11 @@ const styles = StyleSheet.create({
   quantityContainer: {
     position: "absolute",
     right: height(1),
+    top:height(2.5)
   },
   imaage: {
-    height: height(6),
-    width: height(6),
+    height: height(8),
+    width: height(8),
     borderRadius: height(1),
   },
 });

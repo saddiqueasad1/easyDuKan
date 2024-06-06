@@ -1,29 +1,37 @@
 import React, { useState } from "react";
+import AntDesign from "@expo/vector-icons/AntDesign";
+import Modal from "react-native-modal";
+
 import {
   View,
   TextInput,
-  Button,
   Text,
   StyleSheet,
   Alert,
-  ActivityIndicator,
+  FlatList,
+  TouchableOpacity,
 } from "react-native";
 import { addDoc, collection } from "firebase/firestore";
 import { getFirestore } from "firebase/firestore";
 import { useDispatch, useSelector } from "react-redux";
 import { setCategories } from "../redux/slices/categoriesSlice";
 import { RootState } from "../redux/store";
+import ScreenWrapper from "../components/ScreenWrapper";
+import { height, width } from "../utills/Dimension";
+import { Color } from "../utills/GlobalStyles";
+import Button from "../components/button";
 
 const AddCategoryScreen = ({ navigation }: { navigation: any }) => {
   const [newCategoryName, setNewCategoryName] = useState("");
   const [loading, setLoading] = useState(false);
+  const [addModal, setAddModal] = useState(false);
   const [inputError, setInputError] = useState("");
   const dispatch = useDispatch();
   const { categories } = useSelector((state: RootState) => state.categories);
   const user = useSelector((state: RootState) => state.user);
   const db = getFirestore();
   // console.log(categories);
-  
+
   const addCategory = async () => {
     if (!newCategoryName.trim()) {
       setInputError("Category name cannot be empty.");
@@ -36,7 +44,7 @@ const AddCategoryScreen = ({ navigation }: { navigation: any }) => {
         collection(db, "users", user.uid, "categories"),
         {
           name: newCategoryName,
-        },
+        }
       );
 
       const newCategory = {
@@ -61,42 +69,76 @@ const AddCategoryScreen = ({ navigation }: { navigation: any }) => {
     }
   };
 
+  const closeModel = () => setAddModal(false);
   return (
-    <View style={styles.container}>
-      <TextInput
-        style={styles.input}
-        placeholder="New Category Name"
-        value={newCategoryName}
-        onChangeText={setNewCategoryName}
-      />
-      {inputError !== "" && <Text style={styles.errorText}>{inputError}</Text>}
-      <View style={styles.buttonContainer}>
-        {loading ? (
-          <ActivityIndicator size="large" color="#0000ff" />
-        ) : (
-          <Button title="Add Category" onPress={addCategory} />
-        )}
+    <ScreenWrapper scrollEnabled={false}>
+      <View style={styles.container}>
+        <FlatList
+          data={categories}
+          scrollEnabled={false}
+          renderItem={({ item }) => (
+            <View
+              style={{
+                width: width(92),
+                backgroundColor: Color.backgroundColor,
+                padding: height(2),
+                margin: height(0.5),
+                borderRadius: height(1),
+              }}
+            >
+              <Text style={{ fontSize: height(2),fontWeight:'heavy', }}>{item.name}</Text>
+            </View>
+          )}
+          keyExtractor={(item, index) => index}
+        />
+        <TouchableOpacity
+          onPress={() => setAddModal(true)}
+          style={{
+            position: "absolute",
+            bottom: height(6),
+            right: height(4),
+            backgroundColor: "white",
+          }}
+        >
+          <AntDesign
+            name={"pluscircle"}
+            color={Color.primaryColor}
+            size={height(5)}
+          />
+        </TouchableOpacity>
+        <Modal
+          backdropOpacity={0.3}
+          isVisible={addModal}
+          onBackdropPress={closeModel}
+          onBackButtonPress={closeModel}
+        >
+          <View style={styles.searchContainer}>
+            <TextInput
+              style={styles.input}
+              placeholder="New Category Name"
+              value={newCategoryName}
+              onChangeText={setNewCategoryName}
+            />
+            <Button
+              isLoading={loading}
+              title="Add Category"
+              onPress={addCategory}
+              containerStyle={{ width: width(80), marginTop: height(3) }}
+            />
+          </View>
+        </Modal>
       </View>
-    </View>
+    </ScreenWrapper>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
+    padding: height(1.5),
     flex: 1,
-    padding: 20,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#f8f9fa",
   },
   input: {
-    borderWidth: 1,
-    borderColor: "#ced4da",
-    padding: 12,
-    marginVertical: 10,
-    borderRadius: 8,
-    width: "100%",
-    backgroundColor: "#fff",
+    width: width(78),
   },
   errorText: {
     color: "red",
@@ -105,6 +147,13 @@ const styles = StyleSheet.create({
   buttonContainer: {
     marginTop: 20,
     width: "100%",
+  },
+  searchContainer: {
+    alignItems: "center",
+    backgroundColor: "white",
+    height: height(15),
+    borderRadius: height(3),
+    padding: height(2),
   },
 });
 

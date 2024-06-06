@@ -21,6 +21,10 @@ import { setProfile } from "../redux/slices/profilleSlice";
 import { setProduct } from "../redux/slices/productSlice";
 import { IProduct } from "../utills/types";
 import { clearUser } from "../redux/slices/userSlice";
+import ScreenWrapper from "../components/ScreenWrapper";
+import { height, width } from "../utills/Dimension";
+import Button from "../components/button";
+import MyProductCard from "../components/MyProductCard/ProductItem";
 
 const ProfileScreen = ({ navigation }: { navigation: any }) => {
   const user = useSelector((state: RootState) => state.user);
@@ -68,26 +72,30 @@ const ProfileScreen = ({ navigation }: { navigation: any }) => {
 
   const renderItem = ({ item }: { item: IProduct }) => {
     return (
-      <TouchableOpacity
+      <MyProductCard
+        item={item}
         onPress={() =>
           navigation.navigate("EditProductScreen", {
             userId: user.uid,
             itemId: item.id,
           })
         }
-      >
-        <View style={styles.item}>
-          <Text style={styles.itemText}>Name: {item.name}</Text>
-          <Text style={styles.itemText}>Description: {item.description}</Text>
-          <Text style={styles.itemText}>Unit Price: {item.unitPrice}</Text>
-          <Text style={styles.itemText}>
-            {item.purchasePrice ? " Purchase Price:" + item.purchasePrice : ""}
-          </Text>
-          <Text style={styles.itemText}>
-            Total Quantity: {item.totalQuantity}
-          </Text>
-        </View>
-      </TouchableOpacity>
+      />
+      // <TouchableOpacity
+      //
+      // >
+      //   <View style={styles.item}>
+      //     <Text style={styles.itemText}>Name: {item.name}</Text>
+      //     <Text style={styles.itemText}>Description: {item.description}</Text>
+      //     <Text style={styles.itemText}>Unit Price: {item.unitPrice}</Text>
+      //     <Text style={styles.itemText}>
+      //       {item.purchasePrice ? " Purchase Price:" + item.purchasePrice : ""}
+      //     </Text>
+      //     <Text style={styles.itemText}>
+      //       Total Quantity: {item.totalQuantity}
+      //     </Text>
+      //   </View>
+      // </TouchableOpacity>
     );
   };
 
@@ -97,41 +105,42 @@ const ProfileScreen = ({ navigation }: { navigation: any }) => {
     });
   };
 
-
   const headerItem = () => (
     <>
       <View style={styles.sectionHeader}>
         <Text style={styles.sectionTitle}>My Products</Text>
-        <TouchableOpacity style={styles.addButton} onPress={addIProduct}>
-          <Text style={styles.addButtonText}>Add Products</Text>
-        </TouchableOpacity>
+        <Button
+          title={"Add Products"}
+          onPress={addIProduct}
+          containerStyle={{ width: width(20), paddingVertical: height(1.2) }}
+          textStyle={{ fontSize: height(1.2) }}
+        />
       </View>
     </>
   );
 
   return (
-    <View style={styles.container}>
-      <FlatList
-        data={products}
-        keyExtractor={(item) => item.id}
-        renderItem={renderItem}
-        contentContainerStyle={styles.itemsList}
-        ListHeaderComponent={headerItem}
-        ListEmptyComponent={
-          <Text style={styles.noItemsText}>No items available</Text>
-        }
-      />
-    </View>
+    <ScreenWrapper>
+      <View style={styles.container}>
+        <FlatList
+          data={products}
+          keyExtractor={(item) => item.id}
+          renderItem={renderItem}
+          contentContainerStyle={styles.itemsList}
+          ListHeaderComponent={headerItem}
+          ListEmptyComponent={
+            <Text style={styles.noItemsText}>No items available</Text>
+          }
+          numColumns={3}
+        />
+      </View>
+    </ScreenWrapper>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: "#f8f9fa",
-    padding: 20,
-    paddingTop: 40,
-    marginTop: 30,
+    padding: height(1.5),
   },
   profile: {
     flexDirection: "row",

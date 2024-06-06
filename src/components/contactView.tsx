@@ -25,7 +25,7 @@ const ContactView: React.FC<UserProfileProps> = ({ data }) => {
         source={{
           uri:
             data.imageUrl ||
-            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTA-MNSjK1KQq5QyX3QxBm3y20qUxhJVWvRmQ&usqp=CAU",
+            "https://w7.pngwing.com/pngs/357/22/png-transparent-testimonial-computer-icons-customer-business-customer-blue-company-text-thumbnail.png",
         }}
         style={styles.image}
       />
@@ -57,12 +57,12 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: height(2),
-    fontWeight:'bold'
+    fontWeight: "bold",
   },
-  phone:{
+  phone: {
     fontSize: height(1.8),
-    fontWeight:'400'
-  }
+    fontWeight: "400",
+  },
 });
 
 export default ContactView;

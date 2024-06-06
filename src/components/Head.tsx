@@ -88,7 +88,7 @@ const Header: React.FC = ({
             fontWeight: "bold",
             color: Color.primaryColor,
             fontStyle: "italic",
-            width: width(60),
+            width: width(63),
           }}
         >
           eassyDukan
@@ -98,7 +98,7 @@ const Header: React.FC = ({
             flexDirection: "row",
             justifyContent: "space-evenly",
             alignContent: "center",
-            width: width(25),
+            width: width(20),
           }}
         >
           <TouchableOpacity

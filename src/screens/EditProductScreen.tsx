@@ -2,13 +2,15 @@ import React, { useState, useEffect } from "react";
 import {
   View,
   TextInput,
-  Button,
   Text,
   StyleSheet,
   Alert,
   ActivityIndicator,
   ScrollView,
+  TouchableOpacity,
 } from "react-native";
+import AntDesign from "@expo/vector-icons/AntDesign";
+
 import { Picker } from "@react-native-picker/picker";
 import {
   doc,
@@ -23,6 +25,10 @@ import { setCategories } from "../redux/slices/categoriesSlice";
 import { RootState } from "../redux/store";
 import { addProduct, updateProduct } from "../redux/slices/productSlice";
 import { IProduct } from "../utills/types";
+import ScreenWrapper from "../components/ScreenWrapper";
+import { height, width } from "../utills/Dimension";
+import { Color } from "../utills/GlobalStyles";
+import Button from "../components/button";
 
 const EditProductScreen = ({
   route,
@@ -62,7 +68,7 @@ const EditProductScreen = ({
         setLoading(true);
         try {
           const selectProductById: IProduct | undefined = products.find(
-            (product) => product.id === itemId,
+            (product) => product.id === itemId
           );
           if (selectProductById) {
             setName(selectProductById.name || "");
@@ -86,7 +92,7 @@ const EditProductScreen = ({
       setLoading(true);
       try {
         const categoriesSnapshot = await getDocs(
-          collection(db, "users", userId, "categories"),
+          collection(db, "users", userId, "categories")
         );
         const categoriesList = categoriesSnapshot.docs.map((doc) => ({
           id: doc.id,
@@ -166,7 +172,7 @@ const EditProductScreen = ({
             category_id: selectedCategoryId,
             id: itemId,
             purchasePrice: purchasePrice,
-          }),
+          })
         );
       } else {
         const result = await addDoc(
@@ -178,7 +184,7 @@ const EditProductScreen = ({
             totalQuantity: totalQuantity,
             category_id: selectedCategoryId,
             purchasePrice: purchasePrice,
-          },
+          }
         );
         dispatch(
           addProduct({
@@ -189,7 +195,7 @@ const EditProductScreen = ({
             category_id: selectedCategoryId,
             purchasePrice: purchasePrice,
             id: result.id,
-          }),
+          })
         );
         Alert.alert("Success", "Product added successfully!", [
           { text: "Add More" },
@@ -228,96 +234,137 @@ const EditProductScreen = ({
   };
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      {loading && (
-        <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color="#0000ff" />
+    <ScreenWrapper>
+      <View style={styles.container}>
+        <View
+          style={{
+            backgroundColor: Color.backgroundColor,
+            padding: height(2),
+            borderRadius: height(3),
+            marginBottom: height(5),
+          }}
+        >
+          <View
+            style={{ flexDirection: "row", justifyContent: "space-between" }}
+          >
+            <Text
+              style={{
+                textAlign: "center",
+                fontSize: height(2),
+                fontWeight: "600",
+              }}
+            >
+              Select Category
+            </Text>
+            <TouchableOpacity
+              onPress={() => navigation.navigate("AddCategoryScreen")}
+            >
+              <AntDesign
+                name={"pluscircle"}
+                color={Color.primaryColor}
+                size={height(2.5)}
+              />
+            </TouchableOpacity>
+          </View>
+          <Picker
+            style={{
+              padding: height(1),
+              marginVertical: height(1),
+              borderRadius: height(3),
+              width: width(90),
+              backgroundColor: "white",
+            }}
+            selectedValue={selectedCategoryId}
+            onValueChange={(itemValue) => setSelectedCategoryId(itemValue)}
+          >
+            {categories.map((category: any) => (
+              <Picker.Item
+                label={category.name}
+                value={category.id}
+                key={category.id}
+              />
+            ))}
+          </Picker>
+          {/* <Button
+            title="Add New Category"
+            onPress={() => navigation.navigate("AddCategoryScreen")}
+          /> */}
         </View>
-      )}
-      <Text style={styles.text}>Name</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Name"
-        value={name}
-        onChangeText={(value) => handleInputChange("name", value)}
-      />
-      {inputErrors.name !== "" && (
-        <Text style={styles.errorText}>{inputErrors.name}</Text>
-      )}
-      <Text style={styles.text}>Description</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Description"
-        value={description}
-        onChangeText={(value) => handleInputChange("description", value)}
-      />
-      {inputErrors.description !== "" && (
-        <Text style={styles.errorText}>{inputErrors.description}</Text>
-      )}
-      <Text style={styles.text}>Unit Price</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Unit Price"
-        keyboardType="numeric"
-        value={unitPrice + ""}
-        onChangeText={(value) => handleInputChange("unitPrice", value)}
-      />
-      {inputErrors.unitPrice !== "" && (
-        <Text style={styles.errorText}>{inputErrors.unitPrice}</Text>
-      )}
-      <Text style={styles.text}>Total Quantity</Text>
-
-      <TextInput
-        style={styles.input}
-        placeholder="Total Quantity"
-        keyboardType="numeric"
-        value={totalQuantity + ""}
-        onChangeText={(value) => handleInputChange("totalQuantity", value)}
-      />
-      {inputErrors.totalQuantity !== "" && (
-        <Text style={styles.errorText}>{inputErrors.totalQuantity}</Text>
-      )}
-      <Text style={styles.text}>Purchase Price</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Purchase Price"
-        keyboardType="numeric"
-        value={purchasePrice + ""}
-        onChangeText={(value) => handleInputChange("purchasePrice", value)}
-      />
-      {inputErrors.purchasePrice !== "" && (
-        <Text style={styles.errorText}>{inputErrors.purchasePrice}</Text>
-      )}
-      <Text style={styles.text}>Category</Text>
-      <Picker
-        style={styles.input}
-        selectedValue={selectedCategoryId}
-        onValueChange={(itemValue) => setSelectedCategoryId(itemValue)}
-      >
-        {categories.map((category: any) => (
-          <Picker.Item
-            label={category.name}
-            value={category.id}
-            key={category.id}
-          />
-        ))}
-      </Picker>
-      <View style={styles.buttonContainer}>
-        <Button
-          title="Add New Category"
-          onPress={() => navigation.navigate("AddCategoryScreen")}
+        {loading && (
+          <View style={styles.loadingContainer}>
+            <ActivityIndicator size="large" color="#0000ff" />
+          </View>
+        )}
+        <Text style={styles.text}>Name</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Name"
+          value={name}
+          onChangeText={(value) => handleInputChange("name", value)}
         />
-        <Button title="Save Item" onPress={saveItem} />
+        {inputErrors.name !== "" && (
+          <Text style={styles.errorText}>{inputErrors.name}</Text>
+        )}
+        <Text style={styles.text}>Description</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Description"
+          value={description}
+          onChangeText={(value) => handleInputChange("description", value)}
+        />
+        {inputErrors.description !== "" && (
+          <Text style={styles.errorText}>{inputErrors.description}</Text>
+        )}
+        <Text style={styles.text}>Unit Price</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Unit Price"
+          keyboardType="numeric"
+          value={unitPrice + ""}
+          onChangeText={(value) => handleInputChange("unitPrice", value)}
+        />
+        {inputErrors.unitPrice !== "" && (
+          <Text style={styles.errorText}>{inputErrors.unitPrice}</Text>
+        )}
+        <Text style={styles.text}>Total Quantity</Text>
+
+        <TextInput
+          style={styles.input}
+          placeholder="Total Quantity"
+          keyboardType="numeric"
+          value={totalQuantity + ""}
+          onChangeText={(value) => handleInputChange("totalQuantity", value)}
+        />
+        {inputErrors.totalQuantity !== "" && (
+          <Text style={styles.errorText}>{inputErrors.totalQuantity}</Text>
+        )}
+        <Text style={styles.text}>Purchase Price</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Purchase Price"
+          keyboardType="numeric"
+          value={purchasePrice + ""}
+          onChangeText={(value) => handleInputChange("purchasePrice", value)}
+        />
+        {inputErrors.purchasePrice !== "" && (
+          <Text style={styles.errorText}>{inputErrors.purchasePrice}</Text>
+        )}
+
+        <View style={styles.buttonContainer}>
+          <Button
+            title="Save Item"
+            onPress={saveItem}
+            containerStyle={{ width: width(90), marginTop: height(3) }}
+          />
+        </View>
       </View>
-    </ScrollView>
+    </ScreenWrapper>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flexGrow: 1,
-    padding: 20,
-    backgroundColor: "#f8f9fa",
+    padding: height(2),
     justifyContent: "center",
     alignItems: "center",
   },
@@ -335,22 +382,15 @@ const styles = StyleSheet.create({
   text: {
     textAlign: "left",
     width: "100%",
+    fontSize: height(1.8),
+    fontWeight: "500",
   },
   input: {
-    borderWidth: 1,
-    borderColor: "#ced4da",
-    padding: 12,
-    marginVertical: 10,
-    borderRadius: 8,
-    width: "100%",
-    backgroundColor: "#fff",
-  },
-  buttonContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    width: "100%",
-    marginTop: 20,
-    marginBottom: 140,
+    padding: height(1),
+    marginVertical: height(1),
+    borderRadius: height(3),
+    width: width(94),
+    backgroundColor: Color.backgroundColor,
   },
   errorText: {
     color: "red",
