@@ -10,6 +10,7 @@ import { doc, getDoc, getFirestore } from "firebase/firestore";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "./redux/store";
 import { setProfile } from "./redux/slices/profilleSlice";
+import Loader from "./components/Loder";
 
 const App = () => {
   const [hideSplashScreen] = useState(true);
@@ -50,6 +51,7 @@ const App = () => {
   return (
     <I18nextProvider i18n={i18n}>
       <NavigationContainer>
+        {/* <Loader/> */}
         {hideSplashScreen ? <AppNavigator /> : null}
       </NavigationContainer>
     </I18nextProvider>

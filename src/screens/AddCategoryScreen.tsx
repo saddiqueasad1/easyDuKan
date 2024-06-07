@@ -123,7 +123,7 @@ const AddCategoryScreen = ({ navigation }: { navigation: any }) => {
               isLoading={loading}
               title="Add Category"
               onPress={addCategory}
-              containerStyle={{ width: width(80), marginTop: height(3) }}
+              containerStyle={{ width: width(80), marginTop: height(1) }}
             />
           </View>
         </Modal>
@@ -138,7 +138,11 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   input: {
-    width: width(78),
+    width: width(80),
+    backgroundColor:Color.backgroundColor,
+    margin:height(1),
+    padding:height(1.5),
+    borderRadius:height(3)
   },
   errorText: {
     color: "red",
@@ -151,7 +155,6 @@ const styles = StyleSheet.create({
   searchContainer: {
     alignItems: "center",
     backgroundColor: "white",
-    height: height(15),
     borderRadius: height(3),
     padding: height(2),
   },

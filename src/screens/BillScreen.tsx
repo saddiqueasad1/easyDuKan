@@ -12,6 +12,9 @@ import { AppDispatch, RootState } from "../redux/store";
 import { collection, getDocs, getFirestore } from "firebase/firestore";
 import { IBill } from "../utills/types";
 import { setBills } from "../redux/slices/billsSlice";
+import ScreenWrapper from "../components/ScreenWrapper";
+import { height, width } from "../utills/Dimension";
+import { Color } from "../utills/GlobalStyles";
 
 const BillScreen = ({ route, navigation }: { route: any; navigation: any }) => {
   const user = useSelector((state: RootState) => state.user);
@@ -29,7 +32,7 @@ const BillScreen = ({ route, navigation }: { route: any; navigation: any }) => {
       setLoading(true);
       try {
         const billsData = await fetchBills(userId);
-        dispatch(setBills(billsData));
+        dispatch(setBills(billsData.reverse()));
       } catch (err) {
         setError("Error fetching bills. Please try again later.");
         console.error(err);
@@ -53,15 +56,20 @@ const BillScreen = ({ route, navigation }: { route: any; navigation: any }) => {
   const handleDetail = (item: IBill) => {
     navigation.navigate("BillingDetailScreen", { bill: item });
   };
-  const handleReports = () => {
-    navigation.navigate("DailyReportScreen");
-  };
 
   const renderBillItem = ({ item, index }: { item: IBill; index: number }) => (
     <TouchableOpacity style={styles.item} onPress={() => handleDetail(item)}>
       <Text style={styles.index}>{index + 1}</Text>
       <View style={styles.billDetails}>
-        <Text>{item.customerName}</Text>
+        <Text
+          style={{
+            fontSize: height(1.8),
+            fontWeight: "bold",
+            color: Color.primaryColor,
+          }}
+        >
+          {item.customerName}
+        </Text>
         <Text>Total Quantity: {item.totalQuantity}</Text>
         <Text>Total Amount: {item.totalAmount}</Text>
       </View>
@@ -69,37 +77,34 @@ const BillScreen = ({ route, navigation }: { route: any; navigation: any }) => {
   );
 
   return (
-    <View style={styles.container}>
-      <View style={styles.item}>
-        <Text style={styles.header}>Bill Items</Text>
-        {/* <TouchableOpacity onPress={() => handleReports()}>
-          <Text style={styles.header}>Reports</Text>
-        </TouchableOpacity> */}
+    <ScreenWrapper>
+      <View style={styles.container}>
+        {loading ? (
+          <ActivityIndicator
+            style={styles.loader}
+            size="large"
+            color="#0000ff"
+          />
+        ) : error ? (
+          <Text style={styles.error}>{error}</Text>
+        ) : (
+          <FlatList
+            data={bills || []}
+            keyExtractor={(_item, index) => String(index)}
+            renderItem={renderBillItem}
+            ListEmptyComponent={
+              <Text style={styles.emptyText}>No bills available</Text>
+            }
+          />
+        )}
       </View>
-
-      {loading ? (
-        <ActivityIndicator style={styles.loader} size="large" color="#0000ff" />
-      ) : error ? (
-        <Text style={styles.error}>{error}</Text>
-      ) : (
-        <FlatList
-          data={bills || []}
-          keyExtractor={(_item, index) => String(index)}
-          renderItem={renderBillItem}
-          ListEmptyComponent={
-            <Text style={styles.emptyText}>No bills available</Text>
-          }
-        />
-      )}
-    </View>
+    </ScreenWrapper>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    padding: 16,
-    marginTop: 30,
+    padding: height(2),
   },
   header: {
     fontSize: 24,
@@ -118,11 +123,13 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   item: {
+    backgroundColor: "white",
+    elevation: 3,
+    borderRadius: height(2),
     flexDirection: "row",
     justifyContent: "space-between",
-    padding: 8,
-    borderBottomWidth: 1,
-    borderBottomColor: "#ccc",
+    padding: height(2),
+    margin: height(0.3),
   },
   index: {
     fontWeight: "bold",

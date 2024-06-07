@@ -160,10 +160,14 @@ const UserScreen = ({ navigation }: { navigation: any }) => {
             keyExtractor={(item) => item.phoneNumber}
             renderItem={({ item }) => {
               console.log(item);
-              
+
               if (
-                item?.username?.toLowerCase()?.includes(searchText?.toLowerCase())||
-                item?.phoneNumber?.toLowerCase()?.includes(searchText?.toLowerCase())
+                item?.username
+                  ?.toLowerCase()
+                  ?.includes(searchText?.toLowerCase()) ||
+                item?.phoneNumber
+                  ?.toLowerCase()
+                  ?.includes(searchText?.toLowerCase())
               ) {
                 return <ContactView data={item} />;
               }
@@ -207,9 +211,9 @@ const UserScreen = ({ navigation }: { navigation: any }) => {
               keyboardType="phone-pad"
             />
             <Button
-             title="Search"
-            onPress={fetchProfile}
-            containerStyle={{width:width(20)}}
+              title="Search"
+              onPress={fetchProfile}
+              containerStyle={{ width: width(20) }}
             />
           </View>
         </Modal>
@@ -234,7 +238,11 @@ const styles = StyleSheet.create({
   },
   input: {
     flex: 1,
-    paddingHorizontal: 10,
+    
+    borderRadius: height(3),
+    backgroundColor: Color.backgroundColor,
+    padding:height(2),
+    marginHorizontal: height(1),
   },
   error: {
     color: "red",

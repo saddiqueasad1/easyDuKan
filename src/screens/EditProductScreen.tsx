@@ -234,7 +234,7 @@ const EditProductScreen = ({
   };
 
   return (
-    <ScreenWrapper>
+    <ScreenWrapper scrollEnabled>
       <View style={styles.container}>
         <View
           style={{

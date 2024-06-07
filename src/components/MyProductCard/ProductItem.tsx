@@ -24,16 +24,16 @@ const MyProductCard: React.FC<ProductItemProps> = ({ item, onPress }) => {
     <>
       <TouchableOpacity style={styles.item} onPress={() => setIsShow(true)}>
         <Image source={Icons.p1} style={styles.imaage} />
-        <Text
-          style={[styles.itemText, { fontSize: height(2), fontWeight: "bold" }]}
-        >
-          {item.name}
-        </Text>
-        <Text style={styles.itemText}>{item.description}</Text>
-        <Text style={styles.itemText}>Price: {item.unitPrice}</Text>
-        <Text style={styles.itemText}>
-          Total Quantity: {item.totalQuantity}
-        </Text>
+        <View style={{padding:height(1)}}>
+          <Text
+            style={[
+              { fontSize: height(2), fontWeight: "bold" },
+            ]}
+          >
+            {item.name}
+          </Text>
+          <Text style={{ color: "green" }}>Price: {item.unitPrice}</Text>
+        </View>
       </TouchableOpacity>
       <Modal
         isVisible={isShow}
@@ -98,8 +98,8 @@ const MyProductCard: React.FC<ProductItemProps> = ({ item, onPress }) => {
               {item.name}
             </Text>
             <Text style={styles.itemText}>{item.description}</Text>
-            <Text style={styles.itemText}>Price: {item.unitPrice}</Text>
-            <Text style={styles.itemText}>
+            <Text style={styles.price}>Price: {item.unitPrice}</Text>
+            <Text style={styles.quantity}>
               Total Quantity: {item.totalQuantity}
             </Text>
             <TouchableOpacity
@@ -173,6 +173,20 @@ const styles = StyleSheet.create({
     height: 30,
     justifyContent: "center",
     alignItems: "center",
+  },
+  price: {
+    fontSize: height(1.8),
+    marginBottom: 1,
+    marginLeft: width(2),
+    color: Color.primaryColor,
+    fontWeight: "500",
+  },
+  quantity: {
+    fontSize: height(1.8),
+    color: Color.colorDarkslateblue,
+    marginBottom: 1,
+    marginLeft: width(2),
+    fontWeight: "500",
   },
 });
 
