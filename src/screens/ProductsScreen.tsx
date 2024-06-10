@@ -17,9 +17,10 @@ import { MaterialIcons } from "@expo/vector-icons";
 import {
   decreaseQuantity,
   increaseQuantity,
+  removeAllBills,
   setBill,
 } from "../redux/slices/billSlice";
-import { setProduct } from "../redux/slices/productSlice";
+import { setClearAll, setProduct } from "../redux/slices/productSlice";
 import ProductItem from "../components/ProductComponents/ProductItem";
 import { Color } from "../utills/GlobalStyles";
 import Header from "../components/Head";
@@ -145,7 +146,9 @@ const ProductsScreen = ({ navigation }: { navigation: any }) => {
           >
             <TouchableOpacity
               style={styles.floatingButton2}
-              // onPress={() => navigation.navigate("BillingDetailScreen")}
+              onPress={() => {
+                dispatch(removeAllBills());
+              }}
             >
               <MaterialIcons name="delete" color={"white"} size={height(3)} />
             </TouchableOpacity>
@@ -328,7 +331,7 @@ const styles = StyleSheet.create({
   floatingButton2: {
     borderRadius: height(5),
     backgroundColor: "red",
-    padding: height(1.5),
+    padding: height(1.2),
     margin: height(0.5),
   },
   floatingText: {

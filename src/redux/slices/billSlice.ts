@@ -75,10 +75,15 @@ const billSlice = createSlice({
         }
       }
     },
+    removeAllBills(state) {
+      console.log("state of redux",state);
+      
+      state.bill = null;
+    },
   },
 });
 
-export const { setBill, clearBill, increaseQuantity, decreaseQuantity } =
+export const { setBill, clearBill, increaseQuantity, decreaseQuantity,removeAllBills } =
   billSlice.actions;
 
 export default billSlice.reducer;

@@ -18,7 +18,7 @@ const billsSlice = createSlice({
     },
     addItemToBill: (
       state,
-      action: PayloadAction<{ billId: string; item: IItem }>,
+      action: PayloadAction<{ billId: string; item: IItem }>
     ) => {
       const { billId, item } = action.payload;
       item.totalAmount += item.total;
@@ -26,7 +26,7 @@ const billsSlice = createSlice({
     },
     removeItemFromBill: (
       state,
-      action: PayloadAction<{ billId: string; itemId: string }>,
+      action: PayloadAction<{ billId: string; itemId: string }>
     ) => {
       const { billId, itemId } = action.payload;
       const bill = state.bills.find((bill) => bill.id === billId);
@@ -38,9 +38,10 @@ const billsSlice = createSlice({
         }
       }
     },
+  
   },
 });
 
-export const { addItemToBill, removeItemFromBill, setBills } =
+export const { addItemToBill, removeItemFromBill, setBills} =
   billsSlice.actions;
 export default billsSlice.reducer;
