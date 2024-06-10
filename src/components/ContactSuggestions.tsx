@@ -1,5 +1,5 @@
 // ContactSuggestions.tsx
-import React, { useState } from "react";
+import React, { MutableRefObject, useState } from "react";
 import {
   View,
   TextInput,
@@ -15,11 +15,13 @@ import AntDesign from "@expo/vector-icons/AntDesign";
 interface ContactSuggestionsProps {
   contacts: IProfile[];
   onSelectContact: (contactName: string) => void;
+  inputRef: MutableRefObject<null>;
 }
 
 const ContactSuggestions: React.FC<ContactSuggestionsProps> = ({
   contacts,
   onSelectContact,
+  inputRef,
 }) => {
   const [inputText, setInputText] = useState("");
   const [filteredContacts, setFilteredContacts] = useState<IProfile[]>([]);
@@ -63,6 +65,7 @@ const ContactSuggestions: React.FC<ContactSuggestionsProps> = ({
         onChangeText={handleInputChange}
         onFocus={handleInputFocus}
         // onBlur={handleInputBlur}
+        ref={inputRef}
         placeholder="Enter customer name"
       />
       {filteredContacts.length > 0 && (

@@ -17,11 +17,6 @@ const RanderBillItems: React.FC<ProductItemProps> = ({ item }) => {
           <Text style={styles.itemText}>Unit Price: {item.unitPrice}</Text>
           <Text style={styles.itemText}>Total: {item.total}</Text>
         </View>
-        <View style={styles.itemDetails}>
-          <Text style={styles.itemText}>
-            purchasePrice: {item.purchasePrice}
-          </Text>
-        </View>
       </View>
     </TouchableOpacity>
   );
@@ -43,7 +38,7 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   itemName: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: "bold",
     marginBottom: 5,
   },
@@ -52,7 +47,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   itemText: {
-    fontSize: 16,
+    fontSize: 14,
   },
 });
 

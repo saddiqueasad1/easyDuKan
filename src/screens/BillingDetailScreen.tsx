@@ -34,6 +34,7 @@ const BillingDetailScreen = ({
   const bill = routeBill || useSelector((state: RootState) => state.bill.bill);
   const BillItems = bill?.items;
   const isDetail = !!routeBill;
+  const inputRef = useRef(null);
 
   const [customerName, setCustomerName] = useState(
     routeBill?.customerName || "",
@@ -142,7 +143,7 @@ const BillingDetailScreen = ({
   console.log(bill);
   return (
     <View style={styles.container}>
-      <View style={styles.containerRef} ref={viewRef}>
+      <View style={styles.containerRef} ref={viewRef} collapsable={false}>
         <Text style={styles.label}>
           Customer Name: {isDetail && bill.customerName}
         </Text>
@@ -150,6 +151,7 @@ const BillingDetailScreen = ({
           <ContactSuggestions
             contacts={contacts}
             onSelectContact={setCustomerName}
+            inputRef={inputRef}
           />
         )}
         <Text style={styles.label}>Billing Details:</Text>
@@ -200,6 +202,7 @@ const BillingDetailScreen = ({
             <TouchableOpacity
               style={styles.modalButton}
               onPress={() => {
+                inputRef.current.blur();
                 setModalVisible(false);
                 shareAsImage();
               }}
@@ -241,6 +244,7 @@ const styles = StyleSheet.create({
   },
   containerRef: {
     flex: 1,
+    backgroundColor: Color.backgroundColor,
   },
   label: {
     fontSize: 18,
