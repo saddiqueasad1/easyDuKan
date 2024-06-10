@@ -31,6 +31,7 @@ import ScreenWrapper from "../components/ScreenWrapper";
 import Header from "../components/Head";
 import { Color } from "../utills/GlobalStyles";
 import Button from "../components/button";
+import ContentLoader from "react-native-easy-content-loader";
 
 const UserScreen = ({ navigation }: { navigation: any }) => {
   const [phoneNumber, setPhoneNumber] = useState("");
@@ -156,36 +157,44 @@ const UserScreen = ({ navigation }: { navigation: any }) => {
         <View style={styles.contactsContainer}>
           <Text style={styles.contactsTitle}>Contacts List</Text>
           <FlatList
-            data={contacts}
-            keyExtractor={(item) => item.phoneNumber}
-            renderItem={({ item }) => {
-              console.log(item);
-
-              if (
-                item?.username
+            data={contacts.filter((a) => {
+              return (
+                a?.username
                   ?.toLowerCase()
                   ?.includes(searchText?.toLowerCase()) ||
-                item?.phoneNumber
+                a?.phoneNumber
                   ?.toLowerCase()
                   ?.includes(searchText?.toLowerCase())
-              ) {
-                return <ContactView data={item} />;
-              }
-            }}
+              );
+            })}
+            keyExtractor={(item) => item?.phoneNumber}
+            renderItem={({ item }) => <ContactView data={item} />}
+            ListEmptyComponent={
+              loading ? (
+                <ContentLoader
+                  // key={index}
+                  containerStyles={{ padding: height(1) }}
+                  active
+                  avatar
+                  aSize={height(8)}
+                  pRows={2}
+                  tWidth={width(73)}
+                  tHeight={height(2)}
+                  pHeight={[height(1), height(1)]}
+                  pWidth={[width(60), width(70)]}
+                />
+              ) : (
+                <View></View>
+              )
+            }
           />
         </View>
-
-        {loading && (
-          <View style={styles.loadingContainer}>
-            <ActivityIndicator size="large" color="#0000ff" />
-          </View>
-        )}
         <TouchableOpacity
           onPress={() => setAddModal(true)}
           style={{
             position: "absolute",
-            bottom: height(3),
-            right: height(2),
+            bottom: height(5),
+            right: height(3),
             backgroundColor: "white",
           }}
         >
@@ -238,10 +247,10 @@ const styles = StyleSheet.create({
   },
   input: {
     flex: 1,
-    
+
     borderRadius: height(3),
     backgroundColor: Color.backgroundColor,
-    padding:height(2),
+    padding: height(2),
     marginHorizontal: height(1),
   },
   error: {

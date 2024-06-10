@@ -29,6 +29,8 @@ import ScreenWrapper from "../components/ScreenWrapper";
 import { height, width } from "../utills/Dimension";
 import { Color } from "../utills/GlobalStyles";
 import Button from "../components/button";
+import { setAppLoader } from "../redux/slices/loaderSlice";
+import { successMessage } from "../utills/GlobalMethods";
 
 const EditProductScreen = ({
   route,
@@ -65,7 +67,7 @@ const EditProductScreen = ({
     });
     const fetchItem = async () => {
       if (itemId) {
-        setLoading(true);
+        dispatch(setAppLoader(true));
         try {
           const selectProductById: IProduct | undefined = products.find(
             (product) => product.id === itemId
@@ -83,13 +85,14 @@ const EditProductScreen = ({
         } catch (error) {
           console.log(error);
         } finally {
-          setLoading(false);
+          dispatch(setAppLoader(false));
         }
       }
     };
 
     const fetchCategories = async () => {
-      setLoading(true);
+      dispatch(setAppLoader(true));
+
       try {
         const categoriesSnapshot = await getDocs(
           collection(db, "users", userId, "categories")
@@ -102,7 +105,7 @@ const EditProductScreen = ({
       } catch (error) {
         console.log(error);
       } finally {
-        setLoading(false);
+        dispatch(setAppLoader(false));
       }
     };
 
@@ -149,7 +152,8 @@ const EditProductScreen = ({
     if (!validateInputs()) {
       return;
     }
-    setLoading(true);
+    dispatch(setAppLoader(true));
+
     try {
       if (itemId) {
         await setDoc(doc(db, "users", userId, "products", itemId), {
@@ -197,16 +201,18 @@ const EditProductScreen = ({
             id: result.id,
           })
         );
-        Alert.alert("Success", "Product added successfully!", [
-          { text: "Add More" },
-          { text: "OK", onPress: () => navigation.goBack() },
-        ]);
+        // Alert.alert("Success", "Product added successfully!", [
+        //   { text: "Add More" },
+        //   { text: "OK", onPress: () =>  },
+        // ]);
+        navigation.goBack();
+        successMessage("New Product Added");
       }
     } catch (error) {
       console.log(error);
       Alert.alert("Error", "Failed to save Product.");
     } finally {
-      setLoading(false);
+      dispatch(setAppLoader(false));
     }
   };
 
@@ -290,11 +296,6 @@ const EditProductScreen = ({
             onPress={() => navigation.navigate("AddCategoryScreen")}
           /> */}
         </View>
-        {loading && (
-          <View style={styles.loadingContainer}>
-            <ActivityIndicator size="large" color="#0000ff" />
-          </View>
-        )}
         <Text style={styles.text}>Name</Text>
         <TextInput
           style={styles.input}

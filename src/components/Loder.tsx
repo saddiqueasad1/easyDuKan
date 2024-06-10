@@ -3,11 +3,11 @@ import { Image, View } from "react-native";
 import Modal from "react-native-modal";
 import { Color as AppColors } from "../utills/GlobalStyles";
 export default function Loader() {
-  //   const appLoader = useSelector(selectLoader);
+  const appLoader = useSelector(selectAppLoader);
   //   const { AppColors } = useContext(ThemeContext);
   const styles = getStyles(AppColors);
   return (
-    <Modal isVisible={true} backdropOpacity={1} backdropColor={"white"}>
+    <Modal isVisible={appLoader} backdropOpacity={0.51} backdropColor={"white"}>
       <View style={styles.container}>
         <Image
           style={{
@@ -25,6 +25,8 @@ import { StyleSheet } from "react-native";
 import { width } from "../utills/Dimension";
 import Icons from "../assets/images";
 import { Color } from "../utills/GlobalStyles";
+import { selectAppLoader } from "../redux/slices/loaderSlice";
+import { useSelector } from "react-redux";
 const getStyles = (AppColors) =>
   StyleSheet.create({
     container: {
@@ -32,7 +34,7 @@ const getStyles = (AppColors) =>
       justifyContent: "center",
       alignItems: "center",
       alignSelf: "center",
-      borderRadius: width(3),
+      borderRadius: width(10),
       flexDirection: "row",
     },
     text: {

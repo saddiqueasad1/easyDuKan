@@ -558,7 +558,11 @@ function ChatView({ route }) {
         setImgModal(true);
       }}
       icon={() => (
-        <Ionicons name="camera" size={height(4)} color={AppColors.primary} />
+        <Ionicons
+          name="camera"
+          size={height(4)}
+          color={AppColors.primaryColor}
+        />
       )}
     />
   );
@@ -885,7 +889,7 @@ function ChatView({ route }) {
         // setRoomID(roomNew);
       }
       // console.log("in send image",roomID);
-      
+
       const storage = getStorage();
       const newMessageRef = push(ref(database, `chatrooms/${roomID}/messages`));
 

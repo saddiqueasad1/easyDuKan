@@ -17,6 +17,8 @@ import ScreenWrapper from "../components/ScreenWrapper";
 import { height, width } from "../utills/Dimension";
 import { Color } from "../utills/GlobalStyles";
 import Button from "../components/button";
+import { setAppLoader } from "../redux/slices/loaderSlice";
+import { successMessage } from "../utills/GlobalMethods";
 
 const EditProfileScreen = ({ navigation }: { navigation: any }) => {
   const user = useSelector((state: RootState) => state.user);
@@ -25,12 +27,13 @@ const EditProfileScreen = ({ navigation }: { navigation: any }) => {
   const [phoneNumber, setPhoneNumber] = useState(user.phoneNumber + "");
   const [email, setEmail] = useState(profile.email);
   const [address, setAddress] = useState(profile.address);
-  const [loading, setLoading] = useState(false);
   const db = getFirestore();
   const dispatch = useDispatch();
   const saveProfile = async () => {
     try {
-      setLoading(true);
+      // setLoading(true);
+      dispatch(setAppLoader(true));
+
       await setDoc(doc(db, "users", user.uid), {
         username,
         phoneNumber,
@@ -41,14 +44,18 @@ const EditProfileScreen = ({ navigation }: { navigation: any }) => {
         setProfile({ username, phoneNumber, email, address, userId: user.uid })
       );
 
-      Alert.alert("Success", "Profile saved successfully!", [
-        { text: "OK", onPress: () => navigation.goBack() },
-      ]);
+      // Alert.alert("Success", "Profile saved successfully!", [
+      //   { text: "OK", onPress: () =>  },
+      // ]);
+      successMessage("Profile Updated")
+      navigation.goBack()
+
     } catch (error) {
       console.log(error);
       Alert.alert("Error", "Failed to save profile.");
     } finally {
-      setLoading(false);
+      // setLoading(false);
+      dispatch(setAppLoader(false));
     }
   };
 
@@ -89,18 +96,10 @@ const EditProfileScreen = ({ navigation }: { navigation: any }) => {
           onChangeText={setAddress}
         />
         <Button
-        title={'Save Profile'}
-        onPress={saveProfile}
-        containerStyle={{width:width(90),marginTop:height(3)}}
+          title={"Save Profile"}
+          onPress={saveProfile}
+          containerStyle={{ width: width(90), marginTop: height(3) }}
         />
-        {/* <TouchableOpacity style={styles.saveButton} >
-          <Text style={styles.saveButtonText}>Save Profile</Text>
-        </TouchableOpacity> */}
-        {loading && (
-          <View style={styles.loadingContainer}>
-            <ActivityIndicator size="large" color="#0000ff" />
-          </View>
-        )}
       </View>
     </ScreenWrapper>
   );
@@ -121,17 +120,15 @@ const styles = StyleSheet.create({
   text: {
     textAlign: "left",
     width: "100%",
-    fontSize:height(1.8),
-    fontWeight:'700'
+    fontSize: height(1.8),
+    fontWeight: "700",
   },
   input: {
-
     borderColor: "#ced4da",
     padding: 12,
     marginVertical: width(2),
     borderRadius: height(3),
     backgroundColor: Color.backgroundColor,
-    
   },
   saveButton: {
     backgroundColor: "#007bff",

@@ -262,7 +262,11 @@ export default function ChatList({ navigation, route }) {
       onRefresh={promisFuntion}
       scrollEnabled
       headerUnScrollable={() => (
-        <Header searchText={searchText} setSearchText={setSearchText} />
+        <Header
+          searchText={searchText}
+          setSearchText={setSearchText}
+          showTopHead={false}
+        />
       )}
     >
       <View style={styles.mainViewContainer}>
@@ -378,12 +382,11 @@ import Header from "../components/Head";
 const getStyles = (AppColors) =>
   StyleSheet.create({
     mainViewContainer: {
-      
       padding: width(1),
       paddingBottom: height(8),
       flex: 1,
       backgroundColor: AppColors.white,
       marginTop: height(1),
-      paddingHorizontal:width(3)
+      paddingHorizontal: width(3),
     },
   });

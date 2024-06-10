@@ -2,49 +2,45 @@
 import { formatDistanceToNow } from "date-fns";
 import { es, de, it, enUS, fr } from "date-fns/locale";
 
-
-
-
 import { height, width } from "./Dimension";
 // export const toastMessage = (message) => {
 //   ToastAndroid.show(message, ToastAndroid.SHORT);
 // };
-// export const successMessage = (description = "", message = "success") => {
-//   showMessage({
-//     message: message,
-//     description: description,
-//     type: "success",
-//     position: "top",
-//     statusBarHeight: height(4),
-//     floating: true,
-//     duration: 5000,
-//   });
-// };
-// export const errorMessage = (description = "", message = "error") => {
-//   showMessage({
-//     message: message,
-//     description: description,
-//     type: "danger",
-//     position: "top",
-//     statusBarHeight: height(4),
-//     floating: true,
-//     duration: 5000,
-//   });
-// };
-// export const infoMessage = (description = "", message = "info") => {
-//   showMessage({
-//     message: message,
-//     description: description,
-//     type: "info",
-//     position: "top",
-//     statusBarHeight: height(4),
-//     floating: true,
-//     duration: 5000,
-//   });
-// };
+import { showMessage } from "react-native-flash-message";
 
-
-
+export const successMessage = (description = "", message = "success") => {
+  showMessage({
+    message: message,
+    description: description,
+    type: "success",
+    position: "top",
+    statusBarHeight: height(4),
+    floating: true,
+    duration: 5000,
+  });
+};
+export const errorMessage = (description = "", message = "error") => {
+  showMessage({
+    message: message,
+    description: description,
+    type: "danger",
+    position: "top",
+    statusBarHeight: height(4),
+    floating: true,
+    duration: 5000,
+  });
+};
+export const infoMessage = (description = "", message = "info") => {
+  showMessage({
+    message: message,
+    description: description,
+    type: "info",
+    position: "top",
+    statusBarHeight: height(4),
+    floating: true,
+    duration: 5000,
+  });
+};
 
 // const onPressCall = (phoneNumber) => {
 //   const url =
@@ -143,9 +139,6 @@ const calculateTimeDifference = (createdAt, l) => {
   });
   return distance;
 };
-
-
-
 
 const GlobalMethods = {
   calculateTimeDifference,

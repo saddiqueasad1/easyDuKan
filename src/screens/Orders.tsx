@@ -92,6 +92,7 @@ const OrdersScreen: React.FC = () => {
       <View style={styles.container}>
         <Text style={styles.header}>Orders</Text>
         <FlatList
+          showsVerticalScrollIndicator={false}
           data={orders}
           renderItem={renderOrder}
           keyExtractor={(item) => item.id}

@@ -76,7 +76,7 @@ const styles = StyleSheet.create({
   quantityContainer: {
     position: "absolute",
     right: height(1),
-    top:height(2.5)
+    top:height(2)
   },
   imaage: {
     height: height(8),

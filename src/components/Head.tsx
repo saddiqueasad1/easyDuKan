@@ -24,6 +24,7 @@ const Header: React.FC = ({
   selectValue,
   SetSelectValue,
   categories,
+  showTopHead = true,
 }) => {
   const categoryListRef = useRef<FlatList<Category>>(null);
   const navigation = useNavigation();
@@ -64,62 +65,65 @@ const Header: React.FC = ({
 
   return (
     <View style={styles.header}>
-      <View
-        style={{
-          flexDirection: "row",
-          alignItems: "center",
-          marginBottom: height(1),
-        }}
-      >
-        <TouchableOpacity
-          style={{ paddingHorizontal: height(1) }}
-          onPress={() => navigation.openDrawer()}
-        >
-          <Image
-            source={{
-              uri: "https://cdn-icons-png.flaticon.com/512/149/149071.png",
-            }}
-            style={styles.ProfileIcon}
-          />
-        </TouchableOpacity>
-        <Text
-          style={{
-            fontSize: height(3),
-            fontWeight: "bold",
-            color: Color.primaryColor,
-            fontStyle: "italic",
-            width: width(63),
-          }}
-        >
-          eassyDukan
-        </Text>
+      {showTopHead && (
         <View
           style={{
             flexDirection: "row",
-            justifyContent: "space-evenly",
-            alignContent: "center",
-            width: width(20),
+            alignItems: "center",
+            marginBottom: height(1),
           }}
         >
           <TouchableOpacity
-            style={{ padding: height(0.5) }}
-            // onPress={() => navigation.navigate("chatListScreen")}
+            style={{ paddingHorizontal: height(1) }}
+            onPress={() => navigation.openDrawer()}
           >
-            <Ionicons
-              name={"notifications-sharp"}
-              color={"grey"}
-              size={height(2.5)}
+            <Image
+              source={{
+                uri: "https://cdn-icons-png.flaticon.com/512/149/149071.png",
+              }}
+              style={styles.ProfileIcon}
             />
           </TouchableOpacity>
 
-          <TouchableOpacity
-            style={{ padding: height(0.5) }}
-            onPress={() => navigation.navigate("chatListScreen")}
+          <Text
+            style={{
+              fontSize: height(3),
+              fontWeight: "bold",
+              color: Color.primaryColor,
+              fontStyle: "italic",
+              width: width(63),
+            }}
           >
-            <Ionicons name="chatbubble" color={"grey"} size={height(2.5)} />
-          </TouchableOpacity>
+            eassyDukan
+          </Text>
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-evenly",
+              alignContent: "center",
+              width: width(20),
+            }}
+          >
+            <TouchableOpacity
+              style={{ padding: height(0.5) }}
+              // onPress={() => navigation.navigate("chatListScreen")}
+            >
+              <Ionicons
+                name={"notifications-sharp"}
+                color={"grey"}
+                size={height(2.5)}
+              />
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={{ padding: height(0.5) }}
+              onPress={() => navigation.navigate("chatListScreen")}
+            >
+              <Ionicons name="chatbubble" color={"grey"} size={height(2.5)} />
+            </TouchableOpacity>
+          </View>
         </View>
-      </View>
+      )}
       <View style={{ flexDirection: "row" }}>
         <View style={styles.searchBarContainer}>
           <TextInput

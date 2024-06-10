@@ -15,6 +15,8 @@ import { setBills } from "../redux/slices/billsSlice";
 import ScreenWrapper from "../components/ScreenWrapper";
 import { height, width } from "../utills/Dimension";
 import { Color } from "../utills/GlobalStyles";
+import { selectAppLoader, setAppLoader } from "../redux/slices/loaderSlice";
+import ContentLoader from "react-native-easy-content-loader";
 
 const BillScreen = ({ route, navigation }: { route: any; navigation: any }) => {
   const user = useSelector((state: RootState) => state.user);
@@ -22,14 +24,16 @@ const BillScreen = ({ route, navigation }: { route: any; navigation: any }) => {
   const dispatch: AppDispatch = useDispatch();
   const bills = useSelector((state: RootState) => state.bills.bills);
   const bill = useSelector((state: RootState) => state.bill);
-  const [loading, setLoading] = useState(false);
+  const loading = useSelector(selectAppLoader);
   const [error, setError] = useState("");
 
   const db = getFirestore();
 
   useEffect(() => {
     const loadBills = async () => {
-      setLoading(true);
+      // setLoading(true);
+      dispatch(setAppLoader(true));
+
       try {
         const billsData = await fetchBills(userId);
         dispatch(setBills(billsData.reverse()));
@@ -37,7 +41,8 @@ const BillScreen = ({ route, navigation }: { route: any; navigation: any }) => {
         setError("Error fetching bills. Please try again later.");
         console.error(err);
       } finally {
-        setLoading(false);
+        // setLoading(false);
+        dispatch(setAppLoader(false));
       }
     };
 
@@ -79,24 +84,90 @@ const BillScreen = ({ route, navigation }: { route: any; navigation: any }) => {
   return (
     <ScreenWrapper>
       <View style={styles.container}>
-        {loading ? (
-          <ActivityIndicator
-            style={styles.loader}
-            size="large"
-            color="#0000ff"
-          />
-        ) : error ? (
-          <Text style={styles.error}>{error}</Text>
-        ) : (
-          <FlatList
-            data={bills || []}
-            keyExtractor={(_item, index) => String(index)}
-            renderItem={renderBillItem}
-            ListEmptyComponent={
+        <FlatList
+          data={bills || []}
+          showsVerticalScrollIndicator={false}
+          keyExtractor={(_item, index) => String(index)}
+          renderItem={renderBillItem}
+          ListEmptyComponent={
+            loading ? (
+              <>
+                <ContentLoader
+                  containerStyles={{ padding: height(1) }}
+                  active
+                  aSize={height(8)}
+                  pRows={4}
+                  tWidth={width(73)}
+                  tHeight={height(2)}
+                  pHeight={[height(1), height(1)]}
+                  pWidth={[width(60), width(70)]}
+                />
+                <ContentLoader
+                  containerStyles={{ padding: height(1) }}
+                  active
+                  aSize={height(8)}
+                  pRows={4}
+                  tWidth={width(73)}
+                  tHeight={height(2)}
+                  pHeight={[height(1), height(1)]}
+                  pWidth={[width(60), width(70)]}
+                />
+                <ContentLoader
+                  containerStyles={{ padding: height(1) }}
+                  active
+                  aSize={height(8)}
+                  pRows={4}
+                  tWidth={width(73)}
+                  tHeight={height(2)}
+                  pHeight={[height(1), height(1)]}
+                  pWidth={[width(60), width(70)]}
+                />
+                <ContentLoader
+                  containerStyles={{ padding: height(1) }}
+                  active
+                  aSize={height(8)}
+                  pRows={4}
+                  tWidth={width(73)}
+                  tHeight={height(2)}
+                  pHeight={[height(1), height(1)]}
+                  pWidth={[width(60), width(70)]}
+                />
+                <ContentLoader
+                  containerStyles={{ padding: height(1) }}
+                  active
+                  aSize={height(8)}
+                  pRows={4}
+                  tWidth={width(73)}
+                  tHeight={height(2)}
+                  pHeight={[height(1), height(1)]}
+                  pWidth={[width(60), width(70)]}
+                />
+                <ContentLoader
+                  containerStyles={{ padding: height(1) }}
+                  active
+                  aSize={height(8)}
+                  pRows={4}
+                  tWidth={width(73)}
+                  tHeight={height(2)}
+                  pHeight={[height(1), height(1)]}
+                  pWidth={[width(60), width(70)]}
+                />
+                <ContentLoader
+                  containerStyles={{ padding: height(1) }}
+                  active
+                  aSize={height(8)}
+                  pRows={4}
+                  tWidth={width(73)}
+                  tHeight={height(2)}
+                  pHeight={[height(1), height(1)]}
+                  pWidth={[width(60), width(70)]}
+                />
+              </>
+            ) : (
               <Text style={styles.emptyText}>No bills available</Text>
-            }
-          />
-        )}
+            )
+          }
+        />
       </View>
     </ScreenWrapper>
   );

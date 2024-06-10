@@ -9,6 +9,7 @@ import billsReducer from "./slices/billsSlice";
 import billReducer from "./slices/billSlice";
 import contactsReducer from "./slices/contactsSlice";
 import { chatSliceReducer } from "./slices/chatSlice";
+import { loaderSliceReducer } from "./slices/loaderSlice";
 
 const persistConfig = {
   key: "root",
@@ -27,6 +28,7 @@ const store = configureStore({
     bill: billReducer,
     contacts: contactsReducer,
     chat: chatSliceReducer,
+    loader: loaderSliceReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

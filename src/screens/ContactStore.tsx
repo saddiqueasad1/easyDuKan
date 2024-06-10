@@ -73,40 +73,7 @@ const ContactProfileScreen = ({ navigation, route }: { navigation: any }) => {
   };
 
   const renderItem = ({ item }: { item: IProduct }) => {
-    console.log(item);
-
-    return (
-      <ProductShopItem item={item} />
-      // <TouchableOpacity
-      // // onPress={() =>
-      // //   navigation.navigate("EditProductScreen", {
-      // //     userId: user.uid,
-      // //     itemId: item.id,
-      // //   })
-      // // }
-      // >
-      //   <View style={styles.item}>
-      //     <Text style={styles.itemText}>Name: {item.name}</Text>
-      //     <Text style={styles.itemText}>Description: {item.description}</Text>
-      //     <Text style={styles.itemText}>Unit Price: {item.unitPrice}</Text>
-      //     <Text style={styles.itemText}>
-      //       {item.purchasePrice ? " Purchase Price:" + item.purchasePrice : ""}
-      //     </Text>
-      //     <Text style={styles.itemText}>
-      //       Total Quantity: {item.totalQuantity}
-      //     </Text>
-      //   </View>
-      // </TouchableOpacity>
-    );
-  };
-
-  // const addIProduct = async () => {
-  //   navigation.navigate("EditProductScreen", {
-  //     userId: user.uid,
-  //   });
-  // };
-  const handleEditProfile = () => {
-    navigation.navigate("EditProfileScreen");
+    return <ProductShopItem item={item} />;
   };
 
   const headerItem = () => (

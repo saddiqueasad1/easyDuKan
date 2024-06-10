@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { TouchableOpacity, Text, StyleSheet, View, Image } from "react-native";
 import Modal from "react-native-modal";
-import { Feather } from "@expo/vector-icons";
+import { Feather, MaterialIcons } from "@expo/vector-icons";
 import SwiperFlatList from "react-native-swiper-flatlist";
 
 import { IProduct } from "../../utills/types";
@@ -17,19 +17,15 @@ interface ProductItemProps {
   navigation: any;
 }
 
-const MyProductCard: React.FC<ProductItemProps> = ({ item, onPress }) => {
+const MyProductCard: React.FC<ProductItemProps> = ({ item, onPress,onPressDelete }) => {
   const [isShow, setIsShow] = useState(false);
   const closeModel = () => setIsShow(false);
   return (
     <>
       <TouchableOpacity style={styles.item} onPress={() => setIsShow(true)}>
         <Image source={Icons.p1} style={styles.imaage} />
-        <View style={{padding:height(1)}}>
-          <Text
-            style={[
-              { fontSize: height(2), fontWeight: "bold" },
-            ]}
-          >
+        <View style={{ padding: height(1) }}>
+          <Text style={[{ fontSize: height(2), fontWeight: "bold" }]}>
             {item.name}
           </Text>
           <Text style={{ color: "green" }}>Price: {item.unitPrice}</Text>
@@ -88,30 +84,44 @@ const MyProductCard: React.FC<ProductItemProps> = ({ item, onPress }) => {
               }}
             />
           </View>
-          <View style={{ marginVertical: height(3) }}>
-            <Text
-              style={[
-                styles.itemText,
-                { fontSize: height(2), fontWeight: "bold" },
-              ]}
-            >
-              {item.name}
-            </Text>
-            <Text style={styles.itemText}>{item.description}</Text>
-            <Text style={styles.price}>Price: {item.unitPrice}</Text>
-            <Text style={styles.quantity}>
-              Total Quantity: {item.totalQuantity}
-            </Text>
-            <TouchableOpacity
-              style={styles.quantityContainer1}
-              onPress={onPress}
-            >
-              <Feather
-                name="edit"
-                color={Color.primaryColor}
-                size={height(2.5)}
-              />
-            </TouchableOpacity>
+          <View
+            style={{
+              marginVertical: height(3),
+              flexDirection: "row",
+              justifyContent: "space-between",
+            }}
+          >
+            <View>
+              <Text
+                style={[
+                  styles.itemText,
+                  { fontSize: height(2), fontWeight: "bold" },
+                ]}
+              >
+                {item.name}
+              </Text>
+              <Text style={styles.itemText}>{item.description}</Text>
+              <Text style={styles.price}>Price: {item.unitPrice}</Text>
+              <Text style={styles.quantity}>
+                Total Quantity: {item.totalQuantity}
+              </Text>
+            </View>
+            <View>
+              <TouchableOpacity style={styles.iconButton} onPress={onPress}>
+                <Feather
+                  name="edit"
+                  color={Color.primaryColor}
+                  size={height(2.5)}
+                />
+                <Text style={styles.iconBtnTex}>Edit</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.iconButton} onPress={onPressDelete}>
+                <MaterialIcons name="delete" color={"red"} size={height(3)} />
+                <Text style={[styles.iconBtnTex, { color: "red" }]}>
+                  Delete
+                </Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
       </Modal>
@@ -187,6 +197,18 @@ const styles = StyleSheet.create({
     marginBottom: 1,
     marginLeft: width(2),
     fontWeight: "500",
+  },
+  iconButton: {
+    paddingHorizontal: height(2),
+    paddingVertical: height(0.5),
+    margin: height(0.5),
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  iconBtnTex: {
+    fontSize: height(1.6),
+    color: Color.primaryColor,
   },
 });
 

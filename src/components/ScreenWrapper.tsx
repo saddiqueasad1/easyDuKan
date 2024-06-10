@@ -12,7 +12,7 @@ import { height, width } from "../utills/Dimension";
 import { Color as AppColors } from "../utills/GlobalStyles";
 export default function ScreenWrapper({
   children,
-  statusBarColor = 'white',
+  statusBarColor = "white",
   transclucent = false,
   scrollEnabled = false,
   backgroundImage,
@@ -20,8 +20,8 @@ export default function ScreenWrapper({
   contentContainerStyle = {},
   headerUnScrollable = () => null,
   footerUnScrollable = () => null,
-  backgroundColor ='white',
-  imageBackgroundColor = 'white',
+  backgroundColor = "white",
+  imageBackgroundColor = "white",
   barStyle = "dark-content",
   onTouchEnd,
   refreshing = false,
@@ -29,7 +29,7 @@ export default function ScreenWrapper({
   showStatusBar = false,
   scrollViewRef,
 }) {
-//   const { AppColors } = useContext(ThemeContext);
+  //   const { AppColors } = useContext(ThemeContext);
   const styles = getStyles(AppColors);
   if (backgroundImage) {
     backgroundColor = "transparent";
@@ -62,10 +62,10 @@ export default function ScreenWrapper({
               ]}
               refreshControl={
                 <RefreshControl
-                  tintColor={AppColors.primary}
+                  tintColor={AppColors.primaryColor}
                   refreshing={refreshing}
                   onRefresh={onRefresh}
-                  colors={[AppColors.primary]}
+                  colors={[AppColors.primaryColor]}
                 />
               }
               keyboardShouldPersistTaps="handled"
@@ -130,4 +130,4 @@ const getStyles = (AppColors) =>
     },
     contentContainer: {},
   });
-export {getStyles};
+export { getStyles };

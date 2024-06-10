@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import Modal from "react-native-modal";
 
@@ -11,7 +11,7 @@ import {
   FlatList,
   TouchableOpacity,
 } from "react-native";
-import { addDoc, collection } from "firebase/firestore";
+import { addDoc, collection, getDocs } from "firebase/firestore";
 import { getFirestore } from "firebase/firestore";
 import { useDispatch, useSelector } from "react-redux";
 import { setCategories } from "../redux/slices/categoriesSlice";
@@ -20,6 +20,8 @@ import ScreenWrapper from "../components/ScreenWrapper";
 import { height, width } from "../utills/Dimension";
 import { Color } from "../utills/GlobalStyles";
 import Button from "../components/button";
+import { selectAppLoader, setAppLoader } from "../redux/slices/loaderSlice";
+import { successMessage } from "../utills/GlobalMethods";
 
 const AddCategoryScreen = ({ navigation }: { navigation: any }) => {
   const [newCategoryName, setNewCategoryName] = useState("");
@@ -28,20 +30,42 @@ const AddCategoryScreen = ({ navigation }: { navigation: any }) => {
   const [inputError, setInputError] = useState("");
   const dispatch = useDispatch();
   const { categories } = useSelector((state: RootState) => state.categories);
-  const user = useSelector((state: RootState) => state.user);
+  const user = useSelector((state: RootState) => state.profile);
   const db = getFirestore();
-  // console.log(categories);
+  useEffect(() => {
+    fetchCategories();
+  }, []);
 
+  const fetchCategories = async () => {
+    dispatch(setAppLoader(true));
+    try {
+      const categoriesSnapshot = await getDocs(
+        collection(db, "users", user?.userId, "categories")
+      );
+      const categoriesList = categoriesSnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      dispatch(setCategories(categoriesList as any));
+    } catch (error) {
+      dispatch(setAppLoader(false));
+      console.log("cat sceen", error);
+    } finally {
+      dispatch(setAppLoader(false));
+    }
+  };
   const addCategory = async () => {
     if (!newCategoryName.trim()) {
       setInputError("Category name cannot be empty.");
       return;
+    } else {
+      setAddModal(false);
     }
 
-    setLoading(true);
+    dispatch(setAppLoader(true));
     try {
       const categoryRef = await addDoc(
-        collection(db, "users", user.uid, "categories"),
+        collection(db, "users", user.userId, "categories"),
         {
           name: newCategoryName,
         }
@@ -57,15 +81,16 @@ const AddCategoryScreen = ({ navigation }: { navigation: any }) => {
 
       setNewCategoryName("");
       setInputError("");
-      Alert.alert("Success", "New category added.", [
-        { text: "Add More" },
-        { text: "OK", onPress: () => navigation.goBack() },
-      ]);
+      successMessage("Category Added SuccessFuly");
+      // Alert.alert("Success", "New category added.", [
+      //   { text: "Add More" },
+      //   { text: "OK", onPress: () => navigation.goBack() },
+      // ]);
     } catch (error) {
       console.log(error);
       Alert.alert("Error", "Could not add category. Please try again.");
     } finally {
-      setLoading(false);
+      dispatch(setAppLoader(false));
     }
   };
 
@@ -73,32 +98,9 @@ const AddCategoryScreen = ({ navigation }: { navigation: any }) => {
   return (
     <ScreenWrapper scrollEnabled={false}>
       <View style={styles.container}>
-        <FlatList
-          data={categories}
-          scrollEnabled={false}
-          renderItem={({ item }) => (
-            <View
-              style={{
-                width: width(92),
-                backgroundColor: Color.backgroundColor,
-                padding: height(2),
-                margin: height(0.5),
-                borderRadius: height(1),
-              }}
-            >
-              <Text style={{ fontSize: height(2),fontWeight:'heavy', }}>{item.name}</Text>
-            </View>
-          )}
-          keyExtractor={(item, index) => index}
-        />
         <TouchableOpacity
           onPress={() => setAddModal(true)}
-          style={{
-            position: "absolute",
-            bottom: height(6),
-            right: height(4),
-            backgroundColor: "white",
-          }}
+          style={styles.flotbtn}
         >
           <AntDesign
             name={"pluscircle"}
@@ -106,6 +108,26 @@ const AddCategoryScreen = ({ navigation }: { navigation: any }) => {
             size={height(5)}
           />
         </TouchableOpacity>
+        <FlatList
+          data={categories}
+          showsVerticalScrollIndicator={false}
+          renderItem={({ item }) => (
+            <View style={styles.rowContainer}>
+              <Text style={{ fontSize: height(2), fontWeight: "heavy" }}>
+                {item.name}
+              </Text>
+              <TouchableOpacity>
+                <AntDesign
+                  name={"delete"}
+                  color={Color.primaryColor}
+                  size={height(3)}
+                />
+              </TouchableOpacity>
+            </View>
+          )}
+          keyExtractor={(item, index) => index}
+        />
+
         <Modal
           backdropOpacity={0.3}
           isVisible={addModal}
@@ -120,7 +142,7 @@ const AddCategoryScreen = ({ navigation }: { navigation: any }) => {
               onChangeText={setNewCategoryName}
             />
             <Button
-              isLoading={loading}
+              isLoading={useSelector(selectAppLoader)}
               title="Add Category"
               onPress={addCategory}
               containerStyle={{ width: width(80), marginTop: height(1) }}
@@ -139,10 +161,10 @@ const styles = StyleSheet.create({
   },
   input: {
     width: width(80),
-    backgroundColor:Color.backgroundColor,
-    margin:height(1),
-    padding:height(1.5),
-    borderRadius:height(3)
+    backgroundColor: Color.backgroundColor,
+    margin: height(1),
+    padding: height(1.5),
+    borderRadius: height(3),
   },
   errorText: {
     color: "red",
@@ -157,6 +179,23 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     borderRadius: height(3),
     padding: height(2),
+  },
+  flotbtn: {
+    position: "absolute",
+    bottom: height(6),
+    right: height(4),
+    backgroundColor: "white",
+    zIndex: 1,
+    borderRadius: height(4),
+  },
+  rowContainer: {
+    width: width(92),
+    backgroundColor: Color.backgroundColor,
+    padding: height(2),
+    margin: height(0.5),
+    borderRadius: height(1),
+    flexDirection: "row",
+    justifyContent: "space-between",
   },
 });
 

@@ -30,6 +30,7 @@ const CustomDrawer = ({ navigation }) => {
   const dispatch = useDispatch();
   const styles = getStyles(AppColors);
   const handleEditProfile = () => {
+    navigation.closeDrawer();
     navigation.navigate("EditProfileScreen");
   };
   const logout = async () => {
@@ -92,7 +93,7 @@ const CustomDrawer = ({ navigation }) => {
           }}
           style={styles.drawrbtn}
         >
-          <Ionicons name="grid-outline" size={height(2)} color={'grey'}/>
+          <Ionicons name="grid-outline" size={height(2)} color={"grey"} />
 
           <Text style={styles.dbtext}>All Categories</Text>
         </TouchableOpacity>
@@ -103,7 +104,7 @@ const CustomDrawer = ({ navigation }) => {
           }}
           style={styles.drawrbtn}
         >
-          <AntDesign name="shoppingcart" size={height(2)}color={'grey'} />
+          <AntDesign name="shoppingcart" size={height(2)} color={"grey"} />
           <Text style={styles.dbtext}>All Products</Text>
         </TouchableOpacity>
         <TouchableOpacity
@@ -113,7 +114,7 @@ const CustomDrawer = ({ navigation }) => {
           }}
           style={styles.drawrbtn}
         >
-          <AntDesign name="addfile" size={height(2)} color={'grey'}/>
+          <AntDesign name="addfile" size={height(2)} color={"grey"} />
           <Text style={styles.dbtext}>Add new product</Text>
         </TouchableOpacity>
         <TouchableOpacity
@@ -123,7 +124,11 @@ const CustomDrawer = ({ navigation }) => {
           }}
           style={styles.drawrbtn}
         >
-          <Ionicons name="stats-chart-outline" size={height(2)}color={'grey'} />
+          <Ionicons
+            name="stats-chart-outline"
+            size={height(2)}
+            color={"grey"}
+          />
 
           <Text style={styles.dbtext}>Reposrt & Statistics</Text>
         </TouchableOpacity>
@@ -135,7 +140,7 @@ const CustomDrawer = ({ navigation }) => {
           }}
           style={styles.drawrbtn}
         >
-          <Octicons name="list-unordered" size={height(2)} color={'grey'}/>
+          <Octicons name="list-unordered" size={height(2)} color={"grey"} />
 
           <Text style={styles.dbtext}>All Invoices</Text>
         </TouchableOpacity>
@@ -147,7 +152,7 @@ const CustomDrawer = ({ navigation }) => {
           }}
           style={styles.drawrbtn}
         >
-          <AntDesign name="profile" size={height(2)} color={'grey'}/>
+          <AntDesign name="profile" size={height(2)} color={"grey"} />
 
           <Text style={styles.dbtext}>My Orders</Text>
         </TouchableOpacity>
@@ -158,7 +163,7 @@ const CustomDrawer = ({ navigation }) => {
           }}
           style={styles.drawrbtn}
         >
-          <AntDesign name="infocirlceo" size={height(2)} color={'grey'}/>
+          <AntDesign name="infocirlceo" size={height(2)} color={"grey"} />
 
           <Text style={[styles.dbtext]}>About Us</Text>
         </TouchableOpacity>
@@ -205,7 +210,7 @@ const getStyles = (AppColors) =>
       fontSize: height(1.6),
       fontWeight: "500",
       marginHorizontal: height(1),
-      color:'grey'
+      color: "grey",
     },
     icon: {
       color: "white",

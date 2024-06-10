@@ -12,6 +12,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../redux/store";
 import { IBill, IItem, IProduct } from "../utills/types";
 import AntDesign from "@expo/vector-icons/AntDesign";
+import { MaterialIcons } from "@expo/vector-icons";
 
 import {
   decreaseQuantity,
@@ -25,27 +26,18 @@ import Header from "../components/Head";
 import ScreenWrapper from "../components/ScreenWrapper";
 import { height, width } from "../utills/Dimension";
 import Icons from "../assets/images";
-const categories: Category[] = [
-  { id: "0", name: "All" },
-  { id: "1", name: "Clothes" },
-  { id: "2", name: "Shoes" },
-  { id: "3", name: "Kind" },
-  { id: "4", name: "Clothes" },
-  { id: "5", name: "Shoes" },
-  { id: "6", name: "Kind" },
-  { id: "17", name: "Clothes" },
-  { id: "27", name: "Shoes" },
-  { id: "38", name: "Kind" },
+import ContentLoader from "react-native-easy-content-loader";
 
-  // Add more categories as needed
-];
 const ProductsScreen = ({ navigation }: { navigation: any }) => {
   const user = useSelector((state: RootState) => state.user);
   const products = useSelector((state: RootState) => state.products);
   const bill = useSelector((state: RootState) => state.bill.bill);
+  const { categories } = useSelector((state: RootState) => state.categories);
   const db = getFirestore();
   const dispatch = useDispatch();
   const [searchText, setSearchText] = useState("");
+
+  const [loader, setLoader] = useState(false);
   const [selectValue, SetSelectValue] = useState("0");
 
   useEffect(() => {
@@ -55,6 +47,7 @@ const ProductsScreen = ({ navigation }: { navigation: any }) => {
 
   const fetchItems = async () => {
     try {
+      setLoader(true);
       const itemsCollectionRef = collection(db, "users", user.uid, "products");
       const itemsSnapshot = await getDocs(itemsCollectionRef);
       const itemsList = itemsSnapshot.docs.map((doc) => ({
@@ -62,8 +55,10 @@ const ProductsScreen = ({ navigation }: { navigation: any }) => {
         ...doc.data(),
       }));
       dispatch(setProduct(itemsList as any));
+      setLoader(false);
     } catch (error) {
       console.log(error);
+      setLoader(false);
     }
   };
 
@@ -129,6 +124,7 @@ const ProductsScreen = ({ navigation }: { navigation: any }) => {
   };
   return (
     <ScreenWrapper
+      scrollEnabled={true}
       headerUnScrollable={() => (
         <Header
           searchText={searchText}
@@ -140,15 +136,29 @@ const ProductsScreen = ({ navigation }: { navigation: any }) => {
       )}
       footerUnScrollable={() => {
         return bill?.totalAmount !== undefined && bill?.totalAmount !== 0 ? (
-          <TouchableOpacity
-            onPress={() => navigation.navigate("BillingDetailScreen")}
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
           >
-            <View style={styles.floatingButton}>
-              <Text style={styles.floatingText}> {bill.totalQuantity}</Text>
-              <Text style={styles.floatingText}> View Bill</Text>
-              <Text style={styles.floatingText}>Rs: {bill?.totalAmount}</Text>
-            </View>
-          </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.floatingButton2}
+              // onPress={() => navigation.navigate("BillingDetailScreen")}
+            >
+              <MaterialIcons name="delete" color={"white"} size={height(3)} />
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => navigation.navigate("BillingDetailScreen")}
+            >
+              <View style={styles.floatingButton}>
+                <Text style={styles.floatingText}> {bill.totalQuantity}</Text>
+                <Text style={styles.floatingText}> View Bill</Text>
+                <Text style={styles.floatingText}>Rs: {bill?.totalAmount}</Text>
+              </View>
+            </TouchableOpacity>
+          </View>
         ) : (
           <></>
         );
@@ -157,6 +167,7 @@ const ProductsScreen = ({ navigation }: { navigation: any }) => {
       <View style={styles.container}>
         <FlatList
           data={products}
+          scrollEnabled={false}
           keyExtractor={(item) => item.id}
           renderItem={({ item }) => {
             if (
@@ -174,39 +185,116 @@ const ProductsScreen = ({ navigation }: { navigation: any }) => {
           }}
           contentContainerStyle={styles.itemsList}
           ListEmptyComponent={
-            <View
-              style={{
-                alignItems: "center",
-                height: height(70),
-                backgroundColor: "white",
-                justifyContent: "center",
-              }}
-            >
-              <Image
-                source={Icons.empty}
-                style={{ height: height(30), width: height(30) }}
-              />
-              <Text
+            !loader ? (
+              <View
                 style={{
-                  fontSize: height(1.2),
-                  margin: height(3),
+                  alignItems: "center",
+                  height: height(70),
+                  backgroundColor: "white",
+                  justifyContent: "center",
                 }}
               >
-                No Product found
-              </Text>
+                <Image
+                  source={Icons.empty}
+                  style={{ height: height(30), width: height(30) }}
+                />
+                <Text
+                  style={{
+                    fontSize: height(1.2),
+                    margin: height(3),
+                  }}
+                >
+                  No Product found
+                </Text>
 
-              <TouchableOpacity
-                onPress={() => {
-                  navigation.navigate("EditProductScreen", {
-                    userId: user?.uid,
-                  });
-                }}
-                style={styles.drawrbtn}
-              >
-                <AntDesign name="plus" size={height(2)} />
-                <Text style={styles.dbtext}>Add New Product</Text>
-              </TouchableOpacity>
-            </View>
+                <TouchableOpacity
+                  onPress={() => {
+                    navigation.navigate("EditProductScreen", {
+                      userId: user?.uid,
+                    });
+                  }}
+                  style={styles.drawrbtn}
+                >
+                  <AntDesign name="plus" size={height(2)} />
+                  <Text style={styles.dbtext}>Add New Product</Text>
+                </TouchableOpacity>
+              </View>
+            ) : (
+              <>
+                <ContentLoader
+                  containerStyles={{ padding: height(1) }}
+                  active
+                  avatar
+                  aShape="square"
+                  aSize={height(8)}
+                  pRows={2}
+                  tWidth={width(73)}
+                  tHeight={height(2)}
+                  pHeight={[height(1), height(1)]}
+                  pWidth={[width(60), width(70)]}
+                />
+                <ContentLoader
+                  containerStyles={{ padding: height(1) }}
+                  active
+                  avatar
+                  aShape="square"
+                  aSize={height(8)}
+                  pRows={2}
+                  tWidth={width(73)}
+                  tHeight={height(2)}
+                  pHeight={[height(1), height(1)]}
+                  pWidth={[width(60), width(70)]}
+                />
+                <ContentLoader
+                  containerStyles={{ padding: height(1) }}
+                  active
+                  avatar
+                  aShape="square"
+                  aSize={height(8)}
+                  pRows={2}
+                  tWidth={width(73)}
+                  tHeight={height(2)}
+                  pHeight={[height(1), height(1)]}
+                  pWidth={[width(60), width(70)]}
+                />
+                <ContentLoader
+                  containerStyles={{ padding: height(1) }}
+                  active
+                  avatar
+                  aShape="square"
+                  aSize={height(8)}
+                  pRows={2}
+                  tWidth={width(73)}
+                  tHeight={height(2)}
+                  pHeight={[height(1), height(1)]}
+                  pWidth={[width(60), width(70)]}
+                />
+                <ContentLoader
+                  containerStyles={{ padding: height(1) }}
+                  active
+                  avatar
+                  aShape="square"
+                  aSize={height(8)}
+                  pRows={2}
+                  tWidth={width(73)}
+                  tHeight={height(2)}
+                  pHeight={[height(1), height(1)]}
+                  pWidth={[width(60), width(70)]}
+                />
+                <ContentLoader
+                  containerStyles={{ padding: height(1) }}
+                  active
+                  avatar
+                  aShape="square"
+                  aSize={height(8)}
+                  pRows={2}
+                  tWidth={width(73)}
+                  tHeight={height(2)}
+                  pHeight={[height(1), height(1)]}
+                  pWidth={[width(60), width(70)]}
+                />
+              </>
+            )
           }
         />
       </View>
@@ -216,9 +304,8 @@ const ProductsScreen = ({ navigation }: { navigation: any }) => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    // alignItems: "center",
     marginHorizontal: width(1),
+    marginBottom: height(2),
   },
   noItemsText: {
     textAlign: "center",
@@ -226,19 +313,23 @@ const styles = StyleSheet.create({
     marginVertical: 20,
   },
   itemsList: {
-    paddingBottom: 20,
+    // paddingBottom: 20,
   },
   floatingButton: {
     borderRadius: height(5),
     backgroundColor: Color.primaryColor,
-    position: "absolute",
-    bottom: height(1),
     paddingHorizontal: height(2),
     paddingVertical: height(2),
     flexDirection: "row",
     justifyContent: "space-between",
-    width: width(96),
+    width: width(80),
     alignSelf: "center",
+  },
+  floatingButton2: {
+    borderRadius: height(5),
+    backgroundColor: "red",
+    padding: height(1.5),
+    margin: height(0.5),
   },
   floatingText: {
     color: Color.colorWhite,
