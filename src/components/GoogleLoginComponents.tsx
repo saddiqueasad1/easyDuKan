@@ -10,7 +10,7 @@ import {
 } from "firebase/auth";
 import { Color, FontFamily } from "../utills/GlobalStyles";
 import { useTranslation } from "react-i18next";
-import { doc, getFirestore, setDoc } from "firebase/firestore";
+import { doc, getDoc, getFirestore, setDoc } from "firebase/firestore";
 import { useDispatch } from "react-redux";
 import { setProfile } from "../redux/slices/profilleSlice";
 import { setUser } from "../redux/slices/userSlice";
@@ -25,6 +25,8 @@ export default function GoogleLoginComponents({
   const [request, response, promptAsync] = Google.useAuthRequest({
     androidClientId:
       "777069971997-0kkvncld2jhkurqcp5qp5l3v993ef03f.apps.googleusercontent.com",
+    iosClientId:
+      "777069971997-n7ftkicfcqecjav02lmjas9hclaai48b.apps.googleusercontent.com",
   });
 
   const auth = getAuth();
@@ -51,26 +53,29 @@ export default function GoogleLoginComponents({
           const address = "";
           const emailVerified = user.emailVerified;
           const photoURL = user.photoURL || "";
-
-          await setDoc(doc(db, "users", user.uid), {
-            username,
-            phoneNumber,
-            email,
-            address,
-            emailVerified,
-            photoURL,
-          });
-          dispatch(
-            setProfile({
+          const userRef = doc(db, "users", user.uid);
+          const docSnapshot = await getDoc(userRef);
+          if (!docSnapshot.exists()) {
+            await setDoc(doc(db, "users", user.uid), {
               username,
               phoneNumber,
               email,
               address,
-              userId: user.uid,
               emailVerified,
               photoURL,
-            }),
-          );
+            });
+            dispatch(
+              setProfile({
+                username,
+                phoneNumber,
+                email,
+                address,
+                userId: user.uid,
+                emailVerified,
+                photoURL,
+              })
+            );
+          }
           dispatch(setUser(user as User));
         })
         .catch((error) => {

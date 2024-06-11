@@ -21,6 +21,7 @@ import { RouteProp } from "@react-navigation/native";
 import OtpInputBox from "../components/OtpInputBox";
 import { setUser } from "../redux/slices/userSlice";
 import { useDispatch } from "react-redux";
+import { doc, getDoc, getFirestore, setDoc } from "firebase/firestore";
 
 type RootStackParamList = {
   OtpVerification: {
@@ -47,7 +48,7 @@ const OtpVerification = ({
   const [loading, setLoading] = React.useState(false);
   const [showSuccess, setShowSuccess] = React.useState(false);
   const dispatch = useDispatch();
-
+  const db = getFirestore();
   const [oTP, setOtP] = React.useState("");
   const { t } = useTranslation();
   const auth = getAuth();
@@ -59,21 +60,19 @@ const OtpVerification = ({
       setLoading(true);
       const credential = PhoneAuthProvider.credential(verificationId, oTP);
       await signInWithCredential(auth, credential)
-        .then((res) => {
+        .then(async (res) => {
           console.log("res of ()=> firebaseOTPVerification", phoneNumber);
           console.log(res.user.toJSON());
           dispatch(setUser(res.user.toJSON() as User));
           setShowSuccess(true);
-          Animated.timing(scaleAnim, {
-            toValue: 1,
-            duration: 1000,
-            useNativeDriver: true,
-          }).start(() => {
-            setTimeout(() => {
-              // navigation.navigate("MainStack");
-              console.log("hhhh!");
-            }, 2000);
-          });
+
+          const userRef = doc(db, "users", res.user.uid);
+          const docSnapshot = await getDoc(userRef);
+          if (!docSnapshot.exists()) {
+            await setDoc(doc(db, "users", res.user.uid), {
+              phoneNumber: phoneNumber,
+            });
+          }
         })
         .catch((err) => {
           alert(err.message);
