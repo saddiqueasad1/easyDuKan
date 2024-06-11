@@ -23,7 +23,9 @@ import Button from "../components/button";
 import { selectAppLoader, setAppLoader } from "../redux/slices/loaderSlice";
 import { successMessage } from "../utills/GlobalMethods";
 
-const AddCategoryScreen = ({ navigation }: { navigation: any }) => {
+const AddCategoryScreen = ({ navigation, route }: { navigation: any }) => {
+  console.log("route value", route?.params);
+
   const [newCategoryName, setNewCategoryName] = useState("");
   const [loading, setLoading] = useState(false);
   const [addModal, setAddModal] = useState(false);
@@ -34,6 +36,9 @@ const AddCategoryScreen = ({ navigation }: { navigation: any }) => {
   const db = getFirestore();
   useEffect(() => {
     fetchCategories();
+    if (route?.params) {
+      setAddModal(true);
+    }
   }, []);
 
   const fetchCategories = async () => {

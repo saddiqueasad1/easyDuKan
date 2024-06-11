@@ -34,6 +34,8 @@ const App = () => {
         if (docSnap.exists()) {
           const data = docSnap.data();
           const newData = { ...data, userId: user.uid };
+          console.log("log of user data", newData,data);
+
           dispatch(setProfile(newData as any));
         }
       } catch (error) {

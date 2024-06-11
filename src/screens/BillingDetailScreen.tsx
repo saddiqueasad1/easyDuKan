@@ -19,6 +19,8 @@ import { addDoc, collection, getFirestore } from "firebase/firestore";
 import RanderBillItems from "../components/BillingComponents/randerBillItems";
 import { clearBill } from "../redux/slices/billSlice";
 import { IBill } from "../utills/types";
+import ScreenWrapper from "../components/ScreenWrapper";
+import { height } from "../utills/Dimension";
 
 const BillingDetailScreen = ({
   route,
@@ -37,7 +39,7 @@ const BillingDetailScreen = ({
   const inputRef = useRef(null);
 
   const [customerName, setCustomerName] = useState(
-    routeBill?.customerName || "",
+    routeBill?.customerName || ""
   );
 
   const contacts = useSelector((state: RootState) => state.contacts.contacts);
@@ -64,7 +66,7 @@ const BillingDetailScreen = ({
 
       const result = await addDoc(
         collection(db, "users", userId, "bills"),
-        myBill,
+        myBill
       );
       console.log(result);
       setLoading(false);
@@ -120,7 +122,7 @@ const BillingDetailScreen = ({
           <p>Unit Price: ${item.unitPrice}</p>
           <p>Total: ${item.total}</p>
         </li>
-      `,
+      `
         )
         .join("")}
     </ul>
@@ -142,97 +144,99 @@ const BillingDetailScreen = ({
   };
   console.log(bill);
   return (
-    <View style={styles.container}>
-      <View style={styles.containerRef} ref={viewRef} collapsable={false}>
-        <Text style={styles.label}>
-          Customer Name: {isDetail && bill.customerName}
-        </Text>
-        {!isDetail && (
-          <ContactSuggestions
-            contacts={contacts}
-            onSelectContact={setCustomerName}
-            inputRef={inputRef}
-          />
-        )}
-        <Text style={styles.label}>Billing Details:</Text>
-        <FlatList
-          data={BillItems}
-          keyExtractor={(item) => item.id}
-          renderItem={({ item }) => <RanderBillItems item={item} />}
-          ListEmptyComponent={<Text>No items available</Text>}
-          style={styles.itemContainer}
-        />
-        <View style={styles.viewTotal}>
-          <Text style={styles.total}>Total Qty:</Text>
-          <Text style={styles.total}>{bill?.totalQuantity}</Text>
-        </View>
-        <View style={styles.viewTotal}>
-          <Text style={styles.total}>Total Amount:</Text>
-          <Text style={styles.total}> Rs: {bill?.totalAmount}</Text>
-        </View>
-      </View>
-      <View style={styles.containerButton}>
-        {!isDetail && (
-          <TouchableOpacity
-            onPress={saveDetails}
-            style={styles.rectangleViewBorder}
-          >
-            <Text style={styles.buttonText}>Save</Text>
-          </TouchableOpacity>
-        )}
-
-        <TouchableOpacity
-          style={styles.rectangleViewBorder}
-          onPress={() => setModalVisible(true)}
-        >
-          <Text style={styles.buttonText}>
-            {isDetail ? "Share" : "Save & Share"}
+    <ScreenWrapper>
+      <View style={styles.container}>
+        <View style={styles.containerRef} ref={viewRef} collapsable={false}>
+          <Text style={styles.label}>
+            Customer Name: {isDetail && bill.customerName}
           </Text>
-        </TouchableOpacity>
-      </View>
-
-      <Modal
-        visible={modalVisible}
-        transparent={true}
-        animationType="slide"
-        onRequestClose={() => setModalVisible(false)}
-      >
-        <View style={styles.modalContainer}>
-          <View style={styles.modalContent}>
-            <TouchableOpacity
-              style={styles.modalButton}
-              onPress={() => {
-                inputRef.current.blur();
-                setModalVisible(false);
-                shareAsImage();
-              }}
-            >
-              <Text style={styles.buttonText}>Share as Image</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.modalButton}
-              onPress={() => {
-                setModalVisible(false);
-                shareAsPDF();
-              }}
-            >
-              <Text style={styles.buttonText}>Share as PDF</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={[styles.modalButton, styles.cancelButton]}
-              onPress={() => setModalVisible(false)}
-            >
-              <Text style={styles.buttonText}>Cancel</Text>
-            </TouchableOpacity>
+          {!isDetail && (
+            <ContactSuggestions
+              contacts={contacts}
+              onSelectContact={setCustomerName}
+              inputRef={inputRef}
+            />
+          )}
+          <Text style={styles.label}>Billing Details:</Text>
+          <FlatList
+            data={BillItems}
+            keyExtractor={(item) => item.id}
+            renderItem={({ item }) => <RanderBillItems item={item} />}
+            ListEmptyComponent={<Text>No items available</Text>}
+            style={styles.itemContainer}
+          />
+          <View style={styles.viewTotal}>
+            <Text style={styles.total}>Total Qty:</Text>
+            <Text style={styles.total}>{bill?.totalQuantity}</Text>
+          </View>
+          <View style={styles.viewTotal}>
+            <Text style={styles.total}>Total Amount:</Text>
+            <Text style={styles.total}> Rs: {bill?.totalAmount}</Text>
           </View>
         </View>
-      </Modal>
-      {loading && (
-        <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color="#0000ff" />
+        <View style={styles.containerButton}>
+          {!isDetail && (
+            <TouchableOpacity
+              onPress={saveDetails}
+              style={styles.rectangleViewBorder}
+            >
+              <Text style={styles.buttonText}>Save</Text>
+            </TouchableOpacity>
+          )}
+
+          <TouchableOpacity
+            style={styles.rectangleViewBorder}
+            onPress={() => setModalVisible(true)}
+          >
+            <Text style={styles.buttonText}>
+              {isDetail ? "Share" : "Save & Share"}
+            </Text>
+          </TouchableOpacity>
         </View>
-      )}
-    </View>
+
+        <Modal
+          visible={modalVisible}
+          transparent={true}
+          animationType="slide"
+          onRequestClose={() => setModalVisible(false)}
+        >
+          <View style={styles.modalContainer}>
+            <View style={styles.modalContent}>
+              <TouchableOpacity
+                style={styles.modalButton}
+                onPress={() => {
+                  inputRef.current.blur();
+                  setModalVisible(false);
+                  shareAsImage();
+                }}
+              >
+                <Text style={styles.buttonText}>Share as Image</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.modalButton}
+                onPress={() => {
+                  setModalVisible(false);
+                  shareAsPDF();
+                }}
+              >
+                <Text style={styles.buttonText}>Share as PDF</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[styles.modalButton, styles.cancelButton]}
+                onPress={() => setModalVisible(false)}
+              >
+                <Text style={styles.buttonText}>Cancel</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </Modal>
+        {loading && (
+          <View style={styles.loadingContainer}>
+            <ActivityIndicator size="large" color="#0000ff" />
+          </View>
+        )}
+      </View>
+    </ScreenWrapper>
   );
 };
 
@@ -247,8 +251,9 @@ const styles = StyleSheet.create({
     backgroundColor: Color.backgroundColor,
   },
   label: {
-    fontSize: 18,
-    marginVertical: 10,
+    fontSize: height(2.2),
+    marginVertical: height(2),
+    fontWeight: 'semibold',
   },
   itemContainer: {
     marginBottom: 10,

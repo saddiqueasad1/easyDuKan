@@ -242,60 +242,95 @@ const EditProductScreen = ({
   return (
     <ScreenWrapper scrollEnabled>
       <View style={styles.container}>
-        <View
-          style={{
-            backgroundColor: Color.backgroundColor,
-            padding: height(2),
-            borderRadius: height(3),
-            marginBottom: height(5),
-          }}
-        >
+        {categories.length > 0 ? (
           <View
-            style={{ flexDirection: "row", justifyContent: "space-between" }}
+            style={{
+              backgroundColor: Color.backgroundColor,
+              padding: height(2),
+              borderRadius: height(3),
+              marginBottom: height(5),
+            }}
           >
-            <Text
+            <View
+              style={{ flexDirection: "row", justifyContent: "space-between" }}
+            >
+              <Text
+                style={{
+                  textAlign: "center",
+                  fontSize: height(2),
+                  fontWeight: "600",
+                }}
+              >
+                Select Category
+              </Text>
+              <TouchableOpacity
+                onPress={() =>
+                  navigation.navigate("AddCategoryScreen", { add: true })
+                }
+              >
+                <AntDesign
+                  name={"pluscircle"}
+                  color={Color.primaryColor}
+                  size={height(2.5)}
+                />
+              </TouchableOpacity>
+            </View>
+            <Picker
               style={{
-                textAlign: "center",
-                fontSize: height(2),
-                fontWeight: "600",
+                padding: height(1),
+                marginVertical: height(1),
+                borderRadius: height(3),
+                width: width(90),
+                backgroundColor: "white",
               }}
+              selectedValue={selectedCategoryId}
+              onValueChange={(itemValue) => setSelectedCategoryId(itemValue)}
             >
-              Select Category
-            </Text>
-            <TouchableOpacity
-              onPress={() => navigation.navigate("AddCategoryScreen")}
+              {categories.map((category: any) => (
+                <Picker.Item
+                  label={category.name}
+                  value={category.id}
+                  key={category.id}
+                />
+              ))}
+            </Picker>
+            {/* <Button
+            title="Add New Category"
+            onPress={() => navigation.navigate("AddCategoryScreen")}
+          /> */}
+          </View>
+        ) : (
+          <TouchableOpacity
+            onPress={() => navigation.navigate("AddCategoryScreen",{ add: true })}
+            style={{
+              backgroundColor: Color.backgroundColor,
+              padding: height(2),
+              borderRadius: height(3),
+              marginBottom: height(5),
+              width: width(95),
+            }}
+          >
+            <View
+              style={{ flexDirection: "row", justifyContent: "space-between" }}
             >
+              <Text
+                style={{
+                  textAlign: "center",
+                  fontSize: height(2),
+                  fontWeight: "600",
+                }}
+              >
+                Add Category
+              </Text>
+
               <AntDesign
                 name={"pluscircle"}
                 color={Color.primaryColor}
                 size={height(2.5)}
               />
-            </TouchableOpacity>
-          </View>
-          <Picker
-            style={{
-              padding: height(1),
-              marginVertical: height(1),
-              borderRadius: height(3),
-              width: width(90),
-              backgroundColor: "white",
-            }}
-            selectedValue={selectedCategoryId}
-            onValueChange={(itemValue) => setSelectedCategoryId(itemValue)}
-          >
-            {categories.map((category: any) => (
-              <Picker.Item
-                label={category.name}
-                value={category.id}
-                key={category.id}
-              />
-            ))}
-          </Picker>
-          {/* <Button
-            title="Add New Category"
-            onPress={() => navigation.navigate("AddCategoryScreen")}
-          /> */}
-        </View>
+            </View>
+          </TouchableOpacity>
+        )}
         <Text style={styles.text}>Name</Text>
         <TextInput
           style={styles.input}

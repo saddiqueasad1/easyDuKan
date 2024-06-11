@@ -7,12 +7,14 @@ import { height, width } from "./Dimension";
 //   ToastAndroid.show(message, ToastAndroid.SHORT);
 // };
 import { showMessage } from "react-native-flash-message";
+import { Color } from "./GlobalStyles";
 
 export const successMessage = (description = "", message = "success") => {
   showMessage({
     message: message,
     description: description,
     type: "success",
+    backgroundColor: Color.primaryColor,
     position: "top",
     statusBarHeight: height(4),
     floating: true,

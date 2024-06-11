@@ -9,7 +9,7 @@ interface ProductItemProps {
 
 const RanderBillItems: React.FC<ProductItemProps> = ({ item }) => {
   return (
-    <TouchableOpacity style={styles.itemTouchable}>
+    <View style={styles.itemTouchable}>
       <View style={styles.itemCard}>
         <Text style={styles.itemName}>{item.name}</Text>
         <View style={styles.itemDetails}>
@@ -18,7 +18,7 @@ const RanderBillItems: React.FC<ProductItemProps> = ({ item }) => {
           <Text style={styles.itemText}>Total: {item.total}</Text>
         </View>
       </View>
-    </TouchableOpacity>
+    </View>
   );
 };
 

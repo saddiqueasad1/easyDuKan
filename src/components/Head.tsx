@@ -12,6 +12,8 @@ import { height, width } from "../utills/Dimension";
 import { Color } from "../utills/GlobalStyles";
 import { useNavigation } from "@react-navigation/native";
 import { Entypo, Ionicons } from "@expo/vector-icons";
+import { useSelector } from "react-redux";
+import { RootState } from "../redux/store";
 
 interface Category {
   id: string;
@@ -28,7 +30,7 @@ const Header: React.FC = ({
 }) => {
   const categoryListRef = useRef<FlatList<Category>>(null);
   const navigation = useNavigation();
-
+  const profile = useSelector((state: RootState) => state.profile);
   const handleSearchChange = (text: string) => {
     setSearchText(text);
     // Implement your search logic here, filtering categories if needed
@@ -79,7 +81,9 @@ const Header: React.FC = ({
           >
             <Image
               source={{
-                uri: "https://cdn-icons-png.flaticon.com/512/149/149071.png",
+                uri:
+                  profile?.photoURL ||
+                  "https://cdn-icons-png.flaticon.com/512/149/149071.png",
               }}
               style={styles.ProfileIcon}
             />
@@ -201,8 +205,8 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   ProfileIcon: {
-    height: height(4),
-    width: height(4),
+    height: height(5),
+    width: height(5),
     borderRadius: height(5),
     borderWidth: height(0.3),
     borderColor: Color.secondaryColor,

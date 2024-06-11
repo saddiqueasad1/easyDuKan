@@ -1,4 +1,12 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
+import { Entypo } from "@expo/vector-icons";
+import {
+  deleteObject,
+  getDownloadURL,
+  getStorage,
+  ref as storageRef,
+  uploadBytes,
+} from "@firebase/storage";
 import {
   TextInput,
   TouchableOpacity,
@@ -8,6 +16,8 @@ import {
   Alert,
   View,
   ActivityIndicator,
+  Image,
+  Platform,
 } from "react-native";
 import { doc, setDoc, getFirestore } from "firebase/firestore";
 import { useDispatch, useSelector } from "react-redux";
@@ -19,26 +29,89 @@ import { Color } from "../utills/GlobalStyles";
 import Button from "../components/button";
 import { setAppLoader } from "../redux/slices/loaderSlice";
 import { successMessage } from "../utills/GlobalMethods";
-
+import FilePickerModal from "../components/filepiker";
 const EditProfileScreen = ({ navigation }: { navigation: any }) => {
   const user = useSelector((state: RootState) => state.user);
   const profile = useSelector((state: RootState) => state.profile);
+  const imageRef = useRef(null);
+  const [image, setImage] = React.useState([profile?.photoURL]);
+
   const [username, setUsername] = useState(profile.username);
   const [phoneNumber, setPhoneNumber] = useState(user.phoneNumber + "");
   const [email, setEmail] = useState(profile.email);
   const [address, setAddress] = useState(profile.address);
+
   const db = getFirestore();
   const dispatch = useDispatch();
-  const saveProfile = async () => {
+  async function getBlobFromFile(imageUri) {
+    return (await fetch(imageUri)).blob();
+  }
+  const saveImages = async () => {
+    try {
+      dispatch(setAppLoader(true));
+      const imageUrls = [];
+      const storage = getStorage();
+
+      for (const imageUri of image) {
+        const split = imageUri.split("/");
+        const name = split.pop();
+        const imageRef = storageRef(
+          storage,
+          `Users/${profile.userId}/images/${name}`
+        );
+
+        const metadata = {
+          contentType: "image/jpeg",
+        };
+
+        // // Get the blob from the image URI
+        try {
+          const imageBlob = await getBlobFromFile(imageUri);
+
+          const uploadTask = await uploadBytes(
+            imageRef,
+            imageBlob,
+            metadata
+          ).catch((err) => {
+            console.log("Error uploading images:", err);
+          });
+          const snapshot = await uploadTask;
+
+          if (snapshot) {
+            const downloadUrl = await getDownloadURL(imageRef);
+            if (downloadUrl) {
+              imageUrls.push(downloadUrl);
+            }
+          }
+        } catch (error) {
+          console.log("Error uploading images:", error);
+          dispatch(setAppLoader(false));
+        }
+      }
+
+      if (imageUrls.length > 0) {
+        console.log("set to sever now in profile", imageUrls[0]);
+
+        saveProfile(imageUrls[0]);
+      }
+
+      // dispatch(setAppLoader(false));
+      setImage([]);
+    } catch (error) {
+      console.log("muktipule iamge", error);
+    }
+  };
+  const saveProfile = async (photoURL) => {
     try {
       // setLoading(true);
-      dispatch(setAppLoader(true));
+      // dispatch(setAppLoader(true));
 
       await setDoc(doc(db, "users", user.uid), {
         username,
         phoneNumber,
         email,
         address,
+        photoURL,
       });
       dispatch(
         setProfile({ username, phoneNumber, email, address, userId: user.uid })
@@ -47,9 +120,9 @@ const EditProfileScreen = ({ navigation }: { navigation: any }) => {
       // Alert.alert("Success", "Profile saved successfully!", [
       //   { text: "OK", onPress: () =>  },
       // ]);
-      successMessage("Profile Updated")
-      navigation.goBack()
-
+      dispatch(setAppLoader(false));
+      successMessage("Profile Updated");
+      navigation.goBack();
     } catch (error) {
       console.log(error);
       Alert.alert("Error", "Failed to save profile.");
@@ -58,11 +131,32 @@ const EditProfileScreen = ({ navigation }: { navigation: any }) => {
       dispatch(setAppLoader(false));
     }
   };
+  console.log(image);
 
   return (
     <ScreenWrapper scrollEnabled>
       <View style={styles.container}>
         <Text style={styles.title}>Profile</Text>
+        <TouchableOpacity
+          style={{
+            alignSelf: "center",
+            borderRadius: height(10),
+          }}
+          onPress={() => imageRef.current.show()}
+        >
+          <Image
+            source={{
+              uri:
+                image[0] ||
+                "https://cdn-icons-png.flaticon.com/512/149/149071.png",
+            }}
+            style={styles.image}
+          />
+          <View style={styles.camera}>
+            <Entypo name="camera" size={height(3)} color={Color.primaryColor} />
+          </View>
+        </TouchableOpacity>
+
         <Text style={styles.text}>Name</Text>
         <TextInput
           style={styles.input}
@@ -97,10 +191,22 @@ const EditProfileScreen = ({ navigation }: { navigation: any }) => {
         />
         <Button
           title={"Save Profile"}
-          onPress={saveProfile}
+          onPress={saveImages}
           containerStyle={{ width: width(90), marginTop: height(3) }}
         />
       </View>
+      <FilePickerModal
+        ref={imageRef}
+        onFilesSelected={(img) => {
+          const selectedImages = img.map((imageUri) => {
+            return Platform.OS === "android"
+              ? imageUri.uri
+              : imageUri.uri.replace("file://", "");
+            //}
+          });
+          setImage(selectedImages);
+        }}
+      />
     </ScreenWrapper>
   );
 };
@@ -151,6 +257,23 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "rgba(255, 255, 255, 0.7)",
     zIndex: 1,
+  },
+  image: {
+    width: height(20),
+    height: height(20),
+    alignSelf: "center",
+    marginVertical: height(1),
+    borderWidth: height(0.3),
+    borderColor: Color.secondaryColor,
+    borderRadius: height(20),
+  },
+  camera: {
+    position: "absolute",
+    bottom: height(2),
+    right: height(2),
+    backgroundColor: Color.secondaryColor,
+    padding: height(0.5),
+    borderRadius: height(5),
   },
 });
 
