@@ -56,6 +56,9 @@ export interface IProfile {
   userId?: string;
   emailVerified?: boolean;
   photoURL?: string;
+  branchIds: [];
+  selectedBranchId: string;
+  branchName?: string;
 }
 
 export interface IProduct {

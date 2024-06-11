@@ -11,6 +11,9 @@ const profileSilse = createSlice({
     userId: "",
     emailVerified: false,
     photoURL: "",
+    branchIds: [],
+    selectedBranchId: "",
+    branchName: "",
   },
   reducers: {
     setProfile(state, action: PayloadAction<IProfile>) {
@@ -21,6 +24,9 @@ const profileSilse = createSlice({
       state.userId = action.payload.userId || "";
       state.emailVerified = action.payload.emailVerified || false;
       state.photoURL = action.payload.photoURL || "";
+      state.branchName = action.payload.branchName || "";
+      state.selectedBranchId = action.payload.selectedBranchId || "";
+      state.branchIds = action.payload.branchIds || [];
     },
   },
 });
