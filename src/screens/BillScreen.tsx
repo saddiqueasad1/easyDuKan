@@ -21,6 +21,7 @@ import ContentLoader from "react-native-easy-content-loader";
 const BillScreen = ({ route, navigation }: { route: any; navigation: any }) => {
   const user = useSelector((state: RootState) => state.user);
   const userId = user.uid;
+  const selectedBranchId = user.selectedBranchId;
   const dispatch: AppDispatch = useDispatch();
   const bills = useSelector((state: RootState) => state.bills.bills);
   const bill = useSelector((state: RootState) => state.bill);
@@ -50,7 +51,12 @@ const BillScreen = ({ route, navigation }: { route: any; navigation: any }) => {
   }, [userId, bill]);
 
   const fetchBills = async (userId: string): Promise<IBill[]> => {
-    const billsCollection = collection(db, "users", userId, "bills");
+    const billsCollection = collection(
+      db,
+      "branches",
+      selectedBranchId,
+      "bills",
+    );
     const billsSnapshot = await getDocs(billsCollection);
     const billsList: IBill[] = billsSnapshot.docs.map((doc) => ({
       id: doc.id,

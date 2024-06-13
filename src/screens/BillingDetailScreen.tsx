@@ -46,7 +46,7 @@ const BillingDetailScreen = ({
   const viewRef = useRef(null);
   const db = getFirestore();
   const user = useSelector((state: RootState) => state.user);
-  const userId = user.uid;
+  const selectedBranchId = user.selectedBranchId;
   const dispatch = useDispatch();
 
   const saveDetails = async () => {
@@ -65,8 +65,8 @@ const BillingDetailScreen = ({
       console.log(myBill);
 
       const result = await addDoc(
-        collection(db, "users", userId, "bills"),
-        myBill
+        collection(db, "branches", selectedBranchId, "bills"),
+        myBill,
       );
       console.log(result);
       setLoading(false);
