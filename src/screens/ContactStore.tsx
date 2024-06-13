@@ -17,22 +17,24 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../redux/store";
 import { FontAwesome5, Ionicons } from "@expo/vector-icons";
 import { Color } from "../utills/GlobalStyles";
-import { setProfile } from "../redux/slices/profilleSlice";
-// import { setProduct } from "../redux/slices/productSlice";
-import { IProduct } from "../utills/types";
+import { IProduct, IProfile } from "../utills/types";
 import ProductShopItem from "../components/ProductComponentShop/ProductItem";
-import { height } from "../utills/Dimension";
+import { height, width } from "../utills/Dimension";
 
-const ContactProfileScreen = ({ navigation, route }: { navigation: any }) => {
+const ContactProfileScreen = ({
+  navigation,
+  route,
+}: {
+  navigation: any;
+  route: any;
+}) => {
   const { userId } = route.params;
-  const [user, setUser] = useState();
+  const [user, setUser] = useState<IProfile>();
   const profile = useSelector((state: RootState) => state.profile);
+  const order = useSelector((state: RootState) => state.order.order);
   const [products, setProduct] = useState();
   const db = getFirestore();
   const dispatch = useDispatch();
-  const selectedBranchId = useSelector(
-    (state: RootState) => state.user.selectedBranchId,
-  );
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -41,9 +43,10 @@ const ContactProfileScreen = ({ navigation, route }: { navigation: any }) => {
         const docSnap = await getDoc(docRef);
 
         if (docSnap.exists()) {
-          const data = docSnap.data();
+          const data = docSnap.data() as IProfile;
           console.log("og of other profile", data);
           setUser(data);
+          fetchItems(data.branchIds[0] + "");
         }
       } catch (error) {
         console.log(error);
@@ -51,11 +54,12 @@ const ContactProfileScreen = ({ navigation, route }: { navigation: any }) => {
     };
 
     fetchProfile();
-    fetchItems();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userId, db, profile]);
 
-  const fetchItems = async () => {
+  const fetchItems = async (selectedBranchId = "") => {
+    console.log("user----------------");
+    console.log(user);
     try {
       const itemsCollectionRef = collection(
         db,
@@ -79,7 +83,11 @@ const ContactProfileScreen = ({ navigation, route }: { navigation: any }) => {
   };
 
   const renderItem = ({ item }: { item: IProduct }) => {
-    return <ProductShopItem item={item} />;
+    return <ProductShopItem item={item} navigation={undefined} />;
+  };
+
+  const handleOrder = () => {
+    console.log("loading order");
   };
 
   const headerItem = () => (
@@ -133,6 +141,14 @@ const ContactProfileScreen = ({ navigation, route }: { navigation: any }) => {
         }
         numColumns={2}
       />
+
+      <TouchableOpacity onPress={() => handleOrder()}>
+        <View style={styles.floatingButton}>
+          <Text style={styles.floatingText}> {order?.totalQuantity}</Text>
+          <Text style={styles.floatingText}> View Bill</Text>
+          <Text style={styles.floatingText}>Rs: {order?.totalAmount}</Text>
+        </View>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -212,6 +228,20 @@ const styles = StyleSheet.create({
   itemText: {
     fontSize: 16,
     color: "#495057",
+  },
+  floatingButton: {
+    borderRadius: height(5),
+    backgroundColor: Color.primaryColor,
+    paddingHorizontal: height(2),
+    paddingVertical: height(2),
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: width(80),
+    alignSelf: "center",
+  },
+  floatingText: {
+    color: Color.colorWhite,
+    fontWeight: "bold",
   },
 });
 

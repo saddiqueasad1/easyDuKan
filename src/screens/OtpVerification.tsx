@@ -22,6 +22,7 @@ import OtpInputBox from "../components/OtpInputBox";
 import { setUser } from "../redux/slices/userSlice";
 import { useDispatch } from "react-redux";
 import { doc, getDoc, getFirestore, setDoc } from "firebase/firestore";
+import { setProfile } from "../redux/slices/profilleSlice";
 
 type RootStackParamList = {
   OtpVerification: {
@@ -69,6 +70,19 @@ const OtpVerification = ({
             await setDoc(doc(db, "users", res.user.uid), {
               phoneNumber: phoneNumber,
             });
+
+            dispatch(
+              setProfile({
+                username: "",
+                phoneNumber,
+                email: "",
+                address: "",
+                userId: res.user.uid,
+                emailVerified: false,
+                photoURL: "",
+                branchIds: [],
+              }),
+            );
             dispatch(
               setUser({
                 uid: res.user.uid,
@@ -81,6 +95,7 @@ const OtpVerification = ({
             console.log(data);
             console.log("data.branchIds[0]");
             console.log(data.branchIds[0]);
+          
             dispatch(
               setUser({
                 uid: res.user.uid,

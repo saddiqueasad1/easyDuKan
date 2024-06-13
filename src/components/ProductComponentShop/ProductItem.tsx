@@ -1,42 +1,93 @@
 import React, { useState } from "react";
 import { TouchableOpacity, Text, StyleSheet, View, Image } from "react-native";
 import Modal from "react-native-modal";
-import { AntDesign } from "@expo/vector-icons";
 import SwiperFlatList from "react-native-swiper-flatlist";
-
-import { IProduct } from "../../utills/types";
+import { IBill, IItem, IProduct } from "../../utills/types";
 import QuantityContainer from "./QuantityContainer";
 import { Color } from "../../utills/GlobalStyles";
 import { height, width } from "../../utills/Dimension";
 import Icons, { IconsImage } from "../../assets/images";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
+import {
+  decreaseOrderQuantity,
+  increaseOrderQuantity,
+  setOrder,
+} from "../../redux/slices/orderSlice";
 
 interface ProductItemProps {
   item: IProduct;
   navigation: any;
-  handleIncreaseQuantity: (
-    id: string,
-    currentQuantity: number,
-    item: IProduct
-  ) => void;
-  handleDecreaseQuantity: (
-    id: string,
-    currentQuantity: number,
-    item: IProduct
-  ) => void;
 }
 
-const ProductShopItem: React.FC<ProductItemProps> = ({
-  item,
-  handleIncreaseQuantity,
-  handleDecreaseQuantity,
-}) => {
+const ProductShopItem: React.FC<ProductItemProps> = ({ item, navigation }) => {
   const [isShow, setIsShow] = useState(false);
   const closeModel = () => setIsShow(false);
-  const bill = useSelector((state: RootState) => state.bill.bill);
-  const quantityItem = bill?.items.find((oneItem) => oneItem.id === item.id);
+  const order = useSelector((state: RootState) => state.order.order);
+  const quantityItem = order?.items.find((oneItem) => oneItem.id === item.id);
   const quantity = quantityItem ? quantityItem.quantity : 0;
+  console.log("quantity", quantity);
+  const dispatch = useDispatch();
+  const handleIncreaseQuantity = (
+    id: string,
+    currentQuantity: number,
+    item: IProduct,
+  ) => {
+    const updatedItem: IItem = {
+      ...item,
+      quantity: currentQuantity + 1,
+      total: (currentQuantity + 1) * item?.unitPrice,
+    };
+
+    if (order) {
+      dispatch(increaseOrderQuantity(updatedItem));
+    } else {
+      const itemNew: IItem = {
+        id,
+        description: item.description,
+        quantity: 1,
+        unitPrice: item.unitPrice,
+        total: item.unitPrice,
+        purchasePrice: item.purchasePrice,
+        name: item.name,
+      };
+
+      function generateId(): string {
+        return (
+          Math.random().toString(36).substring(2, 15) +
+          Math.random().toString(36).substring(2, 15)
+        );
+      }
+
+      const newBill: IBill = {
+        id: generateId(), // Assuming user.uid is used as billId
+        customerId: "", // Provide customer ID here
+        customerName: "", // Provide customer name here
+        date: new Date().toISOString(), // Use current date and time
+        totalAmount: updatedItem.total,
+        status: "pending", // Set initial status
+        items: [itemNew],
+        totalQuantity: 1,
+      };
+      dispatch(setOrder(newBill));
+    }
+  };
+
+  const handleDecreaseQuantity = (
+    id: string,
+    currentQuantity: number,
+    item: IProduct,
+  ) => {
+    const updatedItem: IItem = {
+      ...item,
+      quantity: currentQuantity - 1,
+      total: (currentQuantity - 1) * item?.unitPrice,
+    };
+
+    if (order) {
+      dispatch(decreaseOrderQuantity(updatedItem));
+    }
+  };
   return (
     <>
       <TouchableOpacity style={styles.item} onPress={() => setIsShow(true)}>
@@ -52,13 +103,19 @@ const ProductShopItem: React.FC<ProductItemProps> = ({
           Total Quantity: {item.totalQuantity}
         </Text>
         <View style={styles.quantityContainer}>
-          <View style={styles.button}>
+          <QuantityContainer
+            item={item}
+            handleIncreaseQuantity={handleIncreaseQuantity}
+            handleDecreaseQuantity={handleDecreaseQuantity}
+            useOrder={true}
+          />
+          {/* <View style={styles.button}>
             {quantity ? (
               <Text style={{ color: "white" }}>{quantity}</Text>
             ) : (
               <AntDesign name="plus" size={18} color="white" />
             )}
-          </View>
+          </View> */}
         </View>
       </TouchableOpacity>
       <Modal
@@ -133,6 +190,7 @@ const ProductShopItem: React.FC<ProductItemProps> = ({
                 item={item}
                 handleIncreaseQuantity={handleIncreaseQuantity}
                 handleDecreaseQuantity={handleDecreaseQuantity}
+                useOrder={true}
               />
             </View>
           </View>
@@ -170,7 +228,7 @@ const styles = StyleSheet.create({
   quantityContainer: {
     position: "absolute",
     right: height(1),
-    top: height(10),
+    top: height(9),
   },
   quantityContainer1: {
     position: "absolute",

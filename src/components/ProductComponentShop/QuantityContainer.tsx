@@ -19,15 +19,21 @@ interface QuantityContainerProps {
     currentQuantity: number,
     item: IProduct,
   ) => void;
+  useOrder?: boolean;
 }
 
 const QuantityContainer: React.FC<QuantityContainerProps> = ({
   item,
   handleIncreaseQuantity,
   handleDecreaseQuantity,
+  useOrder = false,
 }) => {
   const bill = useSelector((state: RootState) => state.bill.bill);
-  const quantityItem = bill?.items.find((oneItem) => oneItem.id === item.id);
+  const order = useSelector((state: RootState) => state.order.order);
+
+  // Use either bill or order based on the useOrder prop
+  const items = useOrder ? order?.items : bill?.items;
+  const quantityItem = items?.find((oneItem) => oneItem.id === item.id);
   const quantity = quantityItem ? quantityItem.quantity : 0;
 
   return (

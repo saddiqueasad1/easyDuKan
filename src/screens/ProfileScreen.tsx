@@ -1,11 +1,5 @@
-import React, { useEffect, useState } from "react";
-import {
-  View,
-  TouchableOpacity,
-  Text,
-  FlatList,
-  StyleSheet,
-} from "react-native";
+import React, { useEffect } from "react";
+import { View, Text, FlatList, StyleSheet } from "react-native";
 import {
   collection,
   doc,
@@ -15,12 +9,9 @@ import {
 } from "firebase/firestore";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../redux/store";
-import { FontAwesome5 } from "@expo/vector-icons";
-import { Color } from "../utills/GlobalStyles";
 import { setProfile } from "../redux/slices/profilleSlice";
 import { setProduct } from "../redux/slices/productSlice";
 import { IProduct } from "../utills/types";
-import { clearUser } from "../redux/slices/userSlice";
 import ScreenWrapper from "../components/ScreenWrapper";
 import { height, width } from "../utills/Dimension";
 import Button from "../components/button";
@@ -30,8 +21,6 @@ const ProfileScreen = ({ navigation }: { navigation: any }) => {
   const user = useSelector((state: RootState) => state.user);
   const profile = useSelector((state: RootState) => state.profile);
   const products = useSelector((state: RootState) => state.products);
-  const { username, email, address } = profile;
-  const [phoneNumber] = useState(user.phoneNumber + "");
   const db = getFirestore();
   const dispatch = useDispatch();
   const selectedBranchId = user.selectedBranchId;

@@ -165,6 +165,7 @@ const EditProfileScreen = ({ navigation }: { navigation: any }) => {
           userId: user.uid,
           branchIds,
           branchName: businessName,
+          photoURL,
         }),
       );
 
@@ -232,7 +233,7 @@ const EditProfileScreen = ({ navigation }: { navigation: any }) => {
           value={email}
           onChangeText={setEmail}
         />
-        <Text style={styles.text}>Address</Text>
+        <Text style={styles.text}>Business Name</Text>
 
         <TextInput
           style={styles.input}
@@ -240,7 +241,7 @@ const EditProfileScreen = ({ navigation }: { navigation: any }) => {
           value={businessName}
           onChangeText={setBusinessName}
         />
-        <Text style={styles.text}>Business Name</Text>
+        <Text style={styles.text}>Address</Text>
 
         <TextInput
           style={styles.input}
