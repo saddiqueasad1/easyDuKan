@@ -69,9 +69,25 @@ const OtpVerification = ({
             await setDoc(doc(db, "users", res.user.uid), {
               phoneNumber: phoneNumber,
             });
-            dispatch(setUser({ uid: res.user.uid, isProfileComplete: false }));
+            dispatch(
+              setUser({
+                uid: res.user.uid,
+                isProfileComplete: false,
+                selectedBranchId: "",
+              }),
+            );
           } else {
-            dispatch(setUser({ uid: res.user.uid, isProfileComplete: true }));
+            const data = docSnapshot.data();
+            console.log(data);
+            console.log("data.branchIds[0]");
+            console.log(data.branchIds[0]);
+            dispatch(
+              setUser({
+                uid: res.user.uid,
+                isProfileComplete: true,
+                selectedBranchId: data.branchIds[0],
+              }),
+            );
           }
           setShowSuccess(true);
         })

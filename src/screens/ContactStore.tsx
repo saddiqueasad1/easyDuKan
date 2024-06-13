@@ -39,7 +39,6 @@ const ContactProfileScreen = ({ navigation, route }: { navigation: any }) => {
 
         if (docSnap.exists()) {
           const data = docSnap.data();
-          // dispatch(setProfile(data as any));
           console.log("og of other profile", data);
           setUser(data);
         }
@@ -65,7 +64,6 @@ const ContactProfileScreen = ({ navigation, route }: { navigation: any }) => {
       }));
       console.log("+");
 
-      // dispatch(setProduct(itemsList as any));
       setProduct(itemsList);
     } catch (error) {
       console.log("this one ", error);

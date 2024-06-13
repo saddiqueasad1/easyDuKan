@@ -10,7 +10,6 @@ const initialState = {
   emailVerified: false,
   photoURL: "",
   branchIds: [] as string[],
-  selectedBranchId: "",
   branchName: "",
 };
 
@@ -27,7 +26,6 @@ const profileSilse = createSlice({
       state.emailVerified = action.payload.emailVerified || false;
       state.photoURL = action.payload.photoURL || "";
       state.branchName = action.payload.branchName || "";
-      state.selectedBranchId = action.payload.selectedBranchId || "";
       state.branchIds = action.payload.branchIds || [];
     },
     clearProfile: () => initialState,

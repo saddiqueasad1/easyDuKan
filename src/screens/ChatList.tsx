@@ -132,7 +132,6 @@ export default function ChatList({ navigation, route }) {
       if (docSnap.exists()) {
         const data = docSnap.data();
         const newData = { ...data, userId: id };
-        // dispatch(setProfile(newData as any));
         return newData;
       }
       return undefined;

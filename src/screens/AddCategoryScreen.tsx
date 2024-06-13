@@ -27,12 +27,13 @@ const AddCategoryScreen = ({ navigation, route }: { navigation: any }) => {
   console.log("route value", route?.params);
 
   const [newCategoryName, setNewCategoryName] = useState("");
-  const [loading, setLoading] = useState(false);
   const [addModal, setAddModal] = useState(false);
   const [inputError, setInputError] = useState("");
   const dispatch = useDispatch();
   const { categories } = useSelector((state: RootState) => state.categories);
-  const user = useSelector((state: RootState) => state.profile);
+  const profile = useSelector((state: RootState) => state.profile);
+  const user = useSelector((state: RootState) => state.user);
+  const selectedBranchId = user.selectedBranchId;
   const db = getFirestore();
   useEffect(() => {
     fetchCategories();
@@ -45,7 +46,7 @@ const AddCategoryScreen = ({ navigation, route }: { navigation: any }) => {
     dispatch(setAppLoader(true));
     try {
       const categoriesSnapshot = await getDocs(
-        collection(db, "users", user?.userId, "categories")
+        collection(db, "branches", selectedBranchId, "categories"),
       );
       const categoriesList = categoriesSnapshot.docs.map((doc) => ({
         id: doc.id,
@@ -60,6 +61,7 @@ const AddCategoryScreen = ({ navigation, route }: { navigation: any }) => {
     }
   };
   const addCategory = async () => {
+
     if (!newCategoryName.trim()) {
       setInputError("Category name cannot be empty.");
       return;
@@ -70,10 +72,10 @@ const AddCategoryScreen = ({ navigation, route }: { navigation: any }) => {
     dispatch(setAppLoader(true));
     try {
       const categoryRef = await addDoc(
-        collection(db, "users", user.userId, "categories"),
+        collection(db, "branches", selectedBranchId, "categories"),
         {
           name: newCategoryName,
-        }
+        },
       );
 
       const newCategory = {
@@ -146,6 +148,9 @@ const AddCategoryScreen = ({ navigation, route }: { navigation: any }) => {
               value={newCategoryName}
               onChangeText={setNewCategoryName}
             />
+            {inputError !== "" && (
+              <Text style={styles.errorText}>{inputError}</Text>
+            )}
             <Button
               isLoading={useSelector(selectAppLoader)}
               title="Add Category"

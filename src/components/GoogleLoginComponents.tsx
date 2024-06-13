@@ -69,12 +69,25 @@ export default function GoogleLoginComponents({
                 emailVerified,
                 photoURL,
                 branchIds: [],
+              }),
+            );
+            dispatch(
+              setUser({
+                uid: user.uid,
+                isProfileComplete: false,
                 selectedBranchId: "",
               }),
             );
-            dispatch(setUser({ uid: user.uid, isProfileComplete: false }));
           } else {
-            dispatch(setUser({ uid: user.uid, isProfileComplete: true }));
+            const data = docSnapshot.data();
+
+            dispatch(
+              setUser({
+                uid: user.uid,
+                isProfileComplete: true,
+                selectedBranchId: data.branchIds[0],
+              }),
+            );
           }
         })
         .catch((error) => {

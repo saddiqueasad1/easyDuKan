@@ -45,6 +45,7 @@ const EditProductScreen = ({
   const dispatch = useDispatch();
   const { categories } = useSelector((state: RootState) => state.categories);
   const products = useSelector((state: RootState) => state.products);
+  const selectedBranchId = user.selectedBranchId;
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [unitPrice, setUnitPrice] = useState(0);
@@ -176,11 +177,11 @@ const EditProductScreen = ({
             category_id: selectedCategoryId,
             id: itemId,
             purchasePrice: purchasePrice,
-          })
+          }),
         );
       } else {
         const result = await addDoc(
-          collection(db, "users", userId, "products"),
+          collection(db, "branches", selectedBranchId, "products"),
           {
             name,
             description,

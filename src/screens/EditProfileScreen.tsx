@@ -165,7 +165,6 @@ const EditProfileScreen = ({ navigation }: { navigation: any }) => {
           userId: user.uid,
           branchIds,
           branchName: businessName,
-          selectedBranchId,
         }),
       );
 
@@ -174,8 +173,6 @@ const EditProfileScreen = ({ navigation }: { navigation: any }) => {
       // ]);
       dispatch(setAppLoader(false));
       successMessage("Profile Updated");
-      dispatch(setUser({ uid: user.uid, isProfileComplete: true }));
-
       // navigation.goBack();
     } catch (error) {
       console.log(error);
