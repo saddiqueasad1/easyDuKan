@@ -164,7 +164,6 @@ const AddProfileScreen = ({ navigation }: { navigation: any }) => {
           userId: user.uid,
           branchIds,
           branchName: businessName,
-          selectedBranchId,
         }),
       );
 
@@ -173,7 +172,13 @@ const AddProfileScreen = ({ navigation }: { navigation: any }) => {
       // ]);
       dispatch(setAppLoader(false));
       successMessage("Profile Updated");
-      dispatch(setUser({ uid: user.uid, isProfileComplete: true }));
+      dispatch(
+        setUser({
+          uid: user.uid,
+          isProfileComplete: true,
+          selectedBranchId: selectedBranchId,
+        }),
+      );
 
       // navigation.goBack();
     } catch (error) {
