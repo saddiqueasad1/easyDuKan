@@ -34,6 +34,7 @@ const ProfileScreen = ({ navigation }: { navigation: any }) => {
   const [phoneNumber] = useState(user.phoneNumber + "");
   const db = getFirestore();
   const dispatch = useDispatch();
+  const selectedBranchId = user.selectedBranchId;
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -58,7 +59,12 @@ const ProfileScreen = ({ navigation }: { navigation: any }) => {
 
   const fetchItems = async () => {
     try {
-      const itemsCollectionRef = collection(db, "users", user.uid, "products");
+      const itemsCollectionRef = collection(
+        db,
+        "branches",
+        selectedBranchId,
+        "products",
+      );
       const itemsSnapshot = await getDocs(itemsCollectionRef);
       const itemsList = itemsSnapshot.docs.map((doc) => ({
         id: doc.id,

@@ -40,6 +40,7 @@ const ProductsScreen = ({ navigation }: { navigation: any }) => {
 
   const [loader, setLoader] = useState(false);
   const [selectValue, SetSelectValue] = useState("0");
+  const selectedBranchId = user.selectedBranchId;
 
   useEffect(() => {
     fetchItems();
@@ -49,7 +50,12 @@ const ProductsScreen = ({ navigation }: { navigation: any }) => {
   const fetchItems = async () => {
     try {
       setLoader(true);
-      const itemsCollectionRef = collection(db, "users", user.uid, "products");
+      const itemsCollectionRef = collection(
+        db,
+        "branches",
+        selectedBranchId,
+        "products",
+      );
       const itemsSnapshot = await getDocs(itemsCollectionRef);
       const itemsList = itemsSnapshot.docs.map((doc) => ({
         id: doc.id,

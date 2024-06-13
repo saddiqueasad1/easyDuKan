@@ -30,6 +30,9 @@ const ContactProfileScreen = ({ navigation, route }: { navigation: any }) => {
   const [products, setProduct] = useState();
   const db = getFirestore();
   const dispatch = useDispatch();
+  const selectedBranchId = useSelector(
+    (state: RootState) => state.user.selectedBranchId,
+  );
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -54,7 +57,12 @@ const ContactProfileScreen = ({ navigation, route }: { navigation: any }) => {
 
   const fetchItems = async () => {
     try {
-      const itemsCollectionRef = collection(db, "users", userId, "products");
+      const itemsCollectionRef = collection(
+        db,
+        "branches",
+        selectedBranchId,
+        "products",
+      );
       // console.log("itemsCollectionRef id", itemsCollectionRef);
 
       const itemsSnapshot = await getDocs(itemsCollectionRef);

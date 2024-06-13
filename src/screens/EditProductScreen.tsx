@@ -96,7 +96,7 @@ const EditProductScreen = ({
 
       try {
         const categoriesSnapshot = await getDocs(
-          collection(db, "users", userId, "categories")
+          collection(db, "branches", selectedBranchId, "categories"),
         );
         const categoriesList = categoriesSnapshot.docs.map((doc) => ({
           id: doc.id,
@@ -157,14 +157,17 @@ const EditProductScreen = ({
 
     try {
       if (itemId) {
-        await setDoc(doc(db, "users", userId, "products", itemId), {
-          name,
-          description,
-          unitPrice: unitPrice,
-          totalQuantity: totalQuantity,
-          category_id: selectedCategoryId,
-          purchasePrice: purchasePrice,
-        });
+        await setDoc(
+          doc(db, "branches", selectedBranchId, "products", itemId),
+          {
+            name,
+            description,
+            unitPrice: unitPrice,
+            totalQuantity: totalQuantity,
+            category_id: selectedCategoryId,
+            purchasePrice: purchasePrice,
+          }
+        );
         Alert.alert("Success", "Prodduct updated successfully!", [
           { text: "OK", onPress: () => navigation.goBack() },
         ]);
