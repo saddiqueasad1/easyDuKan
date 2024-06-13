@@ -1,20 +1,22 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { IProfile } from "../../utills/types";
 
+const initialState = {
+  username: "",
+  phoneNumber: "",
+  email: "",
+  address: "",
+  userId: "",
+  emailVerified: false,
+  photoURL: "",
+  branchIds: [] as string[],
+  selectedBranchId: "",
+  branchName: "",
+};
+
 const profileSilse = createSlice({
   name: "profile",
-  initialState: {
-    username: "",
-    phoneNumber: "",
-    email: "",
-    address: "",
-    userId: "",
-    emailVerified: false,
-    photoURL: "",
-    branchIds: [],
-    selectedBranchId: "",
-    branchName: "",
-  },
+  initialState,
   reducers: {
     setProfile(state, action: PayloadAction<IProfile>) {
       state.username = action.payload.username;
@@ -28,9 +30,10 @@ const profileSilse = createSlice({
       state.selectedBranchId = action.payload.selectedBranchId || "";
       state.branchIds = action.payload.branchIds || [];
     },
+    clearProfile: () => initialState,
   },
 });
 
-export const { setProfile } = profileSilse.actions;
+export const { setProfile, clearProfile } = profileSilse.actions;
 
 export default profileSilse.reducer;

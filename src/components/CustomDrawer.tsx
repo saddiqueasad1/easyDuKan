@@ -1,15 +1,8 @@
-import {
-  AntDesign,
-  Entypo,
-  FontAwesome,
-  Ionicons,
-  Octicons,
-} from "@expo/vector-icons";
-import React, { useContext, useState } from "react";
+import { AntDesign, Ionicons, Octicons } from "@expo/vector-icons";
+import React, { useState } from "react";
 import { FontAwesome5 } from "@expo/vector-icons";
 import {
   Image,
-  Linking,
   SafeAreaView,
   StyleSheet,
   Text,
@@ -22,11 +15,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../redux/store";
 import { getAuth, signOut } from "firebase/auth";
 import { clearUser } from "../redux/slices/userSlice";
+import { clearProfile } from "../redux/slices/profilleSlice";
 const CustomDrawer = ({ navigation }) => {
   const user = useSelector((state: RootState) => state.user);
   const profile = useSelector((state: RootState) => state.profile);
   const { username, email, address } = profile;
-  const [phoneNumber] = useState(user?.phoneNumber + "");
+  const [phoneNumber] = useState(profile?.phoneNumber + "");
   const dispatch = useDispatch();
   const styles = getStyles(AppColors);
   const handleEditProfile = () => {
@@ -38,6 +32,7 @@ const CustomDrawer = ({ navigation }) => {
     await signOut(auth)
       .then(() => {
         dispatch(clearUser());
+        dispatch(clearProfile());
         console.log("logout");
       })
       .catch((error) => {

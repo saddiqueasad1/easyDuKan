@@ -56,7 +56,7 @@ export interface IProfile {
   userId?: string;
   emailVerified?: boolean;
   photoURL?: string;
-  branchIds: [];
+  branchIds: string[];
   selectedBranchId: string;
   branchName?: string;
 }

@@ -63,16 +63,17 @@ const OtpVerification = ({
         .then(async (res) => {
           console.log("res of ()=> firebaseOTPVerification", phoneNumber);
           console.log(res.user.toJSON());
-          dispatch(setUser(res.user.toJSON() as User));
-          setShowSuccess(true);
-
           const userRef = doc(db, "users", res.user.uid);
           const docSnapshot = await getDoc(userRef);
           if (!docSnapshot.exists()) {
             await setDoc(doc(db, "users", res.user.uid), {
               phoneNumber: phoneNumber,
             });
+            dispatch(setUser({ uid: res.user.uid, isProfileComplete: false }));
+          } else {
+            dispatch(setUser({ uid: res.user.uid, isProfileComplete: true }));
           }
+          setShowSuccess(true);
         })
         .catch((err) => {
           alert(err.message);

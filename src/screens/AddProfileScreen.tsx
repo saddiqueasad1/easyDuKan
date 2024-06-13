@@ -34,16 +34,16 @@ import { setAppLoader } from "../redux/slices/loaderSlice";
 import { successMessage } from "../utills/GlobalMethods";
 import FilePickerModal from "../components/filepiker";
 import { setUser } from "../redux/slices/userSlice";
-const EditProfileScreen = ({ navigation }: { navigation: any }) => {
+const AddProfileScreen = ({ navigation }: { navigation: any }) => {
   const user = useSelector((state: RootState) => state.user);
   const profile = useSelector((state: RootState) => state.profile);
   const imageRef = useRef(null);
-  const [image, setImage] = React.useState([profile?.photoURL]);
+  const [image, setImage] = React.useState([profile.photoURL]);
 
   const [username, setUsername] = useState(profile.username);
-  const [phoneNumber, setPhoneNumber] = useState(profile.phoneNumber + "");
+  const [phoneNumber, setPhoneNumber] = useState(user.phoneNumber + "");
   const [email, setEmail] = useState(profile.email);
-  const [businessName, setBusinessName] = useState(profile.photoURL);
+  const [businessName, setBusinessName] = useState(profile?.branchName);
   const [address, setAddress] = useState(profile.address);
 
   const db = getFirestore();
@@ -53,10 +53,9 @@ const EditProfileScreen = ({ navigation }: { navigation: any }) => {
   }
   const saveImages = async () => {
     if (!username || !phoneNumber || !email || !businessName || !address) {
-      Alert.alert("Error", "All fields are required except the image.");
+      Alert.alert("Error", "All fields are required.");
       return;
     }
-
     if (image.length === 0) {
       dispatch(setAppLoader(true));
       saveProfile(profile.photoURL);
@@ -67,6 +66,7 @@ const EditProfileScreen = ({ navigation }: { navigation: any }) => {
       saveProfile(profile.photoURL);
       return;
     }
+
     try {
       dispatch(setAppLoader(true));
       const imageUrls = [];
@@ -77,21 +77,20 @@ const EditProfileScreen = ({ navigation }: { navigation: any }) => {
         const name = split.pop();
         const imageRef = storageRef(
           storage,
-          `Users/${profile.userId}/images/${name}`
+          `Users/${profile.userId}/images/${name}`,
         );
 
         const metadata = {
           contentType: "image/jpeg",
         };
 
-        // // Get the blob from the image URI
         try {
           const imageBlob = await getBlobFromFile(imageUri);
 
           const uploadTask = await uploadBytes(
             imageRef,
             imageBlob,
-            metadata
+            metadata,
           ).catch((err) => {
             console.log("Error uploading images:", err);
           });
@@ -185,7 +184,6 @@ const EditProfileScreen = ({ navigation }: { navigation: any }) => {
       dispatch(setAppLoader(false));
     }
   };
-  console.log(image);
 
   return (
     <ScreenWrapper scrollEnabled>
@@ -225,7 +223,7 @@ const EditProfileScreen = ({ navigation }: { navigation: any }) => {
           placeholder="Phone Number"
           value={phoneNumber}
           onChangeText={setPhoneNumber}
-          editable={false}
+          editable={!phoneNumber ? true : false}
         />
         <Text style={styles.text}>Email</Text>
 
@@ -234,6 +232,7 @@ const EditProfileScreen = ({ navigation }: { navigation: any }) => {
           placeholder="Email"
           value={email}
           onChangeText={setEmail}
+          editable={!email ? true : false}
         />
         <Text style={styles.text}>Address</Text>
 
@@ -339,4 +338,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default EditProfileScreen;
+export default AddProfileScreen;

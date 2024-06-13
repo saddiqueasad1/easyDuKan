@@ -1,48 +1,31 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { IdTokenResult, User, UserMetadata } from "firebase/auth";
 
-const initialState: User = {
-  emailVerified: false,
-  isAnonymous: false,
-  metadata: {} as UserMetadata,
-  providerData: [],
-  refreshToken: "",
-  tenantId: null,
-  delete: function (): Promise<void> {
-    throw new Error("Function not implemented.");
-  },
-  getIdToken: function (forceRefresh?: boolean): Promise<string> {
-    throw new Error("Function not implemented.");
-  },
-  getIdTokenResult: function (forceRefresh?: boolean): Promise<IdTokenResult> {
-    throw new Error("Function not implemented.");
-  },
-  reload: function (): Promise<void> {
-    throw new Error("Function not implemented.");
-  },
-  toJSON: function (): object {
-    throw new Error("Function not implemented.");
-  },
-  displayName: null,
-  email: null,
-  phoneNumber: null,
-  photoURL: null,
-  providerId: "",
+interface UserState {
+  uid: string;
+  isProfileComplete: boolean;
+}
+
+interface SetUserPayload {
+  uid: string;
+  isProfileComplete: boolean;
+}
+
+const initialState: UserState = {
   uid: "",
+  isProfileComplete: false,
 };
 
 const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
-    setUser(state, action: PayloadAction<User>) {
-      return {
-        ...state,
-        ...action.payload,
-      };
+    setUser: (state, action: PayloadAction<SetUserPayload>) => {
+      state.uid = action.payload.uid;
+      state.isProfileComplete = action.payload.isProfileComplete;
     },
-    clearUser() {
-      return initialState;
+    clearUser: (state) => {
+      state.uid = "";
+      state.isProfileComplete = false;
     },
   },
 });

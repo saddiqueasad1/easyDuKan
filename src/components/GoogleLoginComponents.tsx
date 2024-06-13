@@ -6,7 +6,6 @@ import {
   getAuth,
   GoogleAuthProvider,
   signInWithCredential,
-  User,
 } from "firebase/auth";
 import { Color, FontFamily } from "../utills/GlobalStyles";
 import { useTranslation } from "react-i18next";
@@ -36,14 +35,10 @@ export default function GoogleLoginComponents({
 
   useEffect(() => {
     if (response?.type === "success") {
-      console.log("success--------------------");
-
       const { authentication } = response;
       const id_token = authentication?.idToken;
 
-      // Create a credential with the idToken
       const credential = GoogleAuthProvider.credential(id_token);
-      // Sign in with the credential
       signInWithCredential(auth, credential)
         .then(async (userCredential) => {
           const user = userCredential.user;
@@ -73,10 +68,14 @@ export default function GoogleLoginComponents({
                 userId: user.uid,
                 emailVerified,
                 photoURL,
-              })
+                branchIds: [],
+                selectedBranchId: "",
+              }),
             );
+            dispatch(setUser({ uid: user.uid, isProfileComplete: false }));
+          } else {
+            dispatch(setUser({ uid: user.uid, isProfileComplete: true }));
           }
-          dispatch(setUser(user as User));
         })
         .catch((error) => {
           console.error("Error signing in with Google:", error);
@@ -87,7 +86,6 @@ export default function GoogleLoginComponents({
 
       // Handle successful authentication here
     } else {
-      console.log("fail--------------------");
       setLoading(false);
     }
   }, [response]);
