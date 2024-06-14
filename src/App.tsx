@@ -11,7 +11,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "./redux/store";
 import { setProfile } from "./redux/slices/profilleSlice";
 import Loader from "./components/Loder";
-
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 const App = () => {
   const [hideSplashScreen] = useState(true);
   const db = getFirestore();
@@ -34,8 +34,6 @@ const App = () => {
         if (docSnap.exists()) {
           const data = docSnap.data();
           const newData = { ...data, userId: user.uid };
-          console.log("log of user data", newData,data);
-
           dispatch(setProfile(newData as any));
         }
       } catch (error) {
@@ -51,12 +49,18 @@ const App = () => {
   }
 
   return (
-    <I18nextProvider i18n={i18n}>
-      <NavigationContainer>
-        <Loader />
-        {hideSplashScreen ? <AppNavigator /> : null}
-      </NavigationContainer>
-    </I18nextProvider>
+    <GestureHandlerRootView
+      style={{
+        flex: 1,
+      }}
+    >
+      <I18nextProvider i18n={i18n}>
+        <NavigationContainer>
+          <Loader />
+          {hideSplashScreen ? <AppNavigator /> : null}
+        </NavigationContainer>
+      </I18nextProvider>
+    </GestureHandlerRootView>
   );
 };
 export default App;

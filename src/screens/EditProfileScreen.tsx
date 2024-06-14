@@ -43,7 +43,7 @@ const EditProfileScreen = ({ navigation }: { navigation: any }) => {
   const [username, setUsername] = useState(profile.username);
   const [phoneNumber, setPhoneNumber] = useState(profile.phoneNumber + "");
   const [email, setEmail] = useState(profile.email);
-  const [businessName, setBusinessName] = useState(profile.photoURL);
+  const [businessName, setBusinessName] = useState(profile.branchName);
   const [address, setAddress] = useState(profile.address);
 
   const db = getFirestore();
@@ -110,8 +110,6 @@ const EditProfileScreen = ({ navigation }: { navigation: any }) => {
       }
 
       if (imageUrls.length > 0) {
-        console.log("set to sever now in profile", imageUrls[0]);
-
         saveProfile(imageUrls[0]);
       }
 
@@ -183,12 +181,10 @@ const EditProfileScreen = ({ navigation }: { navigation: any }) => {
       dispatch(setAppLoader(false));
     }
   };
-  console.log(image);
 
   return (
     <ScreenWrapper scrollEnabled>
       <View style={styles.container}>
-        <Text style={styles.title}>Profile</Text>
         <TouchableOpacity
           style={{
             alignSelf: "center",

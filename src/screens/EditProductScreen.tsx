@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   View,
   TextInput,
@@ -8,9 +8,12 @@ import {
   ActivityIndicator,
   ScrollView,
   TouchableOpacity,
+  Image,
+  Platform
 } from "react-native";
-import AntDesign from "@expo/vector-icons/AntDesign";
-
+import DraggableFlatList, {
+  ScaleDecorator,
+} from "react-native-draggable-flatlist"; 
 import { Picker } from "@react-native-picker/picker";
 import {
   doc,
@@ -20,6 +23,14 @@ import {
   addDoc,
   getFirestore,
 } from "firebase/firestore";
+import {
+  deleteObject,
+  getDownloadURL,
+  getStorage,
+  ref as storageRef,
+  uploadBytes,
+} from "@firebase/storage";
+import { AntDesign, Ionicons, Entypo } from "@expo/vector-icons";
 import { useDispatch, useSelector } from "react-redux";
 import { setCategories } from "../redux/slices/categoriesSlice";
 import { RootState } from "../redux/store";
@@ -31,7 +42,7 @@ import { Color } from "../utills/GlobalStyles";
 import Button from "../components/button";
 import { setAppLoader } from "../redux/slices/loaderSlice";
 import { successMessage } from "../utills/GlobalMethods";
-
+import FilePickerModal from "../components/filepiker";
 const EditProductScreen = ({
   route,
   navigation,
@@ -52,7 +63,8 @@ const EditProductScreen = ({
   const [totalQuantity, setTotalQuantity] = useState(0);
   const [purchasePrice, setPurchasePrice] = useState(0);
   const [selectedCategoryId, setSelectedCategoryId] = useState("");
-  const [loading, setLoading] = useState(false);
+  const imageRef = useRef(null);
+  const [image, setImage] = useState([]);
   const [inputErrors, setInputErrors] = useState({
     name: "",
     description: "",
@@ -61,7 +73,61 @@ const EditProductScreen = ({
     purchasePrice: "",
   });
   const db = getFirestore();
+  async function getBlobFromFile(imageUri) {
+    return (await fetch(imageUri)).blob();
+  }
+  console.log(selectedCategoryId);
+  
+  const saveImages = async () => {
+    try {
+      dispatch(setAppLoader(true));
+      const imageUrls = [];
+      const storage = getStorage();
 
+      for (const imageUri of image) {
+        const split = imageUri.split("/");
+        const name = split.pop();
+        const imageRef = storageRef(
+          storage,
+          `product/${selectedBranchId}/images/${name}`
+        );
+
+        const metadata = {
+          contentType: "image/jpeg",
+        };
+
+        // // Get the blob from the image URI
+        try {
+          const imageBlob = await getBlobFromFile(imageUri);
+
+          const uploadTask = await uploadBytes(
+            imageRef,
+            imageBlob,
+            metadata
+          ).catch((err) => {
+            console.log("Error uploading images:", err);
+          });
+          const snapshot = await uploadTask;
+
+          if (snapshot) {
+            const downloadUrl = await getDownloadURL(imageRef);
+            if (downloadUrl) {
+              imageUrls.push(downloadUrl);
+            }
+          }
+        } catch (error) {
+          console.log("Error uploading images:", error);
+          dispatch(setAppLoader(false));
+        }
+      }
+
+      // dispatch(setAppLoader(false));
+      setImage([]);
+      return imageUrls;
+    } catch (error) {
+      console.log("muktipule iamge", error);
+    }
+  };
   useEffect(() => {
     navigation.setOptions({
       title: itemId ? "Edit Product" : "Add Product",
@@ -96,7 +162,7 @@ const EditProductScreen = ({
 
       try {
         const categoriesSnapshot = await getDocs(
-          collection(db, "branches", selectedBranchId, "categories"),
+          collection(db, "branches", selectedBranchId, "categories")
         );
         const categoriesList = categoriesSnapshot.docs.map((doc) => ({
           id: doc.id,
@@ -157,6 +223,7 @@ const EditProductScreen = ({
 
     try {
       if (itemId) {
+       let img=await saveImages()
         await setDoc(
           doc(db, "branches", selectedBranchId, "products", itemId),
           {
@@ -166,6 +233,7 @@ const EditProductScreen = ({
             totalQuantity: totalQuantity,
             category_id: selectedCategoryId,
             purchasePrice: purchasePrice,
+            productImages:img
           }
         );
         Alert.alert("Success", "Prodduct updated successfully!", [
@@ -180,9 +248,10 @@ const EditProductScreen = ({
             category_id: selectedCategoryId,
             id: itemId,
             purchasePrice: purchasePrice,
-          }),
+          })
         );
       } else {
+        let img=await saveImages()
         const result = await addDoc(
           collection(db, "branches", selectedBranchId, "products"),
           {
@@ -192,6 +261,7 @@ const EditProductScreen = ({
             totalQuantity: totalQuantity,
             category_id: selectedCategoryId,
             purchasePrice: purchasePrice,
+            productImages:img
           }
         );
         dispatch(
@@ -220,6 +290,39 @@ const EditProductScreen = ({
     }
   };
 
+  const renderItem = ({ item, drag, isActive }) => (
+    <ScaleDecorator>
+      <TouchableOpacity
+        onLongPress={drag}
+        disabled={isActive}
+        style={{ flexDirection: "row" }}
+      >
+        <Image
+          style={{
+            height: height(7),
+            width: height(7),
+            borderRadius: height(1),
+            marginLeft: width(3),
+          }}
+          source={{ uri: item }}
+        />
+        <TouchableOpacity
+          onPress={() => {
+            let temp;
+            temp = image.filter((i) => i !== item);
+            setImage(temp);
+          }}
+          style={{ height: height(3) }}
+        >
+          <Entypo
+            name="squared-cross"
+            size={height(2)}
+            color={Color.primaryColor}
+          />
+        </TouchableOpacity>
+      </TouchableOpacity>
+    </ScaleDecorator>
+  );
   const handleInputChange = (key: string, value: string) => {
     setInputErrors((prevErrors) => ({ ...prevErrors, [key]: "" }));
     switch (key) {
@@ -305,7 +408,9 @@ const EditProductScreen = ({
           </View>
         ) : (
           <TouchableOpacity
-            onPress={() => navigation.navigate("AddCategoryScreen",{ add: true })}
+            onPress={() =>
+              navigation.navigate("AddCategoryScreen", { add: true })
+            }
             style={{
               backgroundColor: Color.backgroundColor,
               padding: height(2),
@@ -335,6 +440,90 @@ const EditProductScreen = ({
             </View>
           </TouchableOpacity>
         )}
+
+        <View
+          style={{
+            backgroundColor: Color.backgroundColor,
+            borderRadius: width(2),
+            width: width(90),
+            alignContent: "center",
+            alignItems: "center",
+            paddingVertical: height(2),
+            marginBottom: height(2),
+          }}
+        >
+          {!(image != null && image.length > 0) ? (
+            <View
+              style={{ justifyContent: "space-around", alignItems: "center" }}
+            >
+              <TouchableOpacity
+                style={{
+                  backgroundColor: Color.primaryColor,
+                  borderRadius: width(2),
+                  padding: height(1),
+                }}
+                onPress={() => imageRef.current.show()}
+              >
+                <Ionicons name="camera" size={height(7)} color={"white"} />
+              </TouchableOpacity>
+            </View>
+          ) : (
+            <View style={{ flex: 1 }}>
+              <DraggableFlatList
+                data={image}
+                horizontal
+                style={{ marginHorizontal: width(2) }}
+                onDragEnd={({ data }) => setImage(data)}
+                keyExtractor={(index, item) => {
+                  return `key-${index}`;
+                }}
+                renderItem={renderItem}
+                ListHeaderComponent={
+                  image?.length < 3 && (
+                    <TouchableOpacity
+                      style={{
+                        backgroundColor: Color.primaryColor,
+                        height: height(7),
+                        width: height(7),
+                        borderRadius: height(1),
+                        alignSelf: "center",
+                        justifyContent: "center",
+                        alignItems: "center",
+                      }}
+                      onPress={() => imageRef.current.show()}
+                    >
+                      <Ionicons name="add" size={height(4)} color={"white"} />
+                    </TouchableOpacity>
+                  )
+                }
+              />
+            </View>
+          )}
+          {image.length <= 0 ? (
+            <>
+              <Text
+                style={{
+                  fontWeight: "bold",
+                  fontSize: height(2),
+                  padding: width(3),
+                  color: Color.black,
+                }}
+              >
+                Attach Images
+              </Text>
+            </>
+          ) : (
+            <Text
+              style={{
+                fontSize: height(1.2),
+                paddingTop: height(3),
+                color: Color.black,
+              }}
+            >
+              Maximum 3 Images
+            </Text>
+          )}
+        </View>
         <Text style={styles.text}>Name</Text>
         <TextInput
           style={styles.input}
@@ -398,6 +587,24 @@ const EditProductScreen = ({
           />
         </View>
       </View>
+      <FilePickerModal
+        ref={imageRef}
+        multi={true}
+        onFilesSelected={(img) => {
+          const selectedImages = img.map((imageUri) => {
+            return Platform.OS === "android"
+              ? imageUri.uri
+              : imageUri.uri.replace("file://", "");
+          });
+          const combinedImages = [...image, ...selectedImages];
+
+          // If the total number of images exceeds 7, slice the array to keep only the first 7
+          const limitedImages = combinedImages.slice(0, 3);
+
+          // Update the state with the limited images
+          setImage(limitedImages);
+        }}
+      />
     </ScreenWrapper>
   );
 };

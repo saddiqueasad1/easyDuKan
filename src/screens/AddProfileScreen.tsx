@@ -42,9 +42,10 @@ const AddProfileScreen = ({ navigation }: { navigation: any }) => {
 
   const [username, setUsername] = useState(profile.username);
   const [phoneNumber, setPhoneNumber] = useState(user.phoneNumber + "");
-  const [email, setEmail] = useState(profile.email);
+  const [email, setEmail] = useState(profile?.email);
   const [businessName, setBusinessName] = useState(profile?.branchName);
   const [address, setAddress] = useState(profile.address);
+console.log(profile?.branchName);
 
   const db = getFirestore();
   const dispatch = useDispatch();
@@ -77,7 +78,7 @@ const AddProfileScreen = ({ navigation }: { navigation: any }) => {
         const name = split.pop();
         const imageRef = storageRef(
           storage,
-          `Users/${profile.userId}/images/${name}`,
+          `Users/${profile.userId}/images/${name}`
         );
 
         const metadata = {
@@ -90,7 +91,7 @@ const AddProfileScreen = ({ navigation }: { navigation: any }) => {
           const uploadTask = await uploadBytes(
             imageRef,
             imageBlob,
-            metadata,
+            metadata
           ).catch((err) => {
             console.log("Error uploading images:", err);
           });
@@ -164,7 +165,7 @@ const AddProfileScreen = ({ navigation }: { navigation: any }) => {
           userId: user.uid,
           branchIds,
           branchName: businessName,
-        }),
+        })
       );
 
       // Alert.alert("Success", "Profile saved successfully!", [
@@ -177,7 +178,7 @@ const AddProfileScreen = ({ navigation }: { navigation: any }) => {
           uid: user.uid,
           isProfileComplete: true,
           selectedBranchId: selectedBranchId,
-        }),
+        })
       );
 
       // navigation.goBack();
@@ -193,7 +194,10 @@ const AddProfileScreen = ({ navigation }: { navigation: any }) => {
   return (
     <ScreenWrapper scrollEnabled>
       <View style={styles.container}>
-        <Text style={styles.title}>Profile</Text>
+        <Text style={styles.title}>Welcome to easyDukan !</Text>
+        <Text style={styles.title2}>
+          To get started, please provide us with the necessary details
+        </Text>
         <TouchableOpacity
           style={{
             alignSelf: "center",
@@ -210,7 +214,7 @@ const AddProfileScreen = ({ navigation }: { navigation: any }) => {
             style={styles.image}
           />
           <View style={styles.camera}>
-            <Entypo name="camera" size={height(3)} color={Color.primaryColor} />
+            <Entypo name="camera" size={height(2)} color={Color.primaryColor} />
           </View>
         </TouchableOpacity>
 
@@ -228,7 +232,7 @@ const AddProfileScreen = ({ navigation }: { navigation: any }) => {
           placeholder="Phone Number"
           value={phoneNumber}
           onChangeText={setPhoneNumber}
-          editable={!phoneNumber ? true : false}
+          editable={!user?.phoneNumber ? true : false}
         />
         <Text style={styles.text}>Email</Text>
 
@@ -237,24 +241,24 @@ const AddProfileScreen = ({ navigation }: { navigation: any }) => {
           placeholder="Email"
           value={email}
           onChangeText={setEmail}
-          editable={!email ? true : false}
+          editable={!profile?.email ? true : false}
         />
         <Text style={styles.text}>Address</Text>
-
-        <TextInput
-          style={styles.input}
-          placeholder="Business Name"
-          value={businessName}
-          onChangeText={setBusinessName}
-        />
-        <Text style={styles.text}>Business Name</Text>
-
         <TextInput
           style={styles.input}
           placeholder="Address"
           value={address}
           onChangeText={setAddress}
         />
+
+        <Text style={styles.text}>Business Name</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Business Name"
+          value={businessName}
+          onChangeText={setBusinessName}
+        />
+
         <Button
           title={"Save Profile"}
           onPress={saveImages}
@@ -279,7 +283,7 @@ const AddProfileScreen = ({ navigation }: { navigation: any }) => {
 
 const styles = StyleSheet.create({
   container: {
-    flexGrow: 1,
+    flex: 1,
     padding: height(2),
   },
   title: {
@@ -288,6 +292,14 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginVertical: height(3),
     color: Color.primaryColor,
+  },
+  title2: {
+    fontSize: height(1.8),
+    fontWeight: "bold",
+    textAlign: "center",
+    marginVertical: height(1),
+    marginHorizontal: width(10),
+    color: Color.colorDarkslateblue,
   },
   text: {
     textAlign: "left",
@@ -325,8 +337,8 @@ const styles = StyleSheet.create({
     zIndex: 1,
   },
   image: {
-    width: height(20),
-    height: height(20),
+    width: height(12),
+    height: height(12),
     alignSelf: "center",
     marginVertical: height(1),
     borderWidth: height(0.3),
@@ -335,10 +347,10 @@ const styles = StyleSheet.create({
   },
   camera: {
     position: "absolute",
-    bottom: height(2),
-    right: height(2),
+    bottom: height(1),
+    right: height(1),
     backgroundColor: Color.secondaryColor,
-    padding: height(0.5),
+    padding: height(0.7),
     borderRadius: height(5),
   },
 });

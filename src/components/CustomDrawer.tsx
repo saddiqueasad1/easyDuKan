@@ -16,11 +16,12 @@ import { RootState } from "../redux/store";
 import { getAuth, signOut } from "firebase/auth";
 import { clearUser } from "../redux/slices/userSlice";
 import { clearProfile } from "../redux/slices/profilleSlice";
+import { ScrollView } from "react-native-gesture-handler";
 const CustomDrawer = ({ navigation }) => {
   const user = useSelector((state: RootState) => state.user);
   const profile = useSelector((state: RootState) => state.profile);
-  const { username, email, address } = profile;
-  const [phoneNumber] = useState(profile?.phoneNumber + "");
+  const { username, email, address,phoneNumber } = profile;
+  
   const dispatch = useDispatch();
   const styles = getStyles(AppColors);
   const handleEditProfile = () => {
@@ -80,7 +81,7 @@ const CustomDrawer = ({ navigation }) => {
           </TouchableOpacity>
         </View>
       </View>
-      <View style={{ marginVertical: height(1) }}>
+      <ScrollView style={{ marginVertical: height(1) }}>
         <TouchableOpacity
           onPress={() => {
             navigation.navigate("AddCategoryScreen");
@@ -173,7 +174,7 @@ const CustomDrawer = ({ navigation }) => {
 
           <Text style={[styles.dbtext, { color: "red" }]}>Log Out</Text>
         </TouchableOpacity>
-      </View>
+      </ScrollView>
     </SafeAreaView>
   );
 };
@@ -302,7 +303,7 @@ const getStyles = (AppColors) =>
       color: "#495057",
     },
     drawrbtn: {
-      padding: height(2),
+      padding: height(1.5),
       backgroundColor: "#EBEBED",
       marginVertical: height(0.5),
       marginHorizontal: height(1),
