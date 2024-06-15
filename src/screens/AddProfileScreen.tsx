@@ -41,11 +41,10 @@ const AddProfileScreen = ({ navigation }: { navigation: any }) => {
   const [image, setImage] = React.useState([profile.photoURL]);
 
   const [username, setUsername] = useState(profile.username);
-  const [phoneNumber, setPhoneNumber] = useState(user.phoneNumber + "");
+  const [phoneNumber, setPhoneNumber] = useState(profile.phoneNumber);
   const [email, setEmail] = useState(profile?.email);
   const [businessName, setBusinessName] = useState(profile?.branchName);
   const [address, setAddress] = useState(profile.address);
-console.log(profile?.branchName);
 
   const db = getFirestore();
   const dispatch = useDispatch();
@@ -164,8 +163,9 @@ console.log(profile?.branchName);
           address,
           userId: user.uid,
           branchIds,
+          photoURL,
           branchName: businessName,
-        })
+        }),
       );
 
       // Alert.alert("Success", "Profile saved successfully!", [
@@ -232,7 +232,7 @@ console.log(profile?.branchName);
           placeholder="Phone Number"
           value={phoneNumber}
           onChangeText={setPhoneNumber}
-          editable={!user?.phoneNumber ? true : false}
+          editable={!profile?.phoneNumber ? true : false}
         />
         <Text style={styles.text}>Email</Text>
 
