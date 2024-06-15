@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { TouchableOpacity, Text, StyleSheet, View, Image } from "react-native";
 import Modal from "react-native-modal";
 import SwiperFlatList from "react-native-swiper-flatlist";
-import { IBill, IItem, IProduct } from "../../utills/types";
+import { IBill, IItem, IProduct, IProfile } from "../../utills/types";
 import QuantityContainer from "./QuantityContainer";
 import { Color } from "../../utills/GlobalStyles";
 import { height, width } from "../../utills/Dimension";
@@ -14,18 +14,27 @@ import {
   increaseOrderQuantity,
   setOrder,
 } from "../../redux/slices/orderSlice";
+import { getFirestore, serverTimestamp } from "firebase/firestore";
 
 interface ProductItemProps {
   item: IProduct;
   navigation: any;
+  shopUser: IProfile | undefined;
+  shopUserId: string;
 }
 
-const ProductShopItem: React.FC<ProductItemProps> = ({ item, navigation }) => {
+const ProductShopItem: React.FC<ProductItemProps> = ({
+  item,
+  navigation,
+  shopUser,
+  shopUserId,
+}) => {
   const [isShow, setIsShow] = useState(false);
   const closeModel = () => setIsShow(false);
   const order = useSelector((state: RootState) => state.order.order);
   const quantityItem = order?.items.find((oneItem) => oneItem.id === item.id);
   const quantity = quantityItem ? quantityItem.quantity : 0;
+  const profile = useSelector((state: RootState) => state.profile);
   console.log("quantity", quantity);
   const dispatch = useDispatch();
   const handleIncreaseQuantity = (
@@ -52,26 +61,29 @@ const ProductShopItem: React.FC<ProductItemProps> = ({ item, navigation }) => {
         name: item.name,
       };
 
-      function generateId(): string {
-        return (
-          Math.random().toString(36).substring(2, 15) +
-          Math.random().toString(36).substring(2, 15)
-        );
-      }
-
       const newBill: IBill = {
         id: generateId(), // Assuming user.uid is used as billId
-        customerId: "", // Provide customer ID here
-        customerName: "", // Provide customer name here
+        customerId: profile.userId, // Provide customer ID here
+        customerName: profile.username, // Provide customer name here
         date: new Date().toISOString(), // Use current date and time
         totalAmount: updatedItem.total,
         status: "pending", // Set initial status
         items: [itemNew],
         totalQuantity: 1,
+        shopUserId,
+        shopId: shopUser?.branchIds[0] + "",
+        createdAt: serverTimestamp(),
+        updatedAt: serverTimestamp(),
       };
       dispatch(setOrder(newBill));
     }
   };
+  function generateId(): string {
+    return (
+      Math.random().toString(36).substring(2, 15) +
+      Math.random().toString(36).substring(2, 15)
+    );
+  }
 
   const handleDecreaseQuantity = (
     id: string,

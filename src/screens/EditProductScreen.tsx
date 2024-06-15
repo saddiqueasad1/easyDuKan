@@ -76,8 +76,6 @@ const EditProductScreen = ({
   async function getBlobFromFile(imageUri) {
     return (await fetch(imageUri)).blob();
   }
-  console.log(selectedCategoryId);
-  
   const saveImages = async () => {
     try {
       dispatch(setAppLoader(true));
@@ -89,7 +87,7 @@ const EditProductScreen = ({
         const name = split.pop();
         const imageRef = storageRef(
           storage,
-          `product/${selectedBranchId}/images/${name}`
+          `product/${selectedBranchId}/images/${name}`,
         );
 
         const metadata = {
@@ -178,7 +176,7 @@ const EditProductScreen = ({
 
     fetchItem();
     fetchCategories();
-  }, [userId, itemId, db, dispatch, navigation, products]);
+  }, []);
 
   const validateInputs = () => {
     let valid = true;

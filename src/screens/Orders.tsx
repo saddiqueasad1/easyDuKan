@@ -1,61 +1,44 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, FlatList, StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  FlatList,
+  StyleSheet,
+  TouchableOpacity,
+} from "react-native";
 import ScreenWrapper from "../components/ScreenWrapper";
 import Header from "../components/Head";
+import { getOrdersByCustomerId, getOrdersByShopUserId } from "../api/orders";
+import { useSelector } from "react-redux";
+import { RootState } from "../redux/store";
+import { IBill } from "../utills/types";
+import { Color } from "../utills/GlobalStyles";
 
-interface Order {
-  id: string;
-  customerId: string;
-  customerName: string;
-  totalQuantity: number;
-  products: {
-    productId: string;
-    name: string;
-    category: string;
-    quantity: number;
-  }[];
-}
 const OrdersScreen: React.FC = () => {
   const [searchText, setSearchText] = useState("");
+  const [activeTab, setActiveTab] = useState("incoming");
+  const profile = useSelector((state: RootState) => state.profile);
+  const [incomingOrders, setIncomingOrders] = useState<IBill[]>([]);
+  const [outgoingOrders, setOutgoingOrders] = useState<IBill[]>([]);
 
-  const [orders, setOrders] = useState<Order[]>([
-    {
-      id: "1",
-      customerId: "CUST123",
-      customerName: "John Doe",
-      totalQuantity: 3,
-      products: [
-        {
-          productId: "P001",
-          name: "T-Shirt",
-          category: "Clothing",
-          quantity: 1,
-        },
-        { productId: "P002", name: "Jeans", category: "Clothing", quantity: 2 },
-      ],
-    },
-    {
-      id: "2",
-      customerId: "CUST456",
-      customerName: "Jane Smith",
-      totalQuantity: 1,
-      products: [
-        {
-          productId: "P003",
-          name: "Book",
-          category: "Stationery",
-          quantity: 1,
-        },
-      ],
-    },
-  ]);
+  useEffect(() => {
+    const customerId = profile.userId;
 
-  // Dummy data for demonstration purposes
+    getOrdersByCustomerId(customerId).then((orders) => {
+      console.log("orders 11111");
 
-  // Simulate fetching orders from an API or database
-  // Replace with your actual data fetching logic
+      console.log(orders);
+      setOutgoingOrders(orders);
+    });
 
-  const renderOrder = ({ item }: { item: Order }) => {
+    getOrdersByShopUserId(customerId).then((orders) => {
+      console.log("orders 222");
+      console.log(orders);
+      setIncomingOrders(orders);
+    });
+  }, []);
+
+  const renderOrder = ({ item }: { item: IBill }) => {
     if (
       item?.customerName?.toLowerCase()?.includes(searchText?.toLowerCase())
     ) {
@@ -64,24 +47,15 @@ const OrdersScreen: React.FC = () => {
           <Text style={styles.customerName}>{item.customerName}</Text>
           <Text style={styles.orderId}>Order #{item.id}</Text>
           <Text style={styles.orderTotal}>
-            Total Quantity: {item.totalQuantity}
+            Total Quantity: {item.totalQuantity} , Price {item.totalAmount}
           </Text>
-          <FlatList
-            data={item.products}
-            renderItem={({ item }: { item: Order["products"][number] }) => (
-              <View style={styles.productItem}>
-                <Text style={styles.productName}>{item.name}</Text>
-                <Text style={styles.productDetails}>
-                  Category: {item.category}, Quantity: {item.quantity}
-                </Text>
-              </View>
-            )}
-            keyExtractor={(item) => item.productId}
-          />
+          <Text style={styles.orderDate}>Date: {item.date}</Text>
         </View>
       );
     }
   };
+
+  const orders = activeTab === "incoming" ? incomingOrders : outgoingOrders;
 
   return (
     <ScreenWrapper
@@ -90,6 +64,20 @@ const OrdersScreen: React.FC = () => {
       )}
     >
       <View style={styles.container}>
+        <View style={styles.tabsContainer}>
+          <TouchableOpacity
+            style={[styles.tab, activeTab === "incoming" && styles.activeTab]}
+            onPress={() => setActiveTab("incoming")}
+          >
+            <Text style={styles.tabText}>Incoming</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.tab, activeTab === "outgoing" && styles.activeTab]}
+            onPress={() => setActiveTab("outgoing")}
+          >
+            <Text style={styles.tabText}>Outgoing</Text>
+          </TouchableOpacity>
+        </View>
         <Text style={styles.header}>Orders</Text>
         <FlatList
           showsVerticalScrollIndicator={false}
@@ -106,6 +94,26 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
+  },
+  tabsContainer: {
+    flexDirection: "row",
+    marginBottom: 20,
+  },
+  tab: {
+    flex: 1,
+    padding: 10,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#ddd",
+    borderRadius: 5,
+    marginHorizontal: 5,
+  },
+  activeTab: {
+    backgroundColor: Color.primaryColor,
+  },
+  tabText: {
+    fontSize: 16,
+    fontWeight: "bold",
   },
   header: {
     fontSize: 24,
@@ -130,15 +138,9 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "bold",
   },
-  productItem: {
-    marginBottom: 5,
-  },
-  productName: {
-    fontSize: 16,
-  },
-  productDetails: {
+  orderDate: {
     fontSize: 14,
-    color: "#ccc",
+    color: "#999",
   },
 });
 

@@ -1,3 +1,5 @@
+import { FieldValue } from "firebase/firestore";
+
 // types.ts
 export interface Message {
   messageId: string;
@@ -83,10 +85,14 @@ export interface IItem {
 export interface IBill {
   id: string;
   customerId: string;
+  shopUserId?: string;
+  shopId?: string;
   customerName: string;
   date: string;
   totalAmount: number;
   totalQuantity: number;
   status: string;
+  createdAt?: FieldValue;
+  updatedAt?: FieldValue;
   items: IItem[];
 }

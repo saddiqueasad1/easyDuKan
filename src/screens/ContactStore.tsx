@@ -7,6 +7,7 @@ import {
   StyleSheet,
 } from "react-native";
 import {
+  addDoc,
   collection,
   doc,
   getDoc,
@@ -20,6 +21,8 @@ import { Color } from "../utills/GlobalStyles";
 import { IProduct, IProfile } from "../utills/types";
 import ProductShopItem from "../components/ProductComponentShop/ProductItem";
 import { height, width } from "../utills/Dimension";
+import { successMessage } from "../utills/GlobalMethods";
+import { removeAllOrders } from "../redux/slices/orderSlice";
 
 const ContactProfileScreen = ({
   navigation,
@@ -83,11 +86,25 @@ const ContactProfileScreen = ({
   };
 
   const renderItem = ({ item }: { item: IProduct }) => {
-    return <ProductShopItem item={item} navigation={undefined} />;
+    return (
+      <ProductShopItem
+        item={item}
+        navigation={navigation}
+        shopUser={user}
+        shopUserId={userId}
+      />
+    );
   };
 
-  const handleOrder = () => {
-    console.log("loading order");
+  const handleOrder = async () => {
+    try {
+      const result = await addDoc(collection(db, "orders"), order);
+      successMessage("Make orders SuccessFuly");
+
+      dispatch(removeAllOrders());
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const headerItem = () => (
@@ -145,7 +162,7 @@ const ContactProfileScreen = ({
       <TouchableOpacity onPress={() => handleOrder()}>
         <View style={styles.floatingButton}>
           <Text style={styles.floatingText}> {order?.totalQuantity}</Text>
-          <Text style={styles.floatingText}> View Bill</Text>
+          <Text style={styles.floatingText}> Make Order</Text>
           <Text style={styles.floatingText}>Rs: {order?.totalAmount}</Text>
         </View>
       </TouchableOpacity>
