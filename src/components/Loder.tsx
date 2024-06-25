@@ -10,8 +10,8 @@ export default function Loader() {
     <Modal
     animationIn='bounceIn'
     animationOut={'bounceOut'}
-    animationInTiming={1000}
-    animationInTiming={3000}
+    animationInTiming={2000}
+    animationOutTiming={1000}
     isVisible={appLoader} backdropOpacity={1} backdropColor={"white"}>
       <View style={styles.container}>
         <Image

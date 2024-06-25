@@ -13,10 +13,16 @@ import { useSelector } from "react-redux";
 import { RootState } from "../redux/store";
 import { IBill } from "../utills/types";
 import { Color } from "../utills/GlobalStyles";
-
+import GlobalMethods from "../utills/GlobalMethods";
+const d = [
+  { id: 1, name: "Complete" },
+  { id: 2, name: "Uncomplete" },
+  { id: 3, name: "Pending" },
+  { id: 4, name: "Cancel" },
+];
 const MyOrdersScreen: React.FC = () => {
   const [searchText, setSearchText] = useState("");
-  const [activeTab, setActiveTab] = useState("incoming");
+  const [selectValue, SetSelectValue] = useState();
   const profile = useSelector((state: RootState) => state.profile);
   const [outgoingOrders, setOutgoingOrders] = useState<IBill[]>([]);
 
@@ -26,8 +32,8 @@ const MyOrdersScreen: React.FC = () => {
     getOrdersByCustomerId(customerId).then((orders) => {
       console.log("orders 11111");
 
-      console.log(orders);
-      setOutgoingOrders(orders);
+      // console.log(orders);
+      setOutgoingOrders(orders.reverse());
     });
   }, []);
 
@@ -35,6 +41,8 @@ const MyOrdersScreen: React.FC = () => {
     if (
       item?.customerName?.toLowerCase()?.includes(searchText?.toLowerCase())
     ) {
+      console.log(item);
+
       return (
         <View style={styles.orderContainer}>
           <Text style={styles.customerName}>{item.customerName}</Text>
@@ -42,17 +50,25 @@ const MyOrdersScreen: React.FC = () => {
           <Text style={styles.orderTotal}>
             Total Quantity: {item.totalQuantity} , Price {item.totalAmount}
           </Text>
-          <Text style={styles.orderDate}>Date: {item.date}</Text>
+          <Text style={styles.orderDate}>
+            Date: {GlobalMethods.calculateTimeDifference(item.date)}
+          </Text>
         </View>
       );
     }
   };
 
-
   return (
     <ScreenWrapper
       headerUnScrollable={() => (
-        <Header searchText={searchText} setSearchText={setSearchText} />
+        <Header
+          searchText={searchText}
+          setSearchText={setSearchText}
+          showTopHead={false}
+          categories={d}
+          selectValue={selectValue}
+          SetSelectValue={SetSelectValue}
+        />
       )}
     >
       <View style={styles.container}>
@@ -61,7 +77,8 @@ const MyOrdersScreen: React.FC = () => {
           showsVerticalScrollIndicator={false}
           data={outgoingOrders}
           renderItem={renderOrder}
-          keyExtractor={(item,index) => item.id+index}
+          keyExtractor={(item, index) => item.id + index}
+          // ListHeaderComponent={<}
         />
       </View>
     </ScreenWrapper>

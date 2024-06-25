@@ -44,6 +44,10 @@ const MyProductCard: React.FC<ProductItemProps> = ({
         </View>
       </TouchableOpacity>
       <Modal
+       animationIn='bounceIn'
+       animationOut={'bounceOut'}
+       animationOutTiming={800}
+       animationInTiming={2000}
         isVisible={isShow}
         // swipeDirection={"down"}
         onBackdropPress={closeModel}

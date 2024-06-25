@@ -134,7 +134,7 @@ const calculateTimeDifference = (createdAt, l) => {
       locale = enUS;
       break;
     default:
-      locale = de;
+      locale = enUS;
   }
   const distance = formatDistanceToNow(new Date(createdAt), {
     locale,

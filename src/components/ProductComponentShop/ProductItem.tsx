@@ -137,6 +137,10 @@ const ProductShopItem: React.FC<ProductItemProps> = ({
         </View>
       </TouchableOpacity>
       <Modal
+       animationIn='zoomIn'
+       animationOut={'zoomOut'}
+       animationOutTiming={800}
+       animationInTiming={2000}
         isVisible={isShow}
         // swipeDirection={"down"}
         onBackdropPress={closeModel}

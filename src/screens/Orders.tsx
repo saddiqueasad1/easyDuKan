@@ -13,10 +13,15 @@ import { useSelector } from "react-redux";
 import { RootState } from "../redux/store";
 import { IBill } from "../utills/types";
 import { Color } from "../utills/GlobalStyles";
-
+const d = [
+  { id: 1, name: "Complete" },
+  { id: 2, name: "Uncomplete" },
+  { id: 3, name: "Pending" },
+  { id: 4, name: "Cancel" },
+];
 const OrdersScreen: React.FC = () => {
   const [searchText, setSearchText] = useState("");
-  const [activeTab, setActiveTab] = useState("incoming");
+  const [selectValue, SetSelectValue] = useState();
   const profile = useSelector((state: RootState) => state.profile);
   const [incomingOrders, setIncomingOrders] = useState<IBill[]>([]);
 
@@ -47,11 +52,16 @@ const OrdersScreen: React.FC = () => {
     }
   };
 
-
   return (
     <ScreenWrapper
       headerUnScrollable={() => (
-        <Header searchText={searchText} setSearchText={setSearchText} />
+        <Header
+          searchText={searchText}
+          setSearchText={setSearchText}
+          categories={d}
+          selectValue={selectValue}
+          SetSelectValue={SetSelectValue}
+        />
       )}
     >
       <View style={styles.container}>
