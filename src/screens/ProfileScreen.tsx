@@ -26,25 +26,27 @@ const ProfileScreen = ({ navigation }: { navigation: any }) => {
   const selectedBranchId = user.selectedBranchId;
 
   useEffect(() => {
-    const fetchProfile = async () => {
-      try {
-        const docRef = doc(db, "users", user.uid);
-        const docSnap = await getDoc(docRef);
+    // const fetchProfile = async () => {
+    //   try {
+    //     const docRef = doc(db, "users", user.uid);
+    //     const docSnap = await getDoc(docRef);
 
-        if (docSnap.exists()) {
-          const data = docSnap.data();
-          const newData = { ...data, userId: user.uid };
-          dispatch(setProfile(newData as any));
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    };
+    //     if (docSnap.exists()) {
+    //       const data = docSnap.data();
+    //       const newData = { ...data, userId: user.uid };
+    //       dispatch(setProfile(newData as any));
+    //     }
+    //   } catch (error) {
+    //     console.log(error);
+    //   }
+    // };
 
-    fetchProfile();
+    // fetchProfile();
     fetchItems();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user.uid, db, profile]);
+  }, []);
+//   return
+//   // eslint-disable-next-line react-hooks/exhaustive-deps
+// }, [user.uid, db, profile]);
 
   const fetchItems = async () => {
     try {

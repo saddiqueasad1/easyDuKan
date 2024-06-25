@@ -5,7 +5,7 @@ import SwiperFlatList from "react-native-swiper-flatlist";
 import { IBill, IItem, IProduct, IProfile } from "../../utills/types";
 import QuantityContainer from "./QuantityContainer";
 import { Color } from "../../utills/GlobalStyles";
-import { height, width } from "../../utills/Dimension";
+import { height, urlImage, width } from "../../utills/Dimension";
 import Icons, { IconsImage } from "../../assets/images";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
@@ -40,7 +40,7 @@ const ProductShopItem: React.FC<ProductItemProps> = ({
   const handleIncreaseQuantity = (
     id: string,
     currentQuantity: number,
-    item: IProduct,
+    item: IProduct
   ) => {
     const updatedItem: IItem = {
       ...item,
@@ -88,7 +88,7 @@ const ProductShopItem: React.FC<ProductItemProps> = ({
   const handleDecreaseQuantity = (
     id: string,
     currentQuantity: number,
-    item: IProduct,
+    item: IProduct
   ) => {
     const updatedItem: IItem = {
       ...item,
@@ -100,10 +100,16 @@ const ProductShopItem: React.FC<ProductItemProps> = ({
       dispatch(decreaseOrderQuantity(updatedItem));
     }
   };
+
   return (
     <>
       <TouchableOpacity style={styles.item} onPress={() => setIsShow(true)}>
-        <Image source={Icons.p1} style={styles.imaage} />
+        <Image
+          source={{
+            uri: item?.productImages?.length>0 ? item?.productImages[0] : urlImage,
+          }}
+          style={styles.imaage}
+        />
         <Text
           style={[styles.itemText, { fontSize: height(2), fontWeight: "bold" }]}
         >
@@ -155,7 +161,7 @@ const ProductShopItem: React.FC<ProductItemProps> = ({
           >
             <SwiperFlatList
               showPagination
-              data={IconsImage}
+              data={item?.productImages}
               paginationStyleItemInactive={{
                 width: height(1),
                 height: height(1),

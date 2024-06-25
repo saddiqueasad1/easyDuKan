@@ -8,6 +8,7 @@ import { height, width } from "./Dimension";
 // };
 import { showMessage } from "react-native-flash-message";
 import { Color } from "./GlobalStyles";
+import { Linking, Platform } from "react-native";
 
 export const successMessage = (description = "", message = "success") => {
   showMessage({
@@ -44,20 +45,20 @@ export const infoMessage = (description = "", message = "info") => {
   });
 };
 
-// const onPressCall = (phoneNumber) => {
-//   const url =
-//     Platform.OS == "ios" ? `telprompt:${phoneNumber}` : `tel:${phoneNumber}`;
+const onPressCall = (phoneNumber) => {
+  const url =
+    Platform.OS == "ios" ? `telprompt:${phoneNumber}` : `tel:${phoneNumber}`;
 
-//   Linking.openURL(url)
-//     .then((result) => {
-//       if (result) {
-//         console.log("Phone app opened successfully");
-//       } else {
-//         console.log("Unable to open phone app");
-//       }
-//     })
-//     .catch((error) => console.error("Error opening phone app:", error));
-// };
+  Linking.openURL(url)
+    .then((result) => {
+      if (result) {
+        console.log("Phone app opened successfully");
+      } else {
+        console.log("Unable to open phone app");
+      }
+    })
+    .catch((error) => console.error("Error opening phone app:", error));
+};
 // const onPressEmail = (email, mymail, message = "") => {
 //   const subject = `${message}`; // Optional: Replace with the subject of your email
 
@@ -144,8 +145,11 @@ const calculateTimeDifference = (createdAt, l) => {
 
 const GlobalMethods = {
   calculateTimeDifference,
+  onPressCall
 };
 export default GlobalMethods;
+
+
 // import React, { useState, useEffect, useRef } from "react";
 // import {
 //   View,

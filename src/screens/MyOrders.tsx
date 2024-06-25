@@ -14,19 +14,20 @@ import { RootState } from "../redux/store";
 import { IBill } from "../utills/types";
 import { Color } from "../utills/GlobalStyles";
 
-const OrdersScreen: React.FC = () => {
+const MyOrdersScreen: React.FC = () => {
   const [searchText, setSearchText] = useState("");
   const [activeTab, setActiveTab] = useState("incoming");
   const profile = useSelector((state: RootState) => state.profile);
-  const [incomingOrders, setIncomingOrders] = useState<IBill[]>([]);
+  const [outgoingOrders, setOutgoingOrders] = useState<IBill[]>([]);
 
   useEffect(() => {
     const customerId = profile.userId;
 
-    getOrdersByShopUserId(customerId).then((orders) => {
-      console.log("orders 222");
+    getOrdersByCustomerId(customerId).then((orders) => {
+      console.log("orders 11111");
+
       console.log(orders);
-      setIncomingOrders(orders);
+      setOutgoingOrders(orders);
     });
   }, []);
 
@@ -55,12 +56,12 @@ const OrdersScreen: React.FC = () => {
       )}
     >
       <View style={styles.container}>
-        <Text style={styles.header}>Orders</Text>
+        <Text style={styles.header}>My Placed Orders</Text>
         <FlatList
           showsVerticalScrollIndicator={false}
-          data={incomingOrders}
+          data={outgoingOrders}
           renderItem={renderOrder}
-          keyExtractor={(item) => item.id}
+          keyExtractor={(item,index) => item.id+index}
         />
       </View>
     </ScreenWrapper>
@@ -121,4 +122,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default OrdersScreen;
+export default MyOrdersScreen;

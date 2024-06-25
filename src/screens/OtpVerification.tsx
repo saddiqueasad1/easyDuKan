@@ -17,11 +17,12 @@ import {
   signInWithCredential,
   User,
 } from "firebase/auth";
+import { db } from "../utills/firebaseConfig";
 import { RouteProp } from "@react-navigation/native";
 import OtpInputBox from "../components/OtpInputBox";
 import { setUser } from "../redux/slices/userSlice";
 import { useDispatch } from "react-redux";
-import { doc, getDoc, getFirestore, setDoc } from "firebase/firestore";
+import { doc, getDoc, collection, setDoc } from "firebase/firestore";
 import { setProfile } from "../redux/slices/profilleSlice";
 
 type RootStackParamList = {
@@ -49,7 +50,7 @@ const OtpVerification = ({
   const [loading, setLoading] = React.useState(false);
   const [showSuccess, setShowSuccess] = React.useState(false);
   const dispatch = useDispatch();
-  const db = getFirestore();
+  // const db = getFirestore();
   const [oTP, setOtP] = React.useState("");
   const { t } = useTranslation();
   const auth = getAuth();
@@ -62,11 +63,17 @@ const OtpVerification = ({
       const credential = PhoneAuthProvider.credential(verificationId, oTP);
       await signInWithCredential(auth, credential)
         .then(async (res) => {
-          console.log("res of ()=> firebaseOTPVerification", phoneNumber);
-          console.log(res.user.toJSON());
+          // console.log("res of ()=> firebaseOTPVerification", phoneNumber);
+          // console.log("",res.user.toJSON());
+          
           const userRef = doc(db, "users", res.user.uid);
+          console.log("this is crashed",userRef);
+
           const docSnapshot = await getDoc(userRef);
+          console.log("this is crashed", getDoc(userRef));
           if (!docSnapshot.exists()) {
+            console.log("runing if ");
+
             await setDoc(doc(db, "users", res.user.uid), {
               phoneNumber: phoneNumber,
             });
@@ -81,34 +88,36 @@ const OtpVerification = ({
                 emailVerified: false,
                 photoURL: "",
                 branchIds: [],
-              }),
+              })
             );
             dispatch(
               setUser({
                 uid: res.user.uid,
                 isProfileComplete: false,
                 selectedBranchId: "",
-              }),
+              })
             );
           } else {
+            console.log("runing else");
+
             const data = docSnapshot.data();
             console.log(data);
             console.log("data.branchIds[0]");
             console.log(data.branchIds[0]);
-          
+
             dispatch(
               setUser({
                 uid: res.user.uid,
                 isProfileComplete: true,
                 selectedBranchId: data.branchIds[0],
-              }),
+              })
             );
           }
           setShowSuccess(true);
         })
         .catch((err) => {
           alert(err.message);
-          console.log(err);
+          console.log("otp screen", err);
         });
     } catch (err) {
       navigation.goBack();

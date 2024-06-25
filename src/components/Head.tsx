@@ -39,7 +39,6 @@ const Header: React.FC = ({
   const handleClearSearch = () => {
     setSearchText("");
   };
-  console.log(selectValue);
 
   const renderCategory = ({ item }: { item: Category }) => (
     <TouchableOpacity

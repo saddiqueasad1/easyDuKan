@@ -7,7 +7,12 @@ export default function Loader() {
   //   const { AppColors } = useContext(ThemeContext);
   const styles = getStyles(AppColors);
   return (
-    <Modal isVisible={appLoader} backdropOpacity={0.51} backdropColor={"white"}>
+    <Modal
+    animationIn='bounceIn'
+    animationOut={'bounceOut'}
+    animationInTiming={1000}
+    animationInTiming={3000}
+    isVisible={appLoader} backdropOpacity={1} backdropColor={"white"}>
       <View style={styles.container}>
         <Image
           style={{

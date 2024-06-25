@@ -5,6 +5,7 @@ import {
   Text,
   FlatList,
   StyleSheet,
+  Image,
 } from "react-native";
 import {
   addDoc,
@@ -21,8 +22,9 @@ import { Color } from "../utills/GlobalStyles";
 import { IProduct, IProfile } from "../utills/types";
 import ProductShopItem from "../components/ProductComponentShop/ProductItem";
 import { height, width } from "../utills/Dimension";
-import { successMessage } from "../utills/GlobalMethods";
+import GlobalMethods, { successMessage } from "../utills/GlobalMethods";
 import { removeAllOrders } from "../redux/slices/orderSlice";
+import { setAppLoader } from "../redux/slices/loaderSlice";
 
 const ContactProfileScreen = ({
   navigation,
@@ -40,6 +42,7 @@ const ContactProfileScreen = ({
   const dispatch = useDispatch();
 
   useEffect(() => {
+    dispatch(setAppLoader(true))
     const fetchProfile = async () => {
       try {
         const docRef = doc(db, "users", userId);
@@ -53,6 +56,7 @@ const ContactProfileScreen = ({
         }
       } catch (error) {
         console.log(error);
+        navigation.goBack()
       }
     };
 
@@ -68,7 +72,7 @@ const ContactProfileScreen = ({
         db,
         "branches",
         selectedBranchId,
-        "products",
+        "products"
       );
       // console.log("itemsCollectionRef id", itemsCollectionRef);
 
@@ -82,6 +86,9 @@ const ContactProfileScreen = ({
       setProduct(itemsList);
     } catch (error) {
       console.log("this one ", error);
+    }
+    finally{
+      dispatch(setAppLoader(false))
     }
   };
 
@@ -110,31 +117,60 @@ const ContactProfileScreen = ({
   const headerItem = () => (
     <>
       <View style={styles.profile}>
-        <FontAwesome5 name="user-tie" size={50} color={Color.primaryColor} />
+        <Image
+          source={{
+            uri:
+              user?.photoURL ||
+              "https://cdn-icons-png.flaticon.com/512/149/149071.png",
+          }}
+          style={styles.image}
+        />
         <View style={styles.profileInfo}>
+          <Text style={styles.contact}>{user?.branchIds[0]}</Text>
           <Text style={styles.username}>{user?.username}</Text>
-          <Text style={styles.email}>{user?.email}</Text>
-          <Text style={styles.contact}>{user?.phoneNumber}</Text>
+          
+          {/* <Text style={styles.email}>{user?.email}</Text> */}
+          {/* <Text style={styles.contact}>{user?.phoneNumber}</Text> */}
           <Text style={styles.address}>{user?.address}</Text>
         </View>
-        <TouchableOpacity
-          style={styles.editButton}
-          onPress={() => {
-            const new_user = { ...user, userId };
-            console.log(new_user);
-
-            navigation.navigate("ChatScreen", {
-              usr: new_user,
-              userRoom: user?.roomId,
-            });
+        <View
+          style={{
+            marginLeft: "auto",            
+            justifyContent: 'space-evenly',
           }}
         >
-          <Ionicons
-            name="chatbubbles-sharp"
-            size={20}
-            color={Color.primaryColor}
-          />
-        </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.editButton}
+            onPress={() => {
+              GlobalMethods.onPressCall(user?.phoneNumber)
+            }}
+          >
+            <Ionicons
+              name="call"
+              size={20}
+              color={Color.white}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.editButton}
+            onPress={() => {
+              const new_user = { ...user, userId };
+              console.log(new_user);
+
+              navigation.navigate("ChatScreen", {
+                usr: new_user,
+                userRoom: user?.roomId,
+              });
+            }}
+          >
+            <Ionicons
+              name="chatbubbles-sharp"
+              size={20}
+              color={Color.white}
+            />
+          </TouchableOpacity>
+
+        </View>
       </View>
       <View style={styles.sectionHeader}>
         <Text style={styles.sectionTitle}>All Products</Text>
@@ -178,13 +214,16 @@ const styles = StyleSheet.create({
   profile: {
     flexDirection: "row",
     alignItems: "center",
-    margin: height(3),
+    margin: height(1),
+    backgroundColor: "white",
+    padding: height(1),
+    borderRadius: height(2),
   },
   profileInfo: {
     marginLeft: 20,
   },
   username: {
-    fontSize: 24,
+    fontSize: height(2),
     fontWeight: "bold",
     marginBottom: 5,
   },
@@ -194,16 +233,21 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   contact: {
-    fontSize: 16,
-    color: "#666",
-    marginBottom: 5,
+    fontSize: height(2.5),
+    color: Color.primaryColor,
+    fontWeight:'700',
+    fontStyle:'italic'
+
   },
   address: {
-    fontSize: 16,
+    fontSize: height(1.5),
     color: "#666",
   },
   editButton: {
-    marginLeft: "auto",
+    backgroundColor: Color.primaryColor,
+    padding: height(1),
+    margin:height(.5),
+    borderRadius: height(5),
   },
   sectionHeader: {
     flexDirection: "row",
@@ -259,6 +303,15 @@ const styles = StyleSheet.create({
   floatingText: {
     color: Color.colorWhite,
     fontWeight: "bold",
+  },
+  image: {
+    width: height(12),
+    height: height(12),
+    alignSelf: "center",
+    marginVertical: height(2),
+    borderWidth: height(0.3),
+    borderColor: "white",
+    borderRadius: height(20),
   },
 });
 

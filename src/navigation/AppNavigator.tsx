@@ -19,6 +19,7 @@ import ProfileScreen from "../screens/ProfileScreen";
 import BillScreen from "../screens/BillScreen";
 import ChatList from "../screens/ChatList";
 import AddProfileScreen from "../screens/AddProfileScreen";
+import MyOrdersScreen from "../screens/MyOrders";
 const Stack = createNativeStackNavigator();
 
 const AppNavigator = ({
@@ -146,6 +147,11 @@ const AppNavigator = ({
               <Stack.Screen
                 name="chatListScreen"
                 component={ChatList}
+                options={{ headerShown: false }}
+              />
+                <Stack.Screen
+                name="MyOrderScreen"
+                component={MyOrdersScreen}
                 options={{ headerShown: false }}
               />
             </>

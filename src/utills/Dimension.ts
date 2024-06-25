@@ -11,4 +11,6 @@ const height = (number) => {
   else if (number <= 0) return 0;
   else return fullHeight * (number / 100);
 };
-export { height, width };
+const urlImage="https://cdn-icons-png.flaticon.com/512/149/149071.png"
+export { height, width,urlImage };
+

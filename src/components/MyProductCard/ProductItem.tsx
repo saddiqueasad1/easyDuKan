@@ -7,7 +7,7 @@ import SwiperFlatList from "react-native-swiper-flatlist";
 import { IProduct } from "../../utills/types";
 import QuantityContainer from "./QuantityContainer";
 import { Color } from "../../utills/GlobalStyles";
-import { height, width } from "../../utills/Dimension";
+import { height, urlImage, width } from "../../utills/Dimension";
 import Icons, { IconsImage } from "../../assets/images";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
@@ -17,13 +17,25 @@ interface ProductItemProps {
   navigation: any;
 }
 
-const MyProductCard: React.FC<ProductItemProps> = ({ item, onPress,onPressDelete }) => {
+const MyProductCard: React.FC<ProductItemProps> = ({
+  item,
+  onPress,
+  onPressDelete,
+}) => {
   const [isShow, setIsShow] = useState(false);
   const closeModel = () => setIsShow(false);
+
   return (
     <>
       <TouchableOpacity style={styles.item} onPress={() => setIsShow(true)}>
-        <Image source={Icons.p1} style={styles.imaage} />
+        <Image
+          source={{
+            uri: item?.productImages?.length>0
+              ? item?.productImages[0]
+              : urlImage,
+          }}
+          style={styles.imaage}
+        />
         <View style={{ padding: height(1) }}>
           <Text style={[{ fontSize: height(2), fontWeight: "bold" }]}>
             {item.name}
@@ -56,7 +68,7 @@ const MyProductCard: React.FC<ProductItemProps> = ({ item, onPress,onPressDelete
           >
             <SwiperFlatList
               showPagination
-              data={IconsImage}
+              data={item?.productImages}
               paginationStyleItemInactive={{
                 width: height(1),
                 height: height(1),
@@ -70,7 +82,7 @@ const MyProductCard: React.FC<ProductItemProps> = ({ item, onPress,onPressDelete
 
                 return (
                   <Image
-                    source={item}
+                    source={{ uri: item }}
                     resizeMode="contain"
                     style={{
                       width: width(88),
@@ -115,7 +127,10 @@ const MyProductCard: React.FC<ProductItemProps> = ({ item, onPress,onPressDelete
                 />
                 <Text style={styles.iconBtnTex}>Edit</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.iconButton} onPress={onPressDelete}>
+              <TouchableOpacity
+                style={styles.iconButton}
+                onPress={onPressDelete}
+              >
                 <MaterialIcons name="delete" color={"red"} size={height(3)} />
                 <Text style={[styles.iconBtnTex, { color: "red" }]}>
                   Delete

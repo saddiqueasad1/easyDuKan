@@ -142,7 +142,7 @@ const CustomDrawer = ({ navigation }) => {
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => {
-            // navigation.navigate("myhorder");
+            navigation.navigate("MyOrderScreen");
 
             navigation.closeDrawer();
           }}
