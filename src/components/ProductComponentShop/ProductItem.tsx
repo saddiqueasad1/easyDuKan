@@ -175,11 +175,9 @@ const ProductShopItem: React.FC<ProductItemProps> = ({
                 alignItems: "center",
               }}
               renderItem={({ item }) => {
-                console.log(item);
-
                 return (
                   <Image
-                    source={item}
+                    source={{uri:item}}
                     resizeMode="contain"
                     style={{
                       width: width(88),

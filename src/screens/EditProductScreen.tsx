@@ -127,6 +127,8 @@ const EditProductScreen = ({
     }
   };
   useEffect(() => {
+ 
+    
     navigation.setOptions({
       title: itemId ? "Edit Product" : "Add Product",
     });
@@ -138,11 +140,13 @@ const EditProductScreen = ({
             (product) => product.id === itemId
           );
           if (selectProductById) {
+            // console.log(selectProductById);
             setName(selectProductById.name || "");
             setDescription(selectProductById.description);
             setUnitPrice(selectProductById.unitPrice);
             setTotalQuantity(selectProductById.totalQuantity);
             setSelectedCategoryId(selectProductById.category_id || "");
+            setImage(selectProductById?.productImages||[])
           } else {
             // Handle case when no product is found with the given id
             console.log("Product not found");

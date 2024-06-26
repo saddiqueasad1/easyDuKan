@@ -14,6 +14,8 @@ import { RootState } from "../redux/store";
 import { IBill } from "../utills/types";
 import { Color } from "../utills/GlobalStyles";
 import GlobalMethods from "../utills/GlobalMethods";
+import { height } from "../utills/Dimension";
+import OrderItem from "../components/OrderItem";
 const d = [
   { id: 1, name: "Complete" },
   { id: 2, name: "Uncomplete" },
@@ -37,26 +39,7 @@ const MyOrdersScreen: React.FC = () => {
     });
   }, []);
 
-  const renderOrder = ({ item }: { item: IBill }) => {
-    if (
-      item?.customerName?.toLowerCase()?.includes(searchText?.toLowerCase())
-    ) {
-      console.log(item);
-
-      return (
-        <View style={styles.orderContainer}>
-          <Text style={styles.customerName}>{item.customerName}</Text>
-          <Text style={styles.orderId}>Order #{item.id}</Text>
-          <Text style={styles.orderTotal}>
-            Total Quantity: {item.totalQuantity} , Price {item.totalAmount}
-          </Text>
-          <Text style={styles.orderDate}>
-            Date: {GlobalMethods.calculateTimeDifference(item.date)}
-          </Text>
-        </View>
-      );
-    }
-  };
+  const renderOrder = ({ item }: { item: IBill }) => <OrderItem item={item} />;
 
   return (
     <ScreenWrapper
@@ -118,23 +101,23 @@ const styles = StyleSheet.create({
   orderContainer: {
     marginBottom: 20,
     padding: 10,
-    backgroundColor: "#eee",
+    flex: 1,
     borderRadius: 5,
   },
   customerName: {
-    fontSize: 18,
-    fontWeight: "bold",
+    fontSize: height(1.7),
   },
   orderId: {
-    fontSize: 16,
-    color: "#ccc",
+    fontSize: height(1.9),
+    fontWeight: "bold",
+    color: Color.primaryColor,
   },
   orderTotal: {
     fontSize: 16,
     fontWeight: "bold",
   },
   orderDate: {
-    fontSize: 14,
+    fontSize: height(1.5),
     color: "#999",
   },
 });

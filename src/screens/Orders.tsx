@@ -13,6 +13,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "../redux/store";
 import { IBill } from "../utills/types";
 import { Color } from "../utills/GlobalStyles";
+import OrderItem from "../components/OrderItem";
 const d = [
   { id: 1, name: "Complete" },
   { id: 2, name: "Uncomplete" },
@@ -35,22 +36,23 @@ const OrdersScreen: React.FC = () => {
     });
   }, []);
 
-  const renderOrder = ({ item }: { item: IBill }) => {
-    if (
-      item?.customerName?.toLowerCase()?.includes(searchText?.toLowerCase())
-    ) {
-      return (
-        <View style={styles.orderContainer}>
-          <Text style={styles.customerName}>{item.customerName}</Text>
-          <Text style={styles.orderId}>Order #{item.id}</Text>
-          <Text style={styles.orderTotal}>
-            Total Quantity: {item.totalQuantity} , Price {item.totalAmount}
-          </Text>
-          <Text style={styles.orderDate}>Date: {item.date}</Text>
-        </View>
-      );
-    }
-  };
+  // const renderOrder = ({ item }: { item: IBill }) => {
+  //   if (
+  //     item?.customerName?.toLowerCase()?.includes(searchText?.toLowerCase())
+  //   ) {
+  //     return (
+  //       <View style={styles.orderContainer}>
+  //         <Text style={styles.customerName}>{item.customerName}</Text>
+  //         <Text style={styles.orderId}>Order #{item.id}</Text>
+  //         <Text style={styles.orderTotal}>
+  //           Total Quantity: {item.totalQuantity} , Price {item.totalAmount}
+  //         </Text>
+  //         <Text style={styles.orderDate}>Date: {item.date}</Text>
+  //       </View>
+  //     );
+  //   }
+  // };
+  const renderOrder = ({ item }: { item: IBill }) => <OrderItem item={item} />;
 
   return (
     <ScreenWrapper
