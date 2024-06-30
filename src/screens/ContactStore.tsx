@@ -25,7 +25,14 @@ import { height, width } from "../utills/Dimension";
 import GlobalMethods, { successMessage } from "../utills/GlobalMethods";
 import { removeAllOrders } from "../redux/slices/orderSlice";
 import { setAppLoader } from "../redux/slices/loaderSlice";
-
+import ScreenWrapper from "../components/ScreenWrapper";
+import Header from "../components/Head";
+const d = [
+  { id: 1, name: "Cloth" },
+  { id: 2, name: "Shoes" },
+  { id: 3, name: "Kid's" },
+  { id: 4, name: "Men" },
+];
 const ContactProfileScreen = ({
   navigation,
   route,
@@ -38,11 +45,13 @@ const ContactProfileScreen = ({
   const profile = useSelector((state: RootState) => state.profile);
   const order = useSelector((state: RootState) => state.order.order);
   const [products, setProduct] = useState();
+  const [searchText, setSearchText] = useState("");
+  const [selectValue, SetSelectValue] = useState("0");
   const db = getFirestore();
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(setAppLoader(true))
+    dispatch(setAppLoader(true));
     const fetchProfile = async () => {
       try {
         const docRef = doc(db, "users", userId);
@@ -56,7 +65,7 @@ const ContactProfileScreen = ({
         }
       } catch (error) {
         console.log(error);
-        navigation.goBack()
+        navigation.goBack();
       }
     };
 
@@ -86,9 +95,8 @@ const ContactProfileScreen = ({
       setProduct(itemsList);
     } catch (error) {
       console.log("this one ", error);
-    }
-    finally{
-      dispatch(setAppLoader(false))
+    } finally {
+      dispatch(setAppLoader(false));
     }
   };
 
@@ -115,101 +123,133 @@ const ContactProfileScreen = ({
   };
 
   const headerItem = () => (
-    <>
-      <View style={styles.profile}>
-        <Image
-          source={{
-            uri:
-              user?.photoURL ||
-              "https://cdn-icons-png.flaticon.com/512/149/149071.png",
-          }}
-          style={styles.image}
+    <View style={styles.profile}>
+      <TouchableOpacity
+        style={{ alignSelf: "flex-start" }}
+        onPress={() => navigation.goBack()}
+      >
+        <Ionicons
+          name="arrow-back-circle-sharp"
+          color={Color.primaryColor}
+          size={height(4)}
         />
-        <View style={styles.profileInfo}>
-          <Text style={styles.contact}>{user?.branchIds[0]}</Text>
-          <Text style={styles.username}>{user?.username}</Text>
-          
-          {/* <Text style={styles.email}>{user?.email}</Text> */}
-          {/* <Text style={styles.contact}>{user?.phoneNumber}</Text> */}
-          <Text style={styles.address}>{user?.address}</Text>
-        </View>
+      </TouchableOpacity>
+      <Image
+        source={{
+          uri:
+            user?.photoURL ||
+            "https://cdn-icons-png.flaticon.com/512/149/149071.png",
+        }}
+        style={styles.image}
+      />
+      <View style={styles.profileInfo}>
+        <Text style={styles.contact}>{user?.branchIds[0]}</Text>
+        <Text style={styles.username}>{user?.username}</Text>
+
+        {/* <Text style={styles.email}>{user?.email}</Text> */}
+        {/* <Text style={styles.contact}>{user?.phoneNumber}</Text> */}
         <View
           style={{
-            marginLeft: "auto",            
-            justifyContent: 'space-evenly',
+            backgroundColor: Color.backgroundColor,
+
+            paddingVertical: height(0.5),
+            borderRadius: height(2),
+            flexDirection: "row",
           }}
         >
-          <TouchableOpacity
-            style={styles.editButton}
-            onPress={() => {
-              GlobalMethods.onPressCall(user?.phoneNumber)
-            }}
-          >
-            <Ionicons
-              name="call"
-              size={20}
-              color={Color.white}
-            />
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.editButton}
-            onPress={() => {
-              const new_user = { ...user, userId };
-              console.log(new_user);
-
-              navigation.navigate("ChatScreen", {
-                usr: new_user,
-                userRoom: user?.roomId,
-              });
-            }}
-          >
-            <Ionicons
-              name="chatbubbles-sharp"
-              size={20}
-              color={Color.white}
-            />
-          </TouchableOpacity>
-
+          <Ionicons
+            name="location-sharp"
+            color={Color.primaryColor}
+            size={height(2)}
+            style={{ paddingHorizontal: height(1) }}
+          />
+          <Text style={styles.address}>{user?.address}</Text>
         </View>
       </View>
-      <View style={styles.sectionHeader}>
-        <Text style={styles.sectionTitle}>All Products</Text>
-        {/* <TouchableOpacity style={styles.addButton} onPress={addIProduct}>
-          <Text style={styles.addButtonText}>Add Products</Text>
-        </TouchableOpacity> */}
+      <View
+        style={{
+          marginLeft: "auto",
+          justifyContent: "space-evenly",
+        }}
+      >
+        <TouchableOpacity
+          style={styles.editButton}
+          onPress={() => {
+            GlobalMethods.onPressCall(user?.phoneNumber);
+          }}
+        >
+          <Ionicons name="call" size={20} color={Color.white} />
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.editButton}
+          onPress={() => {
+            const new_user = { ...user, userId };
+            console.log(new_user);
+
+            navigation.navigate("ChatScreen", {
+              usr: new_user,
+              userRoom: user?.roomId,
+            });
+          }}
+        >
+          <Ionicons name="chatbubbles-sharp" size={20} color={Color.white} />
+        </TouchableOpacity>
       </View>
-    </>
+    </View>
   );
 
   return (
-    <View style={styles.container}>
-      <FlatList
-        data={products}
-        keyExtractor={(item) => item.id}
-        renderItem={renderItem}
-        contentContainerStyle={styles.itemsList}
-        ListHeaderComponent={headerItem}
-        ListEmptyComponent={
-          <Text style={styles.noItemsText}>No items available</Text>
-        }
-        numColumns={2}
-      />
-
-      <TouchableOpacity onPress={() => handleOrder()}>
-        <View style={styles.floatingButton}>
-          <Text style={styles.floatingText}> {order?.totalQuantity}</Text>
-          <Text style={styles.floatingText}> Make Order</Text>
-          <Text style={styles.floatingText}>Rs: {order?.totalAmount}</Text>
-        </View>
-      </TouchableOpacity>
-    </View>
+    <ScreenWrapper
+      headerUnScrollable={headerItem}
+      footerUnScrollable={() => {
+        return order?.totalQuantity ? (
+          <TouchableOpacity onPress={() => handleOrder()}>
+            <View style={styles.floatingButton}>
+              <Text style={styles.floatingText}> {order?.totalQuantity}</Text>
+              <Text style={styles.floatingText}> Make Order</Text>
+              <Text style={styles.floatingText}>Rs: {order?.totalAmount}</Text>
+            </View>
+          </TouchableOpacity>
+        ) : (
+          <></>
+        );
+      }}
+    >
+      <View style={styles.container}>
+        <FlatList
+          data={products}
+          keyExtractor={(item) => item.id}
+          ListHeaderComponent={
+            <>
+              <View style={styles.sectionHeader}>
+                <Text style={styles.sectionTitle}>All Products</Text>
+              </View>
+              <Header
+                searchText={searchText}
+                setSearchText={setSearchText}
+                selectValue={selectValue}
+                SetSelectValue={SetSelectValue}
+                categories={d}
+                showTopHead={false}
+              />
+            </>
+          }
+          renderItem={renderItem}
+          ListEmptyComponent={
+            <Text style={styles.noItemsText}>No items available</Text>
+          }
+          numColumns={2}
+        />
+      </View>
+    </ScreenWrapper>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#f8f9fa",
+    backgroundColor: Color.backgroundColor,
+    alignItems: "center",
   },
   profile: {
     flexDirection: "row",
@@ -220,7 +260,8 @@ const styles = StyleSheet.create({
     borderRadius: height(2),
   },
   profileInfo: {
-    marginLeft: 20,
+    marginLeft: height(1),
+    maxWidth: width(53),
   },
   username: {
     fontSize: height(2),
@@ -235,30 +276,31 @@ const styles = StyleSheet.create({
   contact: {
     fontSize: height(2.5),
     color: Color.primaryColor,
-    fontWeight:'700',
-    fontStyle:'italic'
-
+    fontWeight: "700",
+    fontStyle: "italic",
   },
   address: {
     fontSize: height(1.5),
     color: "#666",
+    fontWeight: "700",
   },
   editButton: {
     backgroundColor: Color.primaryColor,
     padding: height(1),
-    margin:height(.5),
+    margin: height(0.5),
     borderRadius: height(5),
   },
   sectionHeader: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    margin: height(2),
+    paddingHorizontal: height(2),
+    backgroundColor: 'white',
+    borderTopLeftRadius: height(3),
+    borderTopRightRadius: height(3),
+    width: width(99),
   },
   sectionTitle: {
-    fontSize: 24,
+    fontSize: height(2.5),
     fontWeight: "bold",
-    color: "#343a40",
+    // color: "white",
   },
   addButton: {
     backgroundColor: "#28a745",
@@ -274,9 +316,6 @@ const styles = StyleSheet.create({
     textAlign: "center",
     color: "#6c757d",
     marginVertical: 20,
-  },
-  itemsList: {
-    paddingBottom: 20,
   },
   item: {
     padding: 15,
@@ -299,18 +338,19 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     width: width(80),
     alignSelf: "center",
+    marginBottom: height(1),
   },
   floatingText: {
     color: Color.colorWhite,
     fontWeight: "bold",
   },
   image: {
-    width: height(12),
-    height: height(12),
+    width: height(8),
+    height: height(8),
     alignSelf: "center",
     marginVertical: height(2),
     borderWidth: height(0.3),
-    borderColor: "white",
+    borderColor: Color.backgroundColor,
     borderRadius: height(20),
   },
 });

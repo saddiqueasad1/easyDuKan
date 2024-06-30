@@ -139,7 +139,7 @@ const AddCategoryScreen = ({ navigation, route }: { navigation: any }) => {
          animationIn='bounceIn'
          animationOut={'bounceOut'}
          animationOutTiming={800}
-         animationInTiming={2000}
+         animationInTiming={1000}
           backdropOpacity={0.3}
           isVisible={addModal}
           onBackdropPress={closeModel}

@@ -5,6 +5,7 @@ import Modal from "react-native-modal";
 import { height } from "../utills/Dimension";
 import GlobalMethods from "../utills/GlobalMethods";
 import { Color } from "../utills/GlobalStyles";
+import { ScrollView } from "react-native-gesture-handler";
 const OrderItem = ({ item }) => {
   const [isShow, setIsShow] = useState(false);
   const closeModel = () => setIsShow(false);
@@ -18,7 +19,7 @@ const OrderItem = ({ item }) => {
           justifyContent: "center",
           alignItems: "center",
           borderRadius: height(1),
-          margin:height(.5)
+          margin: height(0.5),
         }}
       >
         <View style={styles.orderContainer}>
@@ -56,8 +57,8 @@ const OrderItem = ({ item }) => {
       <Modal
         animationIn="bounceIn"
         animationOut={"bounceOut"}
-        animationOutTiming={800}
-        animationInTiming={2000}
+        animationOutTiming={500}
+        animationInTiming={1000}
         isVisible={isShow}
         // swipeDirection={"down"}
         onBackdropPress={closeModel}
@@ -66,7 +67,6 @@ const OrderItem = ({ item }) => {
       >
         <View style={styles.item1}>
           <View
-
             style={{
               flexDirection: "row",
               justifyContent: "center",
@@ -78,7 +78,7 @@ const OrderItem = ({ item }) => {
               <Text style={styles.orderId}>Order #{item.id}</Text>
               <Text style={styles.customerName}>Price {item.totalAmount}</Text>
               <Text style={styles.orderTotal}>
-                Total Quantity: {item.totalQuantity}
+                Total Products: {item?.items?.length}
               </Text>
               <Text style={styles.orderDate}>
                 Date:
@@ -106,22 +106,50 @@ const OrderItem = ({ item }) => {
               </Text>
             </View>
           </View>
-          {item?.items?.map((i, index) => (
-            <View
-              key={index}
-              style={{
-                padding: height(1),
-                backgroundColor: Color.backgroundColor,
-                marginVertical: height(0.5),
-                borderRadius: height(1),
-              }}
-            >
-              <Text>{"Product Name  :" + i.name}</Text>
-              <Text>{"Price   :" + i.unitPrice}</Text>
-              <Text>{"Quantity  :" + i.quantity}</Text>
-              <Text>{i.unitPrice + "x" + i.quantity + ":" + i.total}</Text>
-            </View>
-          ))}
+          <ScrollView>
+            {item?.items?.map((i, index) => (
+              <View
+                key={index}
+                style={{
+                  padding: height(1),
+                  backgroundColor: Color.backgroundColor,
+                  marginVertical: height(0.5),
+                  borderRadius: height(1),
+                }}
+              >
+                <View
+                  style={{
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <Text style={{ fontWeight: "600" }}>Product Name</Text>
+                  <Text>{i.name}</Text>
+                </View>
+                <View
+                  style={{
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <Text style={{ fontWeight: "600" }}>Price</Text>
+                  <Text>{i.unitPrice}</Text>
+                </View>
+                <View
+                  style={{
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <Text style={{ fontWeight: "600" }}>Quantity</Text>
+                  <Text>{i.quantity}</Text>
+                </View>
+                <Text style={{ alignSelf: "flex-end" }}>
+                  {i.unitPrice + "x" + i.quantity + "=" + i.total}
+                </Text>
+              </View>
+            ))}
+          </ScrollView>
         </View>
       </Modal>
     </>

@@ -127,7 +127,7 @@ const AppNavigator = ({
               <Stack.Screen
                 name="ContactProfileScreen"
                 component={ContactProfileScreen}
-                options={{ headerShown: true, title: "User Profile" }}
+                options={{ headerShown: false }}
               />
               <Stack.Screen
                 name="DailyReportScreen"

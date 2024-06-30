@@ -140,7 +140,7 @@ const ProductShopItem: React.FC<ProductItemProps> = ({
        animationIn='zoomIn'
        animationOut={'zoomOut'}
        animationOutTiming={800}
-       animationInTiming={2000}
+       animationInTiming={1000}
         isVisible={isShow}
         // swipeDirection={"down"}
         onBackdropPress={closeModel}
@@ -229,6 +229,8 @@ const styles = StyleSheet.create({
     borderColor: "#dee2e6",
     borderRadius: height(1.5),
     backgroundColor: Color.white,
+    alignSelf:'center',
+    elevation:1
   },
   item1: {
     width: width(90),
@@ -256,7 +258,7 @@ const styles = StyleSheet.create({
     bottom: height(2),
   },
   imaage: {
-    height: height(15),
+    height: height(12),
     width: "100%",
     borderRadius: height(2),
     marginBottom: height(2),
