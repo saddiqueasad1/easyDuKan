@@ -292,7 +292,7 @@ const styles = StyleSheet.create({
   },
   sectionHeader: {
     paddingHorizontal: height(2),
-    backgroundColor: 'white',
+    backgroundColor: "white",
     borderTopLeftRadius: height(3),
     borderTopRightRadius: height(3),
     width: width(99),
@@ -300,7 +300,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: height(2.5),
     fontWeight: "bold",
-    // color: "white",
+    paddingVertical: height(1),
   },
   addButton: {
     backgroundColor: "#28a745",

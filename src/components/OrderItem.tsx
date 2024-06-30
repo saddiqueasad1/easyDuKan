@@ -23,7 +23,7 @@ const OrderItem = ({ item }) => {
         }}
       >
         <View style={styles.orderContainer}>
-          <Text style={styles.orderId}>Order #{item.id}</Text>
+          <Text style={styles.orderId}>{item.shopUserId}</Text>
           <Text style={styles.customerName}>Price {item.totalAmount}</Text>
           <Text style={styles.orderTotal}>
             Total Quantity: {item.totalQuantity}
@@ -75,7 +75,7 @@ const OrderItem = ({ item }) => {
             }}
           >
             <View style={styles.orderContainer}>
-              <Text style={styles.orderId}>Order #{item.id}</Text>
+              <Text style={styles.orderId}>{item.shopUserId}</Text>
               <Text style={styles.customerName}>Price {item.totalAmount}</Text>
               <Text style={styles.orderTotal}>
                 Total Products: {item?.items?.length}

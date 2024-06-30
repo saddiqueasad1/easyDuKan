@@ -71,7 +71,7 @@ const MyOrdersScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
+    paddingHorizontal: height(2),
   },
   tabsContainer: {
     flexDirection: "row",
@@ -94,9 +94,9 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   header: {
-    fontSize: 24,
+    fontSize: height(2.2),
     fontWeight: "bold",
-    marginBottom: 20,
+    padding: height(1),
   },
   orderContainer: {
     marginBottom: 20,

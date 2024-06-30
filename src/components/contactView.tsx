@@ -2,6 +2,10 @@ import React from "react";
 import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
 import { height, width } from "../utills/Dimension";
 import { useNavigation } from "@react-navigation/native";
+import { Ionicons } from "@expo/vector-icons";
+import { Color } from "../utills/GlobalStyles";
+import GlobalMethods from "../utills/GlobalMethods";
+
 type UserProfileProps = {
   data: {
     name: string;
@@ -33,6 +37,29 @@ const ContactView: React.FC<UserProfileProps> = ({ data }) => {
         <Text style={styles.text}>{data.username}</Text>
         <Text style={styles.phone}>{data.phoneNumber}</Text>
       </View>
+      <View style={styles.iconContainer}>
+        <TouchableOpacity
+          style={styles.editButton}
+          onPress={() => {
+            GlobalMethods.onPressCall(data?.phoneNumber);
+          }}
+        >
+          <Ionicons name="call" size={20} color={Color.grey} />
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.editButton}
+          onPress={() => {
+            // const new_user = { ...user, userId };
+            // console.log(new_user);
+            // navigation.navigate("ChatScreen", {
+            //   usr: new_user,
+            //   userRoom: user?.roomId,
+            // });
+          }}
+        >
+          <Ionicons name="chatbubbles-sharp" size={20} color={Color.grey} />
+        </TouchableOpacity>
+      </View>
     </TouchableOpacity>
   );
 };
@@ -42,8 +69,11 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     alignContent: "center",
-    margin: height(1),
-    width: width(100),
+    marginHorizontal: height(1),
+    marginVertical: height(0.51),
+    padding: height(1),
+    borderRadius: height(1),
+    backgroundColor: Color.backgroundColor,
   },
   image: {
     width: height(6),
@@ -52,8 +82,13 @@ const styles = StyleSheet.create({
     borderRadius: height(10),
   },
   textContainer: {
-    flexDirection: "column",
-    width: width(90),
+    width: width(50),
+  },
+  iconContainer: {
+    width: width(20),
+    marginLeft: "auto",
+    justifyContent: "space-evenly",
+    flexDirection: "row",
   },
   text: {
     fontSize: height(2),

@@ -155,7 +155,7 @@ const UserScreen = ({ navigation }: { navigation: any }) => {
       <View style={styles.container}>
         {error ? <Text style={styles.error}>{error}</Text> : null}
         <View style={styles.contactsContainer}>
-          <Text style={styles.contactsTitle}>Contacts List</Text>
+          <Text style={styles.contactsTitle}>Contact List</Text>
           <FlatList
             data={contacts.filter((a) => {
               return (
@@ -205,10 +205,10 @@ const UserScreen = ({ navigation }: { navigation: any }) => {
           />
         </TouchableOpacity>
         <Modal
-           animationIn='bounceIn'
-           animationOut={'bounceOut'}
-           animationOutTiming={800}
-           animationInTiming={1000}
+          animationIn="bounceIn"
+          animationOut={"bounceOut"}
+          animationOutTiming={800}
+          animationInTiming={1000}
           backdropOpacity={0.3}
           isVisible={addModal}
           onBackdropPress={closeModel}
@@ -263,7 +263,6 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   contactsContainer: {
-    marginTop: 20,
     flex: 1,
   },
   contactsTitle: {

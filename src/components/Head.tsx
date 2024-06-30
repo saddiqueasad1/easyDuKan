@@ -75,7 +75,11 @@ const Header: React.FC = ({
           }}
         >
           <TouchableOpacity
-            style={{ paddingHorizontal: height(1) }}
+            style={{
+              paddingHorizontal: height(1),
+              flexDirection: "row",
+              alignItems: "center",
+            }}
             onPress={() => navigation.openDrawer()}
           >
             <Image
@@ -86,19 +90,20 @@ const Header: React.FC = ({
               }}
               style={styles.ProfileIcon}
             />
+            <Text
+              style={{
+                fontSize: height(3),
+                fontWeight: "bold",
+                color: Color.primaryColor,
+                fontStyle: "italic",
+                width: width(63),
+                paddingHorizontal: height(2),
+              }}
+            >
+              eassyDukan
+            </Text>
           </TouchableOpacity>
 
-          <Text
-            style={{
-              fontSize: height(3),
-              fontWeight: "bold",
-              color: Color.primaryColor,
-              fontStyle: "italic",
-              width: width(63),
-            }}
-          >
-            eassyDukan
-          </Text>
           <View
             style={{
               flexDirection: "row",
@@ -168,7 +173,7 @@ const Header: React.FC = ({
 const styles = StyleSheet.create({
   header: {
     flexDirection: "column",
-    padding: 10,
+    paddingHorizontal: 10,
     backgroundColor: "white",
   },
   searchBarContainer: {
@@ -208,7 +213,7 @@ const styles = StyleSheet.create({
     width: height(5),
     borderRadius: height(5),
     borderWidth: height(0.3),
-    borderColor: Color.secondaryColor,
+    borderColor: Color.primaryColor,
   },
 });
 

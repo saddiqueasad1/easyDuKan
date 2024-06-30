@@ -14,6 +14,7 @@ import { RootState } from "../redux/store";
 import { IBill } from "../utills/types";
 import { Color } from "../utills/GlobalStyles";
 import OrderItem from "../components/OrderItem";
+import { height } from "../utills/Dimension";
 const d = [
   { id: 1, name: "Complete" },
   { id: 2, name: "Uncomplete" },
@@ -82,7 +83,7 @@ const OrdersScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
+    paddingHorizontal: height(1),
   },
   tabsContainer: {
     flexDirection: "row",
@@ -107,7 +108,7 @@ const styles = StyleSheet.create({
   header: {
     fontSize: 24,
     fontWeight: "bold",
-    marginBottom: 20,
+    padding:height(1)
   },
   orderContainer: {
     marginBottom: 20,
