@@ -10,7 +10,7 @@ i18n.use(initReactI18next).init({
     en: { translation: enTranslations },
     ur: { translation: urTranslations },
   },
-  lng: "ur", // Set Urdu as the default language
+  lng: "en", // Set Urdu as the default language
   fallbackLng: "en", // Fallback language if translation not found
   interpolation: {
     escapeValue: false,

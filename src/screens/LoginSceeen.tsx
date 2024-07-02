@@ -18,7 +18,7 @@ import { getApp } from "firebase/app";
 import GoogleLoginComponents from "../components/GoogleLoginComponents";
 
 const LoginScreen = ({ navigation }: { navigation: any }) => {
-  const [phoneNumber, setPhoneNumber] = React.useState("3002918546");
+  const [phoneNumber, setPhoneNumber] = React.useState("");
   const { t } = useTranslation();
   const [loading, setLoading] = React.useState(false);
 
