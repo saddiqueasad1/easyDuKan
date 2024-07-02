@@ -86,6 +86,7 @@ export interface IBill {
   id: string;
   customerId: string;
   shopUserId?: string;
+  shopName?: string;
   shopId?: string;
   customerName: string;
   date: string;

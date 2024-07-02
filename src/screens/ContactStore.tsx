@@ -77,21 +77,34 @@ const ContactProfileScreen = ({
     console.log("user----------------");
     console.log(user);
     try {
+      // Reference to the branch document
+      const branchDocRef = doc(db, "branches", selectedBranchId);
+      // Get the branch document
+      const branchDocSnapshot = await getDoc(branchDocRef);
+      if (!branchDocSnapshot.exists()) {
+        console.log("Branch not found!");
+        return;
+      }
+      // Extract the branch name
+      const branchName = branchDocSnapshot.data().branchName;
+
+      setUser((prevUser) => ({
+        ...prevUser,
+        branchName,
+      }));
+
       const itemsCollectionRef = collection(
         db,
         "branches",
         selectedBranchId,
-        "products"
+        "products",
       );
-      // console.log("itemsCollectionRef id", itemsCollectionRef);
 
       const itemsSnapshot = await getDocs(itemsCollectionRef);
       const itemsList = itemsSnapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
       }));
-      console.log("+");
-
       setProduct(itemsList);
     } catch (error) {
       console.log("this one ", error);

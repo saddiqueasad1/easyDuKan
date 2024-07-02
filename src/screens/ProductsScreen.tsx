@@ -31,6 +31,7 @@ import ContentLoader from "react-native-easy-content-loader";
 
 const ProductsScreen = ({ navigation }: { navigation: any }) => {
   const user = useSelector((state: RootState) => state.user);
+  const profile = useSelector((state: RootState) => state.profile);
   const products = useSelector((state: RootState) => state.products);
   const bill = useSelector((state: RootState) => state.bill.bill);
   const { categories } = useSelector((state: RootState) => state.categories);
@@ -102,6 +103,7 @@ const ProductsScreen = ({ navigation }: { navigation: any }) => {
         status: "pending", // Set initial status
         items: [itemNew],
         totalQuantity: 1,
+        shopName: profile?.branchName,
       };
       dispatch(setBill(newBill));
     }

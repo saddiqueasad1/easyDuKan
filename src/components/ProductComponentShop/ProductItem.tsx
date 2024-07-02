@@ -40,7 +40,7 @@ const ProductShopItem: React.FC<ProductItemProps> = ({
   const handleIncreaseQuantity = (
     id: string,
     currentQuantity: number,
-    item: IProduct
+    item: IProduct,
   ) => {
     const updatedItem: IItem = {
       ...item,
@@ -51,6 +51,8 @@ const ProductShopItem: React.FC<ProductItemProps> = ({
     if (order) {
       dispatch(increaseOrderQuantity(updatedItem));
     } else {
+      console.log(shopUser);
+      
       const itemNew: IItem = {
         id,
         description: item.description,
@@ -67,6 +69,7 @@ const ProductShopItem: React.FC<ProductItemProps> = ({
         customerName: profile.username, // Provide customer name here
         date: new Date().toISOString(), // Use current date and time
         totalAmount: updatedItem.total,
+        shopName: shopUser?.branchName,
         status: "pending", // Set initial status
         items: [itemNew],
         totalQuantity: 1,
