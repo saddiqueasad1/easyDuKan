@@ -33,5 +33,9 @@
     "deletemsg": "Message Deleted",
     "disapermsg": "New messages will disappear from the chat 15 days after they're sent",
     "load": "Loading All Chats ...."
+  },
+  "addPost": {
+    "takephoto": "Take Photo",
+    "choosefromgallery": "Choose From Gallery"
   }
 }

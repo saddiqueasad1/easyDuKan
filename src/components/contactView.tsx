@@ -5,6 +5,8 @@ import { useNavigation } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
 import { Color } from "../utills/GlobalStyles";
 import GlobalMethods from "../utills/GlobalMethods";
+import { clearOrder } from "../redux/slices/orderSlice";
+import { useDispatch } from "react-redux";
 
 type UserProfileProps = {
   data: {
@@ -18,9 +20,11 @@ type UserProfileProps = {
 
 const ContactView: React.FC<UserProfileProps> = ({ data }) => {
   const navigation = useNavigation();
+  const dispatch = useDispatch();
   return (
     <TouchableOpacity
       onPress={() => {
+        dispatch(clearOrder());
         navigation.navigate("ContactProfileScreen", { userId: data.userId });
       }}
       style={styles.container}

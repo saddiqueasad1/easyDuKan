@@ -95,22 +95,54 @@ const UserScreen = ({ navigation }: { navigation: any }) => {
     } else {
       // Filter the full dataset based on the search text
       const filteredData = fullContacts.filter((item) =>
-        item.phoneNumber.toLowerCase().includes(text.toLowerCase())
+        item.phoneNumber.toLowerCase().includes(text.toLowerCase()),
       );
       setContacts(filteredData);
     }
   };
   const closeModel = () => setAddModal(false);
+
+  const validateAndFormatPakistaniNumber = (phoneNumber) => {
+    phoneNumber = phoneNumber.replace(/\D/g, "");
+
+    if (phoneNumber.startsWith("0") && phoneNumber.length === 11) {
+      return `+92${phoneNumber.slice(1)}`;
+    }
+
+    if (phoneNumber.startsWith("92") && phoneNumber.length === 12) {
+      return `+${phoneNumber}`;
+    }
+
+    return null;
+  };
   const fetchProfile = async () => {
     try {
+      console.log("1text", phoneNumber);
+
       setError("");
       if (contacts.some((contact) => contact.phoneNumber === phoneNumber)) {
         return;
       }
+      if (phoneNumber === "") {
+        return;
+      }
+      const formattedPhoneNumber =
+        validateAndFormatPakistaniNumber(phoneNumber);
+
+      if (formattedPhoneNumber) {
+        console.log(`Valid number: ${formattedPhoneNumber}`);
+      } else {
+        console.log("Invalid number----", formattedPhoneNumber);
+        return;
+      }
+
       setLoading(true);
 
       const usersCollection = collection(db, "users");
-      const q = query(usersCollection, where("phoneNumber", "==", phoneNumber));
+      const q = query(
+        usersCollection,
+        where("phoneNumber", "==", formattedPhoneNumber),
+      );
       const querySnapshot = await getDocs(q);
 
       if (!querySnapshot.empty) {
@@ -131,7 +163,7 @@ const UserScreen = ({ navigation }: { navigation: any }) => {
               onPress: () => saveContact(fetchedProfile, contactId),
             },
           ],
-          { cancelable: false }
+          { cancelable: false },
         );
 
         setError("");
