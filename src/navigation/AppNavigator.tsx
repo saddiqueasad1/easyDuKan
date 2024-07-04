@@ -147,7 +147,7 @@ const AppNavigator = ({
               <Stack.Screen
                 name="chatListScreen"
                 component={ChatList}
-                options={{ headerShown: false }}
+                options={{ headerShown: true, title: "Chats" }}
               />
                 <Stack.Screen
                 name="MyOrderScreen"

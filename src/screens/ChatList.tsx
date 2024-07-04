@@ -269,7 +269,7 @@ export default function ChatList({ navigation, route }) {
       )}
     >
       <View style={styles.mainViewContainer}>
-        <Text
+        {/* <Text
           style={{
             fontSize: 24,
             fontWeight: "bold",
@@ -277,7 +277,7 @@ export default function ChatList({ navigation, route }) {
           }}
         >
           Chats
-        </Text>
+        </Text> */}
         <FlatList
           scrollEnabled={false}
           showsVerticalScrollIndicator={false}
@@ -338,7 +338,7 @@ export default function ChatList({ navigation, route }) {
                     color: "black",
                   }}
                 >
-                  {t("commmon.nochatMsg")}
+                  {t("common.nochatMsg")}
                 </Text>
               </View>
             ) : (

@@ -53,12 +53,10 @@ const ContactView: React.FC<UserProfileProps> = ({ data }) => {
         <TouchableOpacity
           style={styles.editButton}
           onPress={() => {
-            // const new_user = { ...user, userId };
-            // console.log(new_user);
-            // navigation.navigate("ChatScreen", {
-            //   usr: new_user,
-            //   userRoom: user?.roomId,
-            // });
+            navigation.navigate("ChatScreen", {
+              usr: data,
+              userRoom: data?.roomId,
+            });
           }}
         >
           <Ionicons name="chatbubbles-sharp" size={20} color={Color.grey} />

@@ -140,7 +140,7 @@ const ProductsScreen = ({ navigation }: { navigation: any }) => {
           setSearchText={setSearchText}
           selectValue={selectValue}
           SetSelectValue={SetSelectValue}
-          categories={categories}
+          // categories={categories}
         />
       )}
       footerUnScrollable={() => {

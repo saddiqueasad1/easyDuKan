@@ -37,5 +37,8 @@
   "addPost": {
     "takephoto": "Take Photo",
     "choosefromgallery": "Choose From Gallery"
+  },
+  "common":{
+    "nochatMsg": "No Message"
   }
 }

@@ -152,9 +152,8 @@ const CustomDrawer = ({ navigation }) => {
 
           <Text style={styles.dbtext}>My Orders</Text>
         </TouchableOpacity>
-        <TouchableOpacity
+        {/* <TouchableOpacity
           onPress={() => {
-            // logout();
             navigation.closeDrawer();
           }}
           style={styles.drawrbtn}
@@ -162,7 +161,7 @@ const CustomDrawer = ({ navigation }) => {
           <AntDesign name="infocirlceo" size={height(2)} color={"grey"} />
 
           <Text style={[styles.dbtext]}>About Us</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
         <TouchableOpacity
           onPress={() => {
             logout();

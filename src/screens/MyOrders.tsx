@@ -48,7 +48,7 @@ const MyOrdersScreen: React.FC = () => {
           searchText={searchText}
           setSearchText={setSearchText}
           showTopHead={false}
-          categories={d}
+          // categories={d} 
           selectValue={selectValue}
           SetSelectValue={SetSelectValue}
         />

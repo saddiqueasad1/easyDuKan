@@ -61,7 +61,7 @@ const OrdersScreen: React.FC = () => {
         <Header
           searchText={searchText}
           setSearchText={setSearchText}
-          categories={d}
+          // categories={d}
           selectValue={selectValue}
           SetSelectValue={SetSelectValue}
         />

@@ -112,16 +112,13 @@ const Header: React.FC = ({
               width: width(20),
             }}
           >
-            <TouchableOpacity
-              style={{ padding: height(0.5) }}
-              // onPress={() => navigation.navigate("chatListScreen")}
-            >
+            {/* <TouchableOpacity style={{ padding: height(0.5) }}>
               <Ionicons
                 name={"notifications-sharp"}
                 color={"grey"}
                 size={height(2.5)}
               />
-            </TouchableOpacity>
+            </TouchableOpacity> */}
 
             <TouchableOpacity
               style={{ padding: height(0.5) }}
@@ -132,7 +129,7 @@ const Header: React.FC = ({
           </View>
         </View>
       )}
-      <View style={{ flexDirection: "row" }}>
+      <View style={{ flexDirection: "row", marginVertical: 5 }}>
         <View style={styles.searchBarContainer}>
           <TextInput
             style={styles.searchBar}
