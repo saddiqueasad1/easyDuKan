@@ -133,7 +133,6 @@ const ProductsScreen = ({ navigation }: { navigation: any }) => {
   };
   return (
     <ScreenWrapper
-      scrollEnabled={true}
       headerUnScrollable={() => (
         <Header
           searchText={searchText}
@@ -179,6 +178,8 @@ const ProductsScreen = ({ navigation }: { navigation: any }) => {
         <FlatList
           data={products}
           scrollEnabled={false}
+          onRefresh={() => fetchItems()}
+          refreshing={false}
           keyExtractor={(item) => item.id}
           renderItem={({ item }) => {
             if (

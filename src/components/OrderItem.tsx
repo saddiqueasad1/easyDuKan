@@ -23,7 +23,7 @@ const OrderItem = ({ item }) => {
         }}
       >
         <View style={styles.orderContainer}>
-          <Text style={styles.orderId}>{item.shopUserId}</Text>
+          <Text style={styles.orderId}>{item?.shopName}</Text>
           <Text style={styles.customerName}>Price {item.totalAmount}</Text>
           <Text style={styles.orderTotal}>
             Total Quantity: {item.totalQuantity}
@@ -76,10 +76,6 @@ const OrderItem = ({ item }) => {
           >
             <View style={styles.orderContainer}>
               <Text style={styles.orderId}>{item.shopUserId}</Text>
-              <Text style={styles.customerName}>Price {item.totalAmount}</Text>
-              <Text style={styles.orderTotal}>
-                Total Products: {item?.items?.length}
-              </Text>
               <Text style={styles.orderDate}>
                 Date:
                 {GlobalMethods.calculateTimeDifference(item?.date)}
@@ -150,6 +146,10 @@ const OrderItem = ({ item }) => {
               </View>
             ))}
           </ScrollView>
+          <Text style={styles.customerName}>
+            Total Products: {item?.items?.length}
+          </Text>
+          <Text style={styles.orderTotal}>Price:  {item.totalAmount}</Text>
         </View>
       </Modal>
     </>
@@ -193,7 +193,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
   customerName: {
-    fontSize: height(1.7),
+    fontSize: height(2.1),
   },
   orderId: {
     fontSize: height(1.9),

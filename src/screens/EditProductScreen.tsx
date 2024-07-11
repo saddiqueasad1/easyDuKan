@@ -127,24 +127,23 @@ const EditProductScreen = ({
     }
   };
   useEffect(() => {
- 
-    
     navigation.setOptions({
       title: itemId ? "Edit Product" : "Add Product",
     });
     const fetchItem = async () => {
       if (itemId) {
-        dispatch(setAppLoader(true));
         try {
           const selectProductById: IProduct | undefined = products.find(
-            (product) => product.id === itemId
+            (product) => product.id === itemId,
           );
+          console.log("selectProductById", selectProductById);
           if (selectProductById) {
             // console.log(selectProductById);
             setName(selectProductById.name || "");
             setDescription(selectProductById.description);
             setUnitPrice(selectProductById.unitPrice);
             setTotalQuantity(selectProductById.totalQuantity);
+            setPurchasePrice(selectProductById.purchasePrice);
             setSelectedCategoryId(selectProductById.category_id || "");
             setImage(selectProductById?.productImages||[])
           } else {

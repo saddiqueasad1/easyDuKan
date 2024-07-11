@@ -28,6 +28,9 @@ const OrdersScreen: React.FC = () => {
   const [incomingOrders, setIncomingOrders] = useState<IBill[]>([]);
 
   useEffect(() => {
+    fetchItems();
+  }, []);
+  const fetchItems = async () => {
     const customerId = profile.userId;
 
     getOrdersByShopUserId(customerId).then((orders) => {
@@ -35,24 +38,8 @@ const OrdersScreen: React.FC = () => {
       console.log(orders);
       setIncomingOrders(orders);
     });
-  }, []);
+  };
 
-  // const renderOrder = ({ item }: { item: IBill }) => {
-  //   if (
-  //     item?.customerName?.toLowerCase()?.includes(searchText?.toLowerCase())
-  //   ) {
-  //     return (
-  //       <View style={styles.orderContainer}>
-  //         <Text style={styles.customerName}>{item.customerName}</Text>
-  //         <Text style={styles.orderId}>Order #{item.id}</Text>
-  //         <Text style={styles.orderTotal}>
-  //           Total Quantity: {item.totalQuantity} , Price {item.totalAmount}
-  //         </Text>
-  //         <Text style={styles.orderDate}>Date: {item.date}</Text>
-  //       </View>
-  //     );
-  //   }
-  // };
   const renderOrder = ({ item }: { item: IBill }) => <OrderItem item={item} />;
 
   return (
@@ -61,7 +48,6 @@ const OrdersScreen: React.FC = () => {
         <Header
           searchText={searchText}
           setSearchText={setSearchText}
-          // categories={d}
           selectValue={selectValue}
           SetSelectValue={SetSelectValue}
         />
@@ -72,6 +58,8 @@ const OrdersScreen: React.FC = () => {
         <FlatList
           showsVerticalScrollIndicator={false}
           data={incomingOrders}
+          onRefresh={() => fetchItems()}
+          refreshing={false}
           renderItem={renderOrder}
           keyExtractor={(item) => item.id}
         />

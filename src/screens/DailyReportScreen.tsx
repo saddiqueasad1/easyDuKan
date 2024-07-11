@@ -57,8 +57,6 @@ const DailyReportScreen: React.FC = () => {
 
   return (
     <ScrollView style={styles.container}>
-      <ProfitGraph />
-
       <View style={styles.container}>
         <Text style={styles.header}>
           Daily Report for {format(selectedDate, "yyyy-MM-dd")}
@@ -89,6 +87,7 @@ const DailyReportScreen: React.FC = () => {
           <Text>Total Profit: ${(report.profit - report.loss).toFixed(2)}</Text>
         </View>
       </View>
+      <ProfitGraph />
     </ScrollView>
   );
 };

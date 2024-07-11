@@ -34,7 +34,17 @@ const App = () => {
         if (docSnap.exists()) {
           const data = docSnap.data();
           const newData = { ...data, userId: user.uid };
-          dispatch(setProfile(newData as any));
+          const mydBranchId = newData?.branchIds[0] || "0";
+          const branchDocRef = doc(db, "branches", mydBranchId);
+          const branchDocSnapshot = await getDoc(branchDocRef);
+          if (!branchDocSnapshot.exists()) {
+            dispatch(setProfile(newData as any));
+          } else {
+            const branchName = branchDocSnapshot.data().branchName;
+            console.log(branchName);
+            const dataWithBranchName = { ...newData, branchName: branchName };
+            dispatch(setProfile(dataWithBranchName as any));
+          }
         }
       } catch (error) {
         console.log(error);

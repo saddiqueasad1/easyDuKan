@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { View, Text, FlatList, StyleSheet } from "react-native";
 import {
   collection,
+  deleteDoc,
   doc,
   getDoc,
   getDocs,
@@ -10,7 +11,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../redux/store";
 import { setProfile } from "../redux/slices/profilleSlice";
-import { setProduct } from "../redux/slices/productSlice";
+import { deleteProduct, setProduct } from "../redux/slices/productSlice";
 import { IProduct } from "../utills/types";
 import ScreenWrapper from "../components/ScreenWrapper";
 import { height, width } from "../utills/Dimension";
@@ -26,27 +27,8 @@ const ProfileScreen = ({ navigation }: { navigation: any }) => {
   const selectedBranchId = user.selectedBranchId;
 
   useEffect(() => {
-    // const fetchProfile = async () => {
-    //   try {
-    //     const docRef = doc(db, "users", user.uid);
-    //     const docSnap = await getDoc(docRef);
-
-    //     if (docSnap.exists()) {
-    //       const data = docSnap.data();
-    //       const newData = { ...data, userId: user.uid };
-    //       dispatch(setProfile(newData as any));
-    //     }
-    //   } catch (error) {
-    //     console.log(error);
-    //   }
-    // };
-
-    // fetchProfile();
     fetchItems();
   }, []);
-//   return
-//   // eslint-disable-next-line react-hooks/exhaustive-deps
-// }, [user.uid, db, profile]);
 
   const fetchItems = async () => {
     try {
@@ -66,6 +48,29 @@ const ProfileScreen = ({ navigation }: { navigation: any }) => {
       console.log(error);
     }
   };
+  const handleDelete = async (item, setIsShow) => {
+    console.log("item----------------");
+    console.log(item);
+    console.log(setIsShow);
+    const productRef = doc(
+      db,
+      "branches",
+      selectedBranchId,
+      "products",
+      item.id,
+    );
+
+    try {
+      await deleteDoc(productRef);
+      console.log("Product deleted successfully!");
+      setIsShow(false);
+      dispatch(deleteProduct(item.id));
+    } catch (error) {
+      console.error("Error deleting product: ", error);
+    }  finally {
+      setIsShow(false);
+    }
+  };
 
   const renderItem = ({ item }: { item: IProduct }) => {
     return (
@@ -77,6 +82,7 @@ const ProfileScreen = ({ navigation }: { navigation: any }) => {
             itemId: item.id,
           })
         }
+        onPressDelete={handleDelete}
       />
       // <TouchableOpacity
       //
@@ -123,6 +129,8 @@ const ProfileScreen = ({ navigation }: { navigation: any }) => {
           data={products}
           keyExtractor={(item) => item.id}
           renderItem={renderItem}
+          onRefresh={() => fetchItems()}
+          refreshing={false}
           contentContainerStyle={styles.itemsList}
           ListHeaderComponent={headerItem}
           ListEmptyComponent={

@@ -3,14 +3,9 @@ import { TouchableOpacity, Text, StyleSheet, View, Image } from "react-native";
 import Modal from "react-native-modal";
 import { Feather, MaterialIcons } from "@expo/vector-icons";
 import SwiperFlatList from "react-native-swiper-flatlist";
-
 import { IProduct } from "../../utills/types";
-import QuantityContainer from "./QuantityContainer";
 import { Color } from "../../utills/GlobalStyles";
 import { height, urlImage, width } from "../../utills/Dimension";
-import Icons, { IconsImage } from "../../assets/images";
-import { useSelector } from "react-redux";
-import { RootState } from "../../redux/store";
 
 interface ProductItemProps {
   item: IProduct;
@@ -25,14 +20,16 @@ const MyProductCard: React.FC<ProductItemProps> = ({
   const [isShow, setIsShow] = useState(false);
   const closeModel = () => setIsShow(false);
 
+
   return (
     <>
       <TouchableOpacity style={styles.item} onPress={() => setIsShow(true)}>
         <Image
           source={{
-            uri: item?.productImages?.length>0
-              ? item?.productImages[0]
-              : urlImage,
+            uri:
+              item?.productImages?.length > 0
+                ? item?.productImages[0]
+                : urlImage,
           }}
           style={styles.imaage}
         />
@@ -44,10 +41,10 @@ const MyProductCard: React.FC<ProductItemProps> = ({
         </View>
       </TouchableOpacity>
       <Modal
-       animationIn='bounceIn'
-       animationOut={'bounceOut'}
-       animationOutTiming={800}
-       animationInTiming={1000}
+        animationIn="bounceIn"
+        animationOut={"bounceOut"}
+        animationOutTiming={800}
+        animationInTiming={1000}
         isVisible={isShow}
         // swipeDirection={"down"}
         onBackdropPress={closeModel}
@@ -133,7 +130,7 @@ const MyProductCard: React.FC<ProductItemProps> = ({
               </TouchableOpacity>
               <TouchableOpacity
                 style={styles.iconButton}
-                onPress={onPressDelete}
+                onPress={() => onPressDelete(item, setIsShow)}
               >
                 <MaterialIcons name="delete" color={"red"} size={height(3)} />
                 <Text style={[styles.iconBtnTex, { color: "red" }]}>

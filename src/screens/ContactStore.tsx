@@ -156,7 +156,7 @@ const ContactProfileScreen = ({
         style={styles.image}
       />
       <View style={styles.profileInfo}>
-        <Text style={styles.contact}>{user?.branchIds[0]}</Text>
+        <Text style={styles.contact}>{user?.branchName}</Text>
         <Text style={styles.username}>{user?.username}</Text>
 
         {/* <Text style={styles.email}>{user?.email}</Text> */}
@@ -214,6 +214,7 @@ const ContactProfileScreen = ({
   return (
     <ScreenWrapper
       headerUnScrollable={headerItem}
+      onRefresh={fetchItems}
       footerUnScrollable={() => {
         return order?.totalQuantity ? (
           <TouchableOpacity onPress={() => handleOrder()}>
@@ -252,6 +253,8 @@ const ContactProfileScreen = ({
             <Text style={styles.noItemsText}>No items available</Text>
           }
           numColumns={2}
+          onRefresh={() => fetchItems()}
+          refreshing={false}
         />
       </View>
     </ScreenWrapper>

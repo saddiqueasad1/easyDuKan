@@ -89,16 +89,14 @@ const UserScreen = ({ navigation }: { navigation: any }) => {
 
   const handleSearch = (text: string) => {
     setPhoneNumber(text);
-    if (text === "") {
-      // If search input is empty, reset data to full dataset
-      setContacts(fullContacts);
-    } else {
-      // Filter the full dataset based on the search text
-      const filteredData = fullContacts.filter((item) =>
-        item.phoneNumber.toLowerCase().includes(text.toLowerCase()),
-      );
-      setContacts(filteredData);
-    }
+    // if (text === "") {
+    //   setContacts(fullContacts);
+    // } else {
+    //   const filteredData = fullContacts.filter((item) =>
+    //     item.phoneNumber.toLowerCase().includes(text.toLowerCase()),
+    //   );
+    //   setContacts(filteredData);
+    // }
   };
   const closeModel = () => setAddModal(false);
 
@@ -132,7 +130,7 @@ const UserScreen = ({ navigation }: { navigation: any }) => {
       if (formattedPhoneNumber) {
         console.log(`Valid number: ${formattedPhoneNumber}`);
       } else {
-        console.log("Invalid number----", formattedPhoneNumber);
+        setError("Invalid number");
         return;
       }
 
@@ -170,10 +168,13 @@ const UserScreen = ({ navigation }: { navigation: any }) => {
       } else {
         setError("Contacts not found");
       }
+      setAddModal(false);
     } catch (error) {
       console.log(error);
       setError("An error occurred while fetching the Contacts");
     } finally {
+      setAddModal(false);
+      setPhoneNumber("");
       setLoading(false);
     }
   };
@@ -199,6 +200,8 @@ const UserScreen = ({ navigation }: { navigation: any }) => {
                   ?.includes(searchText?.toLowerCase())
               );
             })}
+            refreshing={false}
+            onRefresh={() => fetchContacts()}
             keyExtractor={(item) => item?.phoneNumber}
             renderItem={({ item }) => <ContactView data={item} />}
             ListEmptyComponent={

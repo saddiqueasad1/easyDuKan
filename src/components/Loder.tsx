@@ -8,11 +8,14 @@ export default function Loader() {
   const styles = getStyles(AppColors);
   return (
     <Modal
-    animationIn='bounceIn'
-    animationOut={'bounceOut'}
-    animationInTiming={1000}
-    animationOutTiming={1000}
-    isVisible={appLoader} backdropOpacity={1} backdropColor={"white"}>
+      animationIn="bounceIn"
+      animationOut={"bounceOut"}
+      animationInTiming={1000}
+      animationOutTiming={1000}
+      isVisible={appLoader}
+      backdropOpacity={1}
+      backdropColor={"rgba(255, 255, 255, .7)"}
+    >
       <View style={styles.container}>
         <Image
           style={{
