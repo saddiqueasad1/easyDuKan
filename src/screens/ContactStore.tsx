@@ -243,7 +243,7 @@ const ContactProfileScreen = ({
                 setSearchText={setSearchText}
                 selectValue={selectValue}
                 SetSelectValue={SetSelectValue}
-                categories={d}
+                // categories={d}
                 showTopHead={false}
               />
             </>

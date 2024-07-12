@@ -11,10 +11,10 @@ import {
   FlatList,
   TouchableOpacity,
 } from "react-native";
-import { addDoc, collection, getDocs } from "firebase/firestore";
+import { addDoc, collection, deleteDoc, doc, getDocs } from "firebase/firestore";
 import { getFirestore } from "firebase/firestore";
 import { useDispatch, useSelector } from "react-redux";
-import { setCategories } from "../redux/slices/categoriesSlice";
+import { deleteCategory, setCategories } from "../redux/slices/categoriesSlice";
 import { RootState } from "../redux/store";
 import ScreenWrapper from "../components/ScreenWrapper";
 import { height, width } from "../utills/Dimension";
@@ -24,14 +24,11 @@ import { selectAppLoader, setAppLoader } from "../redux/slices/loaderSlice";
 import { successMessage } from "../utills/GlobalMethods";
 
 const AddCategoryScreen = ({ navigation, route }: { navigation: any }) => {
-  console.log("route value", route?.params);
-
   const [newCategoryName, setNewCategoryName] = useState("");
   const [addModal, setAddModal] = useState(false);
   const [inputError, setInputError] = useState("");
   const dispatch = useDispatch();
   const { categories } = useSelector((state: RootState) => state.categories);
-  const profile = useSelector((state: RootState) => state.profile);
   const user = useSelector((state: RootState) => state.user);
   const selectedBranchId = user.selectedBranchId;
   const db = getFirestore();
@@ -61,7 +58,6 @@ const AddCategoryScreen = ({ navigation, route }: { navigation: any }) => {
     }
   };
   const addCategory = async () => {
-
     if (!newCategoryName.trim()) {
       setInputError("Category name cannot be empty.");
       return;
@@ -100,6 +96,18 @@ const AddCategoryScreen = ({ navigation, route }: { navigation: any }) => {
       dispatch(setAppLoader(false));
     }
   };
+  const handleDelete = async (id: string) => {
+    console.log("Delete category", id);
+    dispatch(deleteCategory(id));
+    const productRef = doc(db, "branches", selectedBranchId, "categories", id);
+    try {
+      await deleteDoc(productRef);
+      console.log("Product deleted successfully!");
+    } catch (error) {
+      console.error("Error deleting product: ", error);
+    } finally {
+    }
+  };
 
   const closeModel = () => setAddModal(false);
   return (
@@ -118,16 +126,18 @@ const AddCategoryScreen = ({ navigation, route }: { navigation: any }) => {
         <FlatList
           data={categories}
           showsVerticalScrollIndicator={false}
+          onRefresh={() => fetchCategories()}
+          refreshing={false}
           renderItem={({ item }) => (
             <View style={styles.rowContainer}>
               <Text style={{ fontSize: height(2), fontWeight: "heavy" }}>
                 {item.name}
               </Text>
-              <TouchableOpacity>
+              <TouchableOpacity onPress={() => handleDelete(item.id)}>
                 <AntDesign
                   name={"delete"}
                   color={Color.primaryColor}
-                  size={height(3)}
+                  size={height(3)} 
                 />
               </TouchableOpacity>
             </View>
@@ -136,10 +146,10 @@ const AddCategoryScreen = ({ navigation, route }: { navigation: any }) => {
         />
 
         <Modal
-         animationIn='bounceIn'
-         animationOut={'bounceOut'}
-         animationOutTiming={800}
-         animationInTiming={1000}
+          animationIn="bounceIn"
+          animationOut={"bounceOut"}
+          animationOutTiming={800}
+          animationInTiming={1000}
           backdropOpacity={0.3}
           isVisible={addModal}
           onBackdropPress={closeModel}
