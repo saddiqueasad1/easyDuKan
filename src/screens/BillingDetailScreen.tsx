@@ -205,7 +205,7 @@ const BillingDetailScreen = ({
               <TouchableOpacity
                 style={styles.modalButton}
                 onPress={() => {
-                  inputRef.current.blur();
+                  !isDetail && inputRef.current.blur();
                   setModalVisible(false);
                   shareAsImage();
                 }}
