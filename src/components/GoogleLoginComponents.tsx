@@ -23,7 +23,7 @@ export default function GoogleLoginComponents({
 }) {
   const [request, response, promptAsync] = Google.useAuthRequest({
     androidClientId:
-      "777069971997-0kkvncld2jhkurqcp5qp5l3v993ef03f.apps.googleusercontent.com",
+      "777069971997-l0duiijl688gjbtq4b5sgivmbha8d7e2.apps.googleusercontent.com",
     iosClientId:
       "777069971997-n7ftkicfcqecjav02lmjas9hclaai48b.apps.googleusercontent.com",
   });

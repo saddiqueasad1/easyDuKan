@@ -194,7 +194,7 @@ const AddProfileScreen = ({ navigation }: { navigation: any }) => {
   return (
     <ScreenWrapper scrollEnabled>
       <View style={styles.container}>
-        <Text style={styles.title}>Welcome to easyDukan !</Text>
+        <Text style={styles.title}>Welcome to easyDukaan !</Text>
         <Text style={styles.title2}>
           To get started, please provide us with the necessary details
         </Text>

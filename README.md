@@ -1,8 +1,8 @@
-## easydukan
+## easydukaan
 
 ### Overview
 
-**easydukan** is a mobile application built using React Native and Expo. It helps users manage their daily diet plans and provides easy access to nutrition information.
+**easydukaan** is a mobile application built using React Native and Expo. It helps users manage their daily diet plans and provides easy access to nutrition information.
 
 ### Features
 
@@ -38,7 +38,7 @@ To run the app locally, follow these steps:
 
 ### Getting Started
 
-To get started with developing for **easydukan**, follow these steps:
+To get started with developing for **easydukaan**, follow these steps:
 
 1. Familiarize yourself with React Native and Expo if you haven't already.
 2. Explore the codebase and understand the project structure.
@@ -49,7 +49,7 @@ To get started with developing for **easydukan**, follow these steps:
 
 ### Contributing
 
-Contributions to **easydukan** are welcome! If you find any bugs or have suggestions for new features, feel free to open an issue or submit a pull request.
+Contributions to **easydukaan** are welcome! If you find any bugs or have suggestions for new features, feel free to open an issue or submit a pull request.
 
 ### License
 

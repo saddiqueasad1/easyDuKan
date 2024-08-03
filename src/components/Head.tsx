@@ -100,7 +100,7 @@ const Header: React.FC = ({
                 paddingHorizontal: height(2),
               }}
             >
-              eassyDukan
+              eassyDukaan
             </Text>
           </TouchableOpacity>
 

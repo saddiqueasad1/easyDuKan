@@ -1,37 +1,37 @@
 {
   "expo": {
-    "name": "easydukan",
-    "slug": "easydukan",
-    "version": "1.0.1",
+    "name": "easydukaan",
+    "slug": "easydukaan",
+    "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/splash.gif",
+      "image": "./assets/splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier" : "com.easydukan.easydukan"
+      "bundleIdentifier": "com.easydukaan.easydukaan"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.easydukan.easydukan",
+      "package": "com.easydukaan.easydukaan",
       "googleServicesFile": "./google-services.json",
-      "versionCode": 4
+      "versionCode": 1
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
+    "scheme": "easydukaan",
     "extra": {
       "eas": {
-        "projectId": "de2e21f8-f28a-48ac-9f52-5341041c9475"
+        "projectId": "a5aec49b-045e-4936-a3b8-8cca7563a145"
       }
-    },
-    "scheme": "easydukan"
+    }
   }
 }

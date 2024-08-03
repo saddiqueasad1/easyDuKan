@@ -8,18 +8,18 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:777069971997:android:64a4c7e64055136edb94f4",
+        "mobilesdk_app_id": "1:777069971997:android:9813a6589c8dda0edb94f4",
         "android_client_info": {
-          "package_name": "com.easydukan.easydukan"
+          "package_name": "com.easydukaan.easydukaan"
         }
       },
       "oauth_client": [
         {
-          "client_id": "777069971997-0kkvncld2jhkurqcp5qp5l3v993ef03f.apps.googleusercontent.com",
+          "client_id": "777069971997-l0duiijl688gjbtq4b5sgivmbha8d7e2.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.easydukan.easydukan",
-            "certificate_hash": "a2893c602b4cdba176fc08d7dd5c3cddac779b7c"
+            "package_name": "com.easydukaan.easydukaan",
+            "certificate_hash": "f008b18ca1233eb33e124301273c57df7314da1f"
           }
         },
         {
@@ -29,7 +29,7 @@
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDFAfloQjXaVkiuDQwX9u12DUtT2PW72gM"
+          "current_key": "AIzaSyAnzJPDz4tZ6ZwajdBc2kZKBkAOwie9NK8"
         }
       ],
       "services": {
